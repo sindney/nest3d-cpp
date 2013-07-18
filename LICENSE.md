@@ -1,11 +1,3 @@
-----------------------------------------------------------------
-Nest3D-CPP
-
-By sindney
-----------------------------------------------------------------
-A light weight opengl 3d engine project in c++ for study purpose.
-----------------------------------------------------------------
-
 Copyright (C) 2013 - 2100 Nest3D Team.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -25,7 +17,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-----------------------------------------------------------------
-Under development
-----------------------------------------------------------------
