@@ -1,17 +1,20 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-namespace nest
-{
-	class utils
-	{
-	public:
-		
-		static bool printLog(const char *log);
+extern bool printLog(const char *log);
 
-		static char* readTextFile(const char *fileName);
+extern char* readTextFile(const char *fileName);
 
-	};
-}
+extern float sensitive;
+
+extern float speed;
+
+extern void onKeyStateChange(int id, int state);
+
+extern void handleKeyInput();
+
+extern void onMouseMove(int x, int y);
+
+extern void onMouseButtonStateChange(int id, int state);
 
 #endif

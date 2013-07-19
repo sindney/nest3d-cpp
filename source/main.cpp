@@ -1,39 +1,29 @@
 #include <cstdlib>
-#include <cmath>
 #include <ctime>
 #include <iostream>
-#include <typeinfo>
-#include <vector>
 
 #include "GL/glew.h"
 #include "GL/glfw.h"
 
-#include "event.h"
-#include "eventdispatcher.h"
 #include "geometry.h"
 #include "matrix4.h"
 #include "mesh.h"
-#include "object3d.h"
-#include "quaternion.h"
 #include "shader3d.h"
-#include "utils.h"
 #include "vector4.h"
 #include "containerprocess.h"
+
+#include "utils.h"
+
+void getMousePos(int *x, int *y) { glfwGetMousePos(x, y); }
 
 using namespace nest;
 using namespace std;
 
-void checkError();
+float sensitive = 0.01f;
 
-vector<bool> keys(256, false);
+float speed = 0.5f;
 
-void onKeyStateChange(int id, int state);
-
-void handleKeyInput();
-
-void onMouseMove(int x, int y);
-
-void onMouseButtonStateChange(int id, int state);
+camera3d *camera0;
 
 containerprocess *process0;
 
@@ -43,7 +33,7 @@ int main(void)
 	time_t rawtime;
 	time(&rawtime);
 	struct tm *timeinfo = localtime(&rawtime);
-	utils::printLog(asctime(timeinfo));
+	printLog(asctime(timeinfo));
 	// Initialize GLFW
 	if(!glfwInit()) exit(EXIT_FAILURE);
 	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
@@ -66,9 +56,10 @@ int main(void)
 		new camera3d()
 	);
 	camera3d::setupCamera(*(process0->camera), 0.7854f, 4 / 3, 1.0f, 1000.0f);
+	camera0 = process0->camera;
 	// Initialize Shader
 	shader3d *shader = new shader3d();
-	shader3d::setupShader(*shader, utils::readTextFile("shader_vs.glsl"), utils::readTextFile("shader_fs.glsl"));
+	shader3d::setupShader(*shader, readTextFile("shader_vs.glsl"), readTextFile("shader_fs.glsl"));
 	glUseProgram(shader->program);
 	glUniform4f(glGetUniformLocation(shader->program, "OutColor"), 0.0f, 0.0f, 1.0f, 1.0f);
 	// Initialize Geometry
@@ -131,152 +122,7 @@ int main(void)
 	glfwSetKeyCallback(NULL);
 	glfwSetMousePosCallback(NULL);
 	glfwSetMouseButtonCallback(NULL);
-	vector<container3d*> containers;
-	container3d *current = process0->container;
-	object3d *object0 = NULL;
-	while(true)
-	{
-		while(current->objects.size() != 0)
-		{
-			object0 = current->objects.back();
-			current->objects.pop_back();
-			if(typeid(*object0) == typeid(container3d))
-			{
-				containers.push_back(static_cast<container3d*>(object0));
-			} 
-			else if(typeid(*object0) == typeid(mesh))
-			{
-				mesh0 = static_cast<mesh*>(object0);
-				delete mesh0;
-			}
-		}
-		delete current;
-		if(containers.size() != 0)
-		{
-			current = containers.back();
-			containers.pop_back();
-			continue;
-		}
-		break;
-	}
-	mesh0 = NULL;
-	current = NULL;
 	delete geom, shader, process0;
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
-}
-
-void checkError()
-{
-	GLenum error = glGetError();
-  	if(error != GL_NO_ERROR)
-  	{
-  		switch(error)
-  		{
-  			case GL_INVALID_ENUM:
-  				utils::printLog("GL_INVALID_ENUM\n");
-  				break;
-  			case GL_INVALID_VALUE:
-  				utils::printLog("GL_INVALID_VALUE\n");
-  				break;
-  			case GL_INVALID_OPERATION:
-  				utils::printLog("GL_INVALID_OPERATION\n");
-  				break;
-  			case GL_INVALID_FRAMEBUFFER_OPERATION:
-  				utils::printLog("GL_INVALID_FRAMEBUFFER_OPERATION\n");
-  				break;
-  			case GL_OUT_OF_MEMORY:
-  				utils::printLog("GL_OUT_OF_MEMORY\n");
-  				break;
-  			case GL_STACK_UNDERFLOW:
-  				utils::printLog("GL_STACK_UNDERFLOW\n");
-  				break;
-  			case GL_STACK_OVERFLOW:
-  				utils::printLog("GL_STACK_OVERFLOW\n");
-  				break;
-  		}
-  	}
-}
-
-void onKeyStateChange(int id, int state)
-{
-	keys[id] = state == GLFW_PRESS;
-}
-
-float speed = 0.5f;
-
-void handleKeyInput()
-{
-	vector4 pos;
-	if(keys[65])
-	{
-		pos.x = -speed;
-	}
-	else if(keys[68])
-	{
-		pos.x = speed;
-	}
-	else if(keys[87])
-	{
-		pos.z = -speed;
-	}
-	else if(keys[83])
-	{
-		pos.z = speed;
-	}
-	process0->camera->localMatrix.translate(pos * process0->camera->localMatrix);
-	process0->camera->recompose();
-}
-
-const float DEGREE_90 = 3.1416 / 2;
-
-int oldX = 0, oldY = 0;
-
-bool moving = false;
-
-float sensitive = 0.01f;
-
-float rotX = 0.0f, rotY = 0.0f;
-
-void onMouseMove(int x, int y)
-{
-	if(moving)
-	{
-		float t = (oldY - y) * sensitive + rotX;
-		if(t >= DEGREE_90) 
-		{
-			t = DEGREE_90;
-		} 
-		else if(t <= -DEGREE_90)
-		{
-			t = -DEGREE_90;
-		}
-		rotX = t;
-		rotY += (oldX - x) * sensitive;
-
-    	process0->camera->localMatrix.rotate(vector4(rotX, rotY, 0.0f, 0.0f));
-    	process0->camera->recompose();
-
-		oldX = x;
-		oldY = y;
-	}
-}
-
-void onMouseButtonStateChange(int id, int state)
-{
-	if(id == GLFW_MOUSE_BUTTON_LEFT)
-	{
-		if(state == GLFW_PRESS)
-		{
-			int x, y;
-			glfwGetMousePos(&x, &y);
-			moving = true;
-			oldX = x;
-			oldY = y;
-		}
-		else if(state == GLFW_RELEASE)
-		{
-			moving = false;
-		}
-	}
 }

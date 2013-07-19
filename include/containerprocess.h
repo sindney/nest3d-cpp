@@ -7,7 +7,6 @@
 #include "container3d.h"
 #include "mesh.h"
 #include "renderprocess.h"
-#include "utils.h"
 
 namespace nest
 {
