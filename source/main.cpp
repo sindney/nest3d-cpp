@@ -107,10 +107,7 @@ int main(void)
 			{
 				mesh0 = new mesh(geom, shader);
 				mesh0->localMatrix.translate(vector4(i * 10 - m, j * 10 - m, k * 10 - m, 0.0f));
-				mesh0->parent = container0;
-				container0->objects.push_back(static_cast<object3d*>(mesh0));
-				mesh0->recompose();
-				mesh0 = NULL;
+				container0->addChild(mesh0);
 			}
 		}
 	}

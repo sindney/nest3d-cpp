@@ -69,6 +69,7 @@ namespace nest
 			break;
 		}
 
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		if(alphaObjects.size() > 1) std::sort(alphaObjects.begin(), alphaObjects.end(), *this);
@@ -76,8 +77,8 @@ namespace nest
 		vector<mesh*>::iterator j;
 		for(j = alphaObjects.begin(); j != alphaObjects.end(); j++)
 			drawMesh(static_cast<mesh*>(*j));
-
-		glBlendFunc(GL_ONE, GL_ZERO);
+		
+		glDisable(GL_BLEND);
 	}
 
 	void containerprocess::drawMesh(mesh *mesh0)

@@ -27,6 +27,32 @@ namespace nest
 			objects.clear();
 		}
 
+		void addChild(object3d *node)
+		{
+			objects.push_back(static_cast<object3d*>(node));
+			node->parent = this;
+			node->recompose();
+		}
+
+		object3d *removeChild(object3d *node)
+		{
+			vector<object3d*>::iterator i;
+			for(i = objects.begin(); i != objects.end(); i++)
+			{
+				if(*i == node) return removeChildAt(i);
+			}
+			return NULL;
+		}
+
+		object3d *removeChildAt(vector<object3d*>::iterator index)
+		{
+			object3d *node = *index;
+			node->parent = NULL;
+			node->recompose();
+			objects.erase(index);
+			return node;
+		}
+
 		void recompose()
 		{
 			object3d::recompose();
