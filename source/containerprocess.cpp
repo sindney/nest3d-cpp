@@ -23,7 +23,8 @@ namespace nest
 		numTriangles = 0;
 		numVertices = 0;
 
-		glBindFramebuffer(GL_FRAMEBUFFER, target ? target->frameBuffer : 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, target->frameBuffer);
+		glViewport(target->x, target->y, target->width, target->height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		while(true)

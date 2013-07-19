@@ -35,10 +35,6 @@ void onMouseMove(int x, int y);
 
 void onMouseButtonStateChange(int id, int state);
 
-camera3d *camera;
-
-container3d *container0;
-
 containerprocess *process0;
 
 int main(void)
@@ -60,17 +56,16 @@ int main(void)
 	}
 	glfwSetWindowTitle("Nest3D C++");
 	glfwSwapInterval(1);
-	// GL Setup
-	glViewport(0.0f, 0.0f, 800.0f, 600.0f);
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) exit(EXIT_FAILURE);
-	// Initialize Camera3d
-	camera = new camera3d();
-	camera3d::setupCamera(*camera, 0.7854f, 4 / 3, 1.0f, 1000.0f);
 	// Initialize Containerprocess
-	container0 = new container3d();
-	process0 = new containerprocess(container0, camera);
+	process0 = new containerprocess(
+		new rendertarget(0, 0, 800, 600), 
+		new container3d(), 
+		new camera3d()
+	);
+	camera3d::setupCamera(*(process0->camera), 0.7854f, 4 / 3, 1.0f, 1000.0f);
 	// Initialize Shader
 	shader3d *shader = new shader3d();
 	shader3d::setupShader(*shader, utils::readTextFile("shader_vs.glsl"), utils::readTextFile("shader_fs.glsl"));
@@ -107,7 +102,7 @@ int main(void)
 			{
 				mesh0 = new mesh(geom, shader);
 				mesh0->localMatrix.translate(vector4(i * 10 - m, j * 10 - m, k * 10 - m, 0.0f));
-				container0->addChild(mesh0);
+				process0->container->addChild(mesh0);
 			}
 		}
 	}
@@ -137,7 +132,7 @@ int main(void)
 	glfwSetMousePosCallback(NULL);
 	glfwSetMouseButtonCallback(NULL);
 	vector<container3d*> containers;
-	container3d *current = container0;
+	container3d *current = process0->container;
 	object3d *object0 = NULL;
 	while(true)
 	{
@@ -166,7 +161,7 @@ int main(void)
 	}
 	mesh0 = NULL;
 	current = NULL;
-	delete geom, shader, camera;
+	delete geom, shader, process0;
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }
@@ -229,8 +224,8 @@ void handleKeyInput()
 	{
 		pos.z = speed;
 	}
-	camera->localMatrix.translate(pos * camera->localMatrix);
-	camera->recompose();
+	process0->camera->localMatrix.translate(pos * process0->camera->localMatrix);
+	process0->camera->recompose();
 }
 
 const float DEGREE_90 = 3.1416 / 2;
@@ -259,8 +254,8 @@ void onMouseMove(int x, int y)
 		rotX = t;
 		rotY += (oldX - x) * sensitive;
 
-    	camera->localMatrix.rotate(vector4(rotX, rotY, 0.0f, 0.0f));
-    	camera->recompose();
+    	process0->camera->localMatrix.rotate(vector4(rotX, rotY, 0.0f, 0.0f));
+    	process0->camera->recompose();
 
 		oldX = x;
 		oldY = y;

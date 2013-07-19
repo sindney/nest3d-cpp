@@ -29,13 +29,13 @@ namespace nest
 
 		int numVertices;
 
-		containerprocess(container3d *container, camera3d *camera)
-		 : container(container), camera(camera), numObjects(0), numTriangles(0), numVertices(0) {}
+		containerprocess(rendertarget *target, container3d *container, camera3d *camera)
+		 : renderprocess(target), container(container), camera(camera), numObjects(0), numTriangles(0), numVertices(0) {}
 
 		~containerprocess() 
 		{
-			container = NULL;
-			camera = NULL;
+			if(container != NULL) delete container;
+			if(camera != NULL) delete camera;
 			objects.clear();
 			alphaObjects.clear();
 		}

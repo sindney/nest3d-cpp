@@ -1,41 +1,21 @@
 #ifndef RENDERPROCESS_H
 #define RENDERPROCESS_H
 
-#include "GL/glew.h"
+#include "rendertarget.h"
 
 namespace nest
 {
-	typedef struct 
-	{
-		GLuint frameBuffer;
-
-		GLuint *renderBuffers;
-
-		GLuint renderBufferSize;
-
-		GLuint *textures;
-
-		GLuint textureSize;
-
-		GLint top;
-
-		GLint left;
-
-		GLint right;
-
-		GLint bottom;
-
-	} renderTarget;
-
 	class renderprocess
 	{
 	public:
 
-		renderTarget *target;
+		rendertarget *target;
 
-		virtual ~renderprocess() 
+		renderprocess(rendertarget *target) : target(target) {}
+
+		virtual ~renderprocess()
 		{
-			target = NULL;
+			if(target != NULL) delete target;
 		}
 
 		virtual void calculate() = 0;
