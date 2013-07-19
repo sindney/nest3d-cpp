@@ -104,8 +104,6 @@ void onMouseMove(int x, int y)
 	}
 }
 
-extern void getMousePos(int *x, int *y);
-
 void onMouseButtonStateChange(int id, int state)
 {
 	if(id == 0)

@@ -1,8 +1,6 @@
 #ifndef SHADER3D_H
 #define SHADER3D_H
 
-#include "GL/glew.h"
-
 namespace nest
 {
 	class shader3d
@@ -29,17 +27,7 @@ namespace nest
 
 		shader3d() : program(0), vertexShader(0), fragmentShader(0) {}
 
-		~shader3d()
-		{
-			if(program != 0)
-			{
-				glDetachShader(program, vertexShader);
-				glDetachShader(program, fragmentShader);
-				glDeleteShader(vertexShader);
-				glDeleteShader(fragmentShader);
-				glDeleteShader(program);
-			}
-		}
+		~shader3d();
 
 		static void setupShader(shader3d &shader, const char *vertex, const char *fragment);
 	};

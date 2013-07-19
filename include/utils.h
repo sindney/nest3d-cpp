@@ -17,4 +17,6 @@ extern void onMouseMove(int x, int y);
 
 extern void onMouseButtonStateChange(int id, int state);
 
+extern void getMousePos(int *x, int *y);
+
 #endif

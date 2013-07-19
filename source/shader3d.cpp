@@ -1,3 +1,5 @@
+#include "GL/glew.h"
+
 #include "shader3d.h"
 
 namespace nest
@@ -17,6 +19,18 @@ namespace nest
 	const GLchar shader3d::SHADER_INVERT_VIEW_MATRIX[] = "invert_view_matrix";
 
 	const GLchar shader3d::SHADER_WORLD_MATRIX[] = "world_matrix";
+
+	shader3d::~shader3d()
+	{
+		if(program != 0)
+		{
+			glDetachShader(program, vertexShader);
+			glDetachShader(program, fragmentShader);
+			glDeleteShader(vertexShader);
+			glDeleteShader(fragmentShader);
+			glDeleteShader(program);
+		}
+	}
 
 	void shader3d::setupShader(shader3d &shader, const char *vertex, const char *fragment)
 	{
