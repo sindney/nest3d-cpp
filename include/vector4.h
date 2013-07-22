@@ -3,19 +3,21 @@
 
 #include <cmath>
 
+#include "GL/glew.h"
+
 namespace nest
 {
 	class vector4 
 	{
 	public:
 
-		float x, y, z, w;
+		GLfloat x, y, z, w;
 	
 		vector4() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 		
 		vector4(const vector4 &a) : x(a.x), y(a.y), z(a.z), w(a.w) {}
 		
-		vector4(float lx, float ly, float lz, float lw) : x(lx), y(ly), z(lz), w(lw) {}
+		vector4(GLfloat lx, GLfloat ly, GLfloat lz, GLfloat lw) : x(lx), y(ly), z(lz), w(lw) {}
 		
 		void absolute()
 		{
@@ -33,10 +35,10 @@ namespace nest
 		
 		void normalize()
 		{
-			float mag = x * x + y * y + z * z;
+			GLfloat mag = x * x + y * y + z * z;
 			if(mag > 0.0f)
 			{
-				float a = 1.0f / sqrt(mag);
+				GLfloat a = 1.0f / sqrt(mag);
 				x *= a; y *= a; z *= a;
 			}
 			w = 1.0f;
@@ -73,14 +75,14 @@ namespace nest
 			return vector4(x - a.x, y - a.y, z - a.z, 1.0f);
 		}
 		
-		vector4 operator * (float a) const 
+		vector4 operator * (GLfloat a) const 
 		{
 			return vector4(x * a, y * a, z * a, 1.0f);
 		}
 		
-		vector4 operator / (float a) const 
+		vector4 operator / (GLfloat a) const 
 		{
-			float b = 1.0f / a;
+			GLfloat b = 1.0f / a;
 			return vector4(x * b, y * b, z * b, 1.0f);
 		}
 		
@@ -96,26 +98,28 @@ namespace nest
 			return *this;
 		}
 		
-		vector4 &operator *= (float a)
+		vector4 &operator *= (GLfloat a)
 		{
 			x *= a; y *= a; z *= a;
 			return *this;
 		}
 		
-		vector4 &operator /= (float a)
+		vector4 &operator /= (GLfloat a)
 		{
 			a = 1.0f / a;
 			x *= a; y *= a; z *= a;
 			return *this;
 		}
 		
-		float operator * (const vector4 &a)
+		GLfloat operator * (const vector4 &a)
 		{
 			return x * a.x + y * a.y + z * a.z;
 		}
+
+		static const vector4 X_AXIS, Y_AXIS, Z_AXIS, ZERO;
 	};
 
-	inline vector4 operator * (float a, const vector4 &b)
+	inline vector4 operator * (GLfloat a, const vector4 &b)
 	{
 		return vector4(a * b.x, a * b.y, a * b.z, 1.0f);
 	}
@@ -130,23 +134,18 @@ namespace nest
 		);
 	}
 
-	inline float distance(const vector4 &a, const vector4 &b)
+	inline GLfloat distance(const vector4 &a, const vector4 &b)
 	{
-		float dx = a.x - b.x;
-		float dy = a.y - b.y;
-		float dz = a.z - b.z;
+		GLfloat dx = a.x - b.x;
+		GLfloat dy = a.y - b.y;
+		GLfloat dz = a.z - b.z;
 		return sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
-	inline float magnet(const vector4 &a)
+	inline GLfloat magnet(const vector4 &a)
 	{
 		return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 	}
-
-	const vector4 X_AXIS = vector4(1.0f, 0.0f, 0.0f, 1.0f);
-	const vector4 Y_AXIS = vector4(0.0f, 1.0f, 0.0f, 1.0f);
-	const vector4 Z_AXIS = vector4(0.0f, 0.0f, 1.0f, 1.0f);
-	const vector4 ZERO;
 }
 
 #endif

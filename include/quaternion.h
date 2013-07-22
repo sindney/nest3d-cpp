@@ -9,13 +9,13 @@ namespace nest
 	{
 	public:
 		
-		float x, y, z, w;
+		GLfloat x, y, z, w;
 		
 		quaternion() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 		
 		quaternion(const quaternion &a) : x(a.x), y(a.y), z(a.z), w(a.w) {}
 		
-		quaternion(float nx, float ny, float nz, float nw) : x(nx), y(ny), z(nz), w(nw) {}
+		quaternion(GLfloat nx, GLfloat ny, GLfloat nz, GLfloat nw) : x(nx), y(ny), z(nz), w(nw) {}
 		
 		void identity() 
 		{
@@ -23,7 +23,7 @@ namespace nest
 			w = 1.0f;
 		}
 		
-		void rotate(const vector4 &axis, float theta);
+		void rotate(const vector4 &axis, GLfloat theta);
 		
 		void normalize();
 		
@@ -34,13 +34,13 @@ namespace nest
 		quaternion &operator *= (const quaternion &a);
 	};
 
-	float dotProduct(const quaternion &a, const quaternion &b);
+	GLfloat dotProduct(const quaternion &a, const quaternion &b);
 
-	quaternion slerp(const quaternion &a, const quaternion &b, float t);
+	quaternion slerp(const quaternion &a, const quaternion &b, GLfloat t);
 
 	quaternion conjugate(const quaternion &a);
 
-	quaternion pow(const quaternion &a, float exp);
+	quaternion pow(const quaternion &a, GLfloat exp);
 }
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
-#include "GL/glew.h"
-
 #include "matrix4.h"
 #include "vector4.h"
 
@@ -53,36 +51,40 @@ namespace nest
 
 		GLuint attributeArray;
 
-		geometry()
-		{
-			vertexBuffer = 0;
-			uvBuffer = 0;
-			normalBuffer = 0;
-			tangentBuffer = 0;
-			indexBuffer = 0;
-			vertexDataSize = 0;
-			uvDataSize = 0;
-			normalDataSize = 0;
-			tangentDataSize = 0;
-			indexDataSize = 0;
-			attributeArray = 0;
-		}
+		geometry();
 
-		~geometry()
-		{
-			if(vertexBuffer != 0) glDeleteBuffers(1, &vertexBuffer);
-			if(uvBuffer != 0) glDeleteBuffers(1, &uvBuffer);
-			if(normalBuffer != 0) glDeleteBuffers(1, &normalBuffer);
-			if(tangentBuffer != 0) glDeleteBuffers(1, &tangentBuffer);
-			if(indexBuffer != 0) glDeleteBuffers(1, &indexBuffer);
-			if(attributeArray != 0) glDeleteVertexArrays(1, &attributeArray);
-		}
+		~geometry();
 
+		/**
+		 *	Calculate target vertex array's bounding-box.
+		 */
 		static void setupAABB(aabb &bound, const float *vertexData, const int vertexDataSize);
 
+		/**
+		 *	Setup target geometry object by corresponding geometrydata for opengl rendering pipeline.
+		 */
 		static void setupGeometry(geometry &geom, const geometrydata &data, bool vertex, bool uv, bool normal, bool tangent, bool index);
 
+		/**
+		 *	Transform target bounding-box by corresponding matrix.
+		 */
 		static void transformAABB(const matrix4 &mat, const aabb &target, aabb &dest);
+
+		/**
+		 *	Calculate normal data for corresponding geometrydata.
+		 */
+		static void calculateNormal(geometrydata &data);
+
+		/**
+		 *	Calculate tangent data for corresponding geometrydata.
+		 */
+		static void calculateTangent(geometrydata &data);
+
+		/**
+		 *	Free memories allocated by target geometrydata.
+		 *	Call this when you're about to delete target geometrydata.
+		 */
+		static void emptyGeometryData(geometrydata &data);
 	};
 }
 

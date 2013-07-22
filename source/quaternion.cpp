@@ -5,10 +5,10 @@
 
 namespace nest
 {
-	void quaternion::rotate(const vector4 &axis, float theta)
+	void quaternion::rotate(const vector4 &axis, GLfloat theta)
 	{
-		float t2 = theta * .5f;
-		float st2 = sin(t2);
+		GLfloat t2 = theta * .5f;
+		GLfloat st2 = sin(t2);
 		w = cos(t2);
 		x = axis.x * st2;
 		y = axis.y * st2;
@@ -17,7 +17,7 @@ namespace nest
 
 	void quaternion::normalize()
 	{
-		float mag = (float)sqrt(x * x + y * y + z * z + w * w);
+		GLfloat mag = (GLfloat)sqrt(x * x + y * y + z * z + w * w);
 		if(mag > 0.0f)
 		{
 			mag = 1 / mag;
@@ -37,7 +37,7 @@ namespace nest
 		vector4 result;
 		result.w = acos(w) * 2.0f;
 		
-		float a = 1.0f - w * w;
+		GLfloat a = 1.0f - w * w;
 		if(a <= 0.0f)
 		{
 			result.x = 1.0f;
@@ -45,7 +45,7 @@ namespace nest
 			return result;
 		}
 		
-		float b = 1.0f / sqrt(a);
+		GLfloat b = 1.0f / sqrt(a);
 		result.x = x * b;
 		result.y = y * b;
 		result.z = z * b;
@@ -69,16 +69,16 @@ namespace nest
 		return *this;
 	}
 
-	float dotProduct(const quaternion &a, const quaternion &b)
+	GLfloat dotProduct(const quaternion &a, const quaternion &b)
 	{
 		return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
 	}
 
-	quaternion slerp(const quaternion &a, const quaternion &b, float t)
+	quaternion slerp(const quaternion &a, const quaternion &b, GLfloat t)
 	{
 		quaternion result;
 		
-		float cos = dotProduct(a, b);
+		GLfloat cos = dotProduct(a, b);
 		if (cos == 0.0f) {
 			result.x = a.x;
 			result.y = a.y;
@@ -87,16 +87,16 @@ namespace nest
 			return result;
 		}
 		
-		float k0, k1;
+		GLfloat k0, k1;
 		if (cos > .9999f) {
 			k0 = 1.0f - t;
 			k1 = t;
 		} 
 		else 
 		{
-			float a = sqrt(1.0f - cos * cos);
-			float b = atan2(a, cos);
-			float c = 1.0f / a;
+			GLfloat a = sqrt(1.0f - cos * cos);
+			GLfloat b = atan2(a, cos);
+			GLfloat c = 1.0f / a;
 			k0 = sin((1.0f - t) * b) * c;
 			k1 = sin(t * b) * c;
 		}
@@ -118,13 +118,13 @@ namespace nest
 		result.z = -a.z;
 	}
 
-	quaternion pow(const quaternion &a, float exp)
+	quaternion pow(const quaternion &a, GLfloat exp)
 	{
 		if(fabs(a.w) > .9999f) return a;
 		
-		float alpha = acos(a.w);
-		float alpha2 = alpha * exp;
-		float mul = sin(alpha2) / sin(alpha);
+		GLfloat alpha = acos(a.w);
+		GLfloat alpha2 = alpha * exp;
+		GLfloat mul = sin(alpha2) / sin(alpha);
 		
 		quaternion result;
 		result.w = cos(alpha2);

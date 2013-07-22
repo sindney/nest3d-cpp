@@ -58,8 +58,11 @@ int main(void)
 	camera3d::setupCamera(*(process0->camera), 0.7854f, 4 / 3, 1.0f, 1000.0f);
 	camera0 = process0->camera;
 	// Initialize Shader
+	char *vs = readTextFile("shader_vs.glsl");
+	char *fs = readTextFile("shader_fs.glsl");
 	shader3d *shader = new shader3d();
-	shader3d::setupShader(*shader, readTextFile("shader_vs.glsl"), readTextFile("shader_fs.glsl"));
+	shader3d::setupShader(*shader, vs, fs);
+	delete [] vs, fs;
 	glUseProgram(shader->program);
 	glUniform4f(glGetUniformLocation(shader->program, "OutColor"), 0.0f, 0.0f, 1.0f, 1.0f);
 	// Initialize Geometry

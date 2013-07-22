@@ -26,7 +26,7 @@ namespace nest
 		bool classifyBSphere(const vector4 &center, float radius);
 
 		/**
-		 *	Make sure your bound is in world space, and pass the right invertViewMatrix.
+		 *	Make sure your bounding-box is in world space, and pass the right invertViewMatrix.
 		 */
 		bool classifyAABB(const aabb &bound, const matrix4 &ivm);
 

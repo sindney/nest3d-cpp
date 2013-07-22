@@ -8,10 +8,6 @@
 
 namespace nest
 {
-	/**
-	 *	This delocate function will delete all child objects.
-	 *	You can call container.objects.clear() before delete to avoid that process from happening.
-	 */
 	container3d::~container3d()
 	{
 		vector<container3d*> containers;

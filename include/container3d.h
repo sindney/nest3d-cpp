@@ -24,8 +24,9 @@ namespace nest
 		container3d() : castShadows(false), visible(true) {}
 
 		/**
-		 *	This delocate function will delete all child objects.
+		 *	The delocate function will delete target container's all child objects.
 		 *	You can call container.objects.clear() before delete to avoid that process from happening.
+		 *	Don't forget to call object.recompose() and set it's parent to NULL to reset his transform matrixes.
 		 */
 		~container3d();
 

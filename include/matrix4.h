@@ -1,8 +1,6 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
-#include "GL/glew.h"
-
 #include "vector4.h"
 #include "quaternion.h"
 

@@ -7,6 +7,12 @@ namespace nest
 	{
 	public:
 
+		GLuint program, vertexShader, fragmentShader;
+
+		shader3d() : program(0), vertexShader(0), fragmentShader(0) {}
+
+		~shader3d();
+
 		static const GLchar SHADER_VERTEX_POSITION[];
 
 		static const GLchar SHADER_VERTEX_UV[];
@@ -22,12 +28,6 @@ namespace nest
 		static const GLchar SHADER_INVERT_VIEW_MATRIX[];
 
 		static const GLchar SHADER_WORLD_MATRIX[];
-
-		GLuint program, vertexShader, fragmentShader;
-
-		shader3d() : program(0), vertexShader(0), fragmentShader(0) {}
-
-		~shader3d();
 
 		static void setupShader(shader3d &shader, const char *vertex, const char *fragment);
 	};

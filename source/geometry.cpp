@@ -1,8 +1,36 @@
+#include <cmath>
+
 #include "geometry.h"
 #include "matrix4.h"
+#include "vector4.h"
 
 namespace nest
 {
+	geometry::geometry()
+	{
+		vertexBuffer = 0;
+		uvBuffer = 0;
+		normalBuffer = 0;
+		tangentBuffer = 0;
+		indexBuffer = 0;
+		vertexDataSize = 0;
+		uvDataSize = 0;
+		normalDataSize = 0;
+		tangentDataSize = 0;
+		indexDataSize = 0;
+		attributeArray = 0;
+	}
+
+	geometry::~geometry()
+	{
+		if(vertexBuffer != 0) glDeleteBuffers(1, &vertexBuffer);
+		if(uvBuffer != 0) glDeleteBuffers(1, &uvBuffer);
+		if(normalBuffer != 0) glDeleteBuffers(1, &normalBuffer);
+		if(tangentBuffer != 0) glDeleteBuffers(1, &tangentBuffer);
+		if(indexBuffer != 0) glDeleteBuffers(1, &indexBuffer);
+		if(attributeArray != 0) glDeleteVertexArrays(1, &attributeArray);
+	}
+
 	void geometry::setupAABB(aabb &bound, const float *vertexData, const int vertexDataSize)
 	{
 		bound.max.x = bound.min.x = vertexData[0];
@@ -143,5 +171,163 @@ namespace nest
 			else if(vt->z < dest.min.z)
 				dest.min.z = vt->z;
 		}
+	}
+
+	// TODO: check if it's right.
+	void calculateNormal(geometrydata &data)
+	{
+		if(data.normalData == NULL) 
+			data.normalData = new GLfloat[data.vertexDataSize * 3];
+		else if(data.normalDataSize != data.vertexDataSize * 3)
+		{
+			delete data.normalData;
+			data.normalData = new GLfloat[data.vertexDataSize * 3];
+		} 
+		else
+		{
+			int k;
+			for(k = 0; k < data.normalDataSize; k++)
+				data.normalData[k] = 0;
+		} 
+		data.normalDataSize = data.vertexDataSize * 3;
+
+		int i, j;
+		GLuint a, b, c;
+		GLfloat x1, y1, z1, x2, y2, z2, x3, y3, z3;
+		vector4 vt1, vt2;
+
+		for(i = 0; i < data.indexDataSize; i++)
+		{
+			j = i * 3;
+			a = data.indexData[j] * 3;
+			x1 = data.vertexData[a];
+			y1 = data.vertexData[a + 1];
+			z1 = data.vertexData[a + 2];
+			b = data.indexData[j + 1] * 3;
+			x2 = data.vertexData[b];
+			y2 = data.vertexData[b + 1];
+			z2 = data.vertexData[b + 2];
+			c = data.indexData[j + 2] * 3;
+			x3 = data.vertexData[c];
+			y3 = data.vertexData[c + 1];
+			z3 = data.vertexData[c + 2];
+
+			vt1.x = x2 - x1;
+			vt1.y = y2 - y1;
+			vt1.z = z2 - z1;
+			vt2.x = x3 - x2;
+			vt2.y = y3 - y2;
+			vt2.z = z3 - z2;
+			vt1 = crossProduct(vt1, vt2);
+			vt1.normalize();
+
+			data.normalData[a] += vt1.x;
+			data.normalData[a + 1] += vt1.y;
+			data.normalData[a + 2] += vt1.z;
+			data.normalData[b] += vt1.x;
+			data.normalData[b + 1] += vt1.y;
+			data.normalData[b + 2] += vt1.z;
+			data.normalData[c] += vt1.x;
+			data.normalData[c + 1] += vt1.y;
+			data.normalData[c + 2] += vt1.z;
+		}
+
+		for(i = 0; i < data.vertexDataSize; i++)
+		{
+			j = i * 3;
+			x3 = data.normalData[j];
+			y3 = data.normalData[j + 1];
+			z3 = data.normalData[j + 2];
+			x1 = 1 / sqrt(x3 * x3 + y3 * y3 + z3 * z3);
+			data.normalData[j] *= x1;
+			data.normalData[j + 1] *= x1;
+			data.normalData[j + 2] *= x1;
+		}
+	}
+
+	void calculateTangent(geometrydata &data)
+	{
+		if(data.normalData == NULL) calculateNormal(data);
+		if(data.tangentData == NULL) 
+			data.tangentData = new GLfloat[data.normalDataSize];
+		else if(data.tangentDataSize != data.normalDataSize)
+		{
+			delete data.tangentData;
+			data.tangentData = new GLfloat[data.normalDataSize];
+		}
+		else
+		{
+			int k;
+			for(k = 0; k < data.tangentDataSize; k++)
+				data.tangentData[k] = 0;
+		} 
+		data.tangentDataSize = data.normalDataSize;
+
+		int i, j;
+		GLuint a, b, c, d;
+		GLfloat u1, u2, u3, v1, v2, v3;
+		vector4 p1, p2, p3, p4, p5;
+
+		for(i = 0; i < data.indexDataSize; i++)
+		{
+			j = i * 3;
+			a = data.indexData[j] * 3;
+			p1.x = data.vertexData[a];
+			p1.y = data.vertexData[a + 1];
+			p1.z = data.vertexData[a + 2];
+			b = data.indexData[j + 1] * 3;
+			p2.x = data.vertexData[b];
+			p2.y = data.vertexData[b + 1];
+			p2.z = data.vertexData[b + 2];
+			c = data.indexData[j + 2] * 3;
+			p3.x = data.vertexData[c];
+			p3.y = data.vertexData[c + 1];
+			p3.z = data.vertexData[c + 2];
+
+			d = data.indexData[j] * 2;
+			u1 = data.uvData[d];
+			v1 = data.uvData[d + 1];
+			d = data.indexData[j + 1] * 2;
+			u2 = data.uvData[d];
+			v2 = data.uvData[d + 1];
+			d = data.indexData[j + 2] * 2;
+			u3 = data.uvData[d];
+			v3 = data.uvData[d + 1];
+
+			p4 = (p2 - p1) * (v3 - v1);
+			p5 = (p3 - p1) * (v2 - v1);
+			p4 -= p5;
+			p4 *= 1 / ((u2 - u1) * (v3 - v1) - (v2 - v1) * (u3 - u1));
+
+			data.tangentData[a] += p4.x;
+			data.tangentData[a + 1] += p4.y;
+			data.tangentData[a + 2] += p4.z;
+			data.tangentData[b] += p4.x;
+			data.tangentData[b + 1] += p4.y;
+			data.tangentData[b + 2] += p4.z;
+			data.tangentData[c] += p4.x;
+			data.tangentData[c + 1] += p4.y;
+			data.tangentData[c + 2] += p4.z;
+		}
+
+		for (i = 0; i < data.vertexDataSize; i++) {
+			j = i * 3;
+			v1 = data.tangentData[j];
+			v2 = data.tangentData[j + 1];
+			v3 = data.tangentData[j + 2];
+			u1 = 1 / sqrt(v1 * v1 + v2 * v2 + v3 * v3);
+			data.tangentData[j] *= u1;
+			data.tangentData[j + 1] *= u1;
+			data.tangentData[j + 2] *= u1;
+		}
+	}
+
+	void emptyGeometryData(geometrydata &data)
+	{
+		if(data.vertexData != NULL) delete [] data.vertexData;
+		if(data.uvData != NULL) delete [] data.uvData;
+		if(data.normalData != NULL) delete [] data.normalData;
+		if(data.tangentData != NULL) delete [] data.tangentData;
+		if(data.indexData != NULL) delete [] data.indexData;
 	}
 }
