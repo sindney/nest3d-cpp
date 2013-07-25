@@ -29,7 +29,7 @@ namespace nest
 
 		static const GLchar SHADER_WORLD_MATRIX[];
 
-		static void setupShader(shader3d &shader, const char *vertex, const char *fragment);
+		static void configure(shader3d &shader, const char *vertex, const char *fragment);
 	};
 }
 

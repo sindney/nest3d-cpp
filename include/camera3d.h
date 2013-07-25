@@ -17,14 +17,14 @@ namespace nest
 
 		float fov, aspect, near, far;
 
-		static void setupCamera(camera3d &camera, float fov, float aspect, float near, float far)
+		void configure(float fov, float aspect, float near, float far)
 		{
-			camera.fov = fov;
-			camera.aspect = aspect;
-			camera.near = near;
-			camera.far = far;
-			camera.culling.create(fov, aspect, near, far);
-			matrix4::perspectiveProjection(camera.projectionMatrix, fov, aspect, near, far);
+			this->fov = fov;
+			this->aspect = aspect;
+			this->near = near;
+			this->far = far;
+			culling.create(fov, aspect, near, far);
+			matrix4::perspectiveProjection(projectionMatrix, fov, aspect, near, far);
 		}
 		
 	};

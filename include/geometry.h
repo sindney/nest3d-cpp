@@ -1,6 +1,9 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include <string>
+#include <vector>
+
 #include "matrix4.h"
 #include "vector4.h"
 
@@ -11,46 +14,30 @@ namespace nest
 		vector4 max, min;
 	} aabb;
 
-	typedef struct 
-	{
-		GLfloat *vertexData;
-
-		GLfloat *uvData;
-
-		GLfloat *normalData;
-
-		GLfloat *tangentData;
-
-		GLuint *indexData;
-
-		GLuint vertexDataSize;
-
-		GLuint uvDataSize;
-
-		GLuint normalDataSize;
-
-		GLuint tangentDataSize;
-
-		GLuint indexDataSize;
-
-	} geometrydata;
-
 	class geometry
 	{
 	public:
 
+		std::string name;
+
 		aabb bound;
+
+		GLfloat *vertexData, *uvData, *normalData, *tangentData;
+
+		GLuint *indexData;
 
 		GLuint vertexBuffer, uvBuffer, normalBuffer, tangentBuffer;
 
 		GLuint indexBuffer;
 
-		GLuint vertexDataSize, uvDataSize, normalDataSize, tangentDataSize;
-
-		GLuint indexDataSize;
+		GLuint numVertices, numTriangles;
 
 		GLuint attributeArray;
 
+		/**
+		 *	When you change the lenght of vertexData.
+		 *	You should make sure that it's uv/normal/tangent are in the right size or just delete and NULL them.
+		 */
 		geometry();
 
 		~geometry();
@@ -61,11 +48,6 @@ namespace nest
 		static void setupAABB(aabb &bound, const float *vertexData, const int vertexDataSize);
 
 		/**
-		 *	Setup target geometry object by corresponding geometrydata for opengl rendering pipeline.
-		 */
-		static void setupGeometry(geometry &geom, const geometrydata &data, bool vertex, bool uv, bool normal, bool tangent, bool index);
-
-		/**
 		 *	Transform target bounding-box by corresponding matrix.
 		 */
 		static void transformAABB(const matrix4 &mat, const aabb &target, aabb &dest);
@@ -73,18 +55,17 @@ namespace nest
 		/**
 		 *	Calculate normal data for corresponding geometrydata.
 		 */
-		static void calculateNormal(geometrydata &data);
+		static void calculateNormal(geometry &geom);
 
 		/**
 		 *	Calculate tangent data for corresponding geometrydata.
 		 */
-		static void calculateTangent(geometrydata &data);
+		static void calculateTangent(geometry &geom);
 
 		/**
-		 *	Free memories allocated by target geometrydata.
-		 *	Call this when you're about to delete target geometrydata.
+		 *	Setup target geometry object by corresponding geometrydata for opengl rendering pipeline.
 		 */
-		static void emptyGeometryData(geometrydata &data);
+		static void configure(geometry &geom, bool vertex, bool uv, bool normal, bool tangent);
 	};
 }
 

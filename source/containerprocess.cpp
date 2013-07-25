@@ -24,6 +24,8 @@ namespace nest
 		numVertices = 0;
 
 		glBindFramebuffer(GL_FRAMEBUFFER, target->frameBuffer);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 		glViewport(target->x, target->y, target->width, target->height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -55,8 +57,8 @@ namespace nest
 								objects.push_back(*i);
 							}
 							numObjects++;
-							numTriangles += mesh0->geom->indexDataSize;
-							numVertices += mesh0->geom->vertexDataSize;
+							numTriangles += mesh0->geom->numTriangles;
+							numVertices += mesh0->geom->numVertices;
 						}
 					}
 				}
@@ -99,7 +101,7 @@ namespace nest
 		glBindVertexArray(mesh0->geom->attributeArray);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh0->geom->indexBuffer);
 
-		glDrawElements(GL_TRIANGLES, mesh0->geom->indexDataSize, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, mesh0->geom->numTriangles * 3, GL_UNSIGNED_INT, 0);
 
 		glUseProgram(0);
 		glBindVertexArray(0);

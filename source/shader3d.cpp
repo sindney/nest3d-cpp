@@ -32,7 +32,7 @@ namespace nest
 
 	const GLchar shader3d::SHADER_WORLD_MATRIX[] = "world_matrix";
 
-	void shader3d::setupShader(shader3d &shader, const char *vertex, const char *fragment)
+	void shader3d::configure(shader3d &shader, const char *vertex, const char *fragment)
 	{
 		if(shader.program != 0)
 		{

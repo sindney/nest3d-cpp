@@ -1,6 +1,8 @@
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
+#include <string>
+
 #include "eventdispatcher.h"
 #include "matrix4.h"
 
@@ -9,6 +11,8 @@ namespace nest
 	class object3d
 	{
 	public:
+
+		std::string name;
 
 		matrix4 localMatrix;
 
