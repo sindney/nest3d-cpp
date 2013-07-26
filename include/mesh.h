@@ -32,7 +32,8 @@ namespace nest
 		shader3d *shader;
 
 		mesh(geometry *geom, shader3d *shader) 
-		 : alphaTest(false), alphaKey(0.0f), castShadows(false), cliping(true), visible(true), faceCulling(true), face(GL_BACK), geom(geom), shader(shader) {}
+		 : alphaTest(false), alphaKey(0.0f), castShadows(false), cliping(true), visible(true), 
+		 	faceCulling(true), face(GL_BACK), geom(geom), shader(shader) {}
 
 		~mesh()
 		{

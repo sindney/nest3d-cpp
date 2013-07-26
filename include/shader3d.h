@@ -1,6 +1,10 @@
 #ifndef SHADER3D_H
 #define SHADER3D_H
 
+#include <vector>
+
+#include "GL/glew.h"
+
 namespace nest
 {
 	class shader3d
@@ -8,6 +12,8 @@ namespace nest
 	public:
 
 		GLuint program, vertexShader, fragmentShader;
+
+		std::vector<GLuint> textures;
 
 		shader3d() : program(0), vertexShader(0), fragmentShader(0) {}
 
@@ -28,6 +34,12 @@ namespace nest
 		static const GLchar SHADER_INVERT_VIEW_MATRIX[];
 
 		static const GLchar SHADER_WORLD_MATRIX[];
+
+		static const GLchar SHADER_TEXTURE_DIFFUSE[];
+
+		static const GLchar SHADER_TEXTURE_SPECULAR[];
+
+		static const GLchar SHADER_TEXTURE_NORMAL[];
 
 		static void configure(shader3d &shader, const char *vertex, const char *fragment);
 	};

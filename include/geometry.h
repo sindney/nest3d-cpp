@@ -14,6 +14,14 @@ namespace nest
 		vector4 max, min;
 	} aabb;
 
+	enum geomparams
+	{
+		GEOM_VERTEX 	= 1 << 0, 
+		GEOM_UV			= 1 << 2, 
+		GEOM_NORMAL		= 1 << 3, 
+		GEOM_TANGENT	= 1 << 4
+	};
+
 	class geometry
 	{
 	public:
@@ -65,7 +73,7 @@ namespace nest
 		/**
 		 *	Setup target geometry object by corresponding geometrydata for opengl rendering pipeline.
 		 */
-		static void configure(geometry &geom, bool vertex, bool uv, bool normal, bool tangent);
+		static void configure(geometry &geom, int params);
 	};
 }
 

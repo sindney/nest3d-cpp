@@ -1,5 +1,3 @@
-#include "GL/glew.h"
-
 #include "shader3d.h"
 
 namespace nest
@@ -13,6 +11,11 @@ namespace nest
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 			glDeleteShader(program);
+		}
+		if(textures.size() > 0)
+		{
+			glDeleteTextures(textures.size(), &textures[0]);
+			textures.clear();
 		}
 	}
 
@@ -31,6 +34,12 @@ namespace nest
 	const GLchar shader3d::SHADER_INVERT_VIEW_MATRIX[] = "invert_view_matrix";
 
 	const GLchar shader3d::SHADER_WORLD_MATRIX[] = "world_matrix";
+
+	const GLchar shader3d::SHADER_TEXTURE_DIFFUSE[] = "texture_diffuse";
+
+	const GLchar shader3d::SHADER_TEXTURE_SPECULAR[] = "texture_specular";
+
+	const GLchar shader3d::SHADER_TEXTURE_NORMAL[] = "texture_normal";
 
 	void shader3d::configure(shader3d &shader, const char *vertex, const char *fragment)
 	{

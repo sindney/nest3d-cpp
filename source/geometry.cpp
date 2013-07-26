@@ -240,13 +240,13 @@ namespace nest
 		}
 	}
 
-	void geometry::configure(geometry &geom, bool vertex = false, bool uv = false, bool normal = false, bool tangent = false)
+	void geometry::configure(geometry &geom, int params)
 	{
 		GLuint count = 0;
 		if(geom.attributeArray != 0) glDeleteVertexArrays(1, &geom.attributeArray);
 		glGenVertexArrays(1, &geom.attributeArray);
 		glBindVertexArray(geom.attributeArray);
-		if(vertex)
+		if(params & GEOM_VERTEX)
 		{
 			if(geom.vertexBuffer != 0) glDeleteBuffers(1, &geom.vertexBuffer);
 			geom.vertexBuffer = 0;
@@ -259,7 +259,7 @@ namespace nest
 				glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			}
 		}
-		if(uv)
+		if(params & GEOM_UV)
 		{
 			if(geom.uvBuffer != 0) glDeleteBuffers(1, &geom.uvBuffer);
 			geom.uvBuffer = 0;
@@ -272,7 +272,7 @@ namespace nest
 				glVertexAttribPointer(count++, 2, GL_FLOAT, GL_FALSE, 0, 0);
 			}
 		}
-		if(normal)
+		if(params & GEOM_NORMAL)
 		{
 			if(geom.normalBuffer != 0) glDeleteBuffers(1, &geom.normalBuffer);
 			geom.normalBuffer = 0;
@@ -285,7 +285,7 @@ namespace nest
 				glVertexAttribPointer(count++, 3, GL_FLOAT, GL_TRUE, 0, 0);
 			}
 		}
-		if(tangent)
+		if(params & GEOM_TANGENT)
 		{
 			if(geom.tangentBuffer != 0) glDeleteBuffers(1, &geom.tangentBuffer);
 			geom.tangentBuffer = 0;
