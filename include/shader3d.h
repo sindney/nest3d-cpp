@@ -5,6 +5,8 @@
 
 #include "GL/glew.h"
 
+#include "shaderpart.h"
+
 namespace nest
 {
 	class shader3d
@@ -14,6 +16,8 @@ namespace nest
 		GLuint program, vertexShader, fragmentShader;
 
 		std::vector<GLuint> textures;
+
+		std::vector<shaderpart*> parts;
 
 		shader3d() : program(0), vertexShader(0), fragmentShader(0) {}
 

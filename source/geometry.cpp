@@ -38,7 +38,7 @@ namespace nest
 		if(indexData != NULL) delete [] indexData;
 	}
 
-	void geometry::setupAABB(aabb &bound, const float *vertexData, const int vertexDataSize)
+	void geometry::calculateAABB(aabb &bound, const float *vertexData, const int vertexDataSize)
 	{
 		bound.max.x = bound.min.x = vertexData[0];
 		bound.max.y = bound.min.y = vertexData[1];

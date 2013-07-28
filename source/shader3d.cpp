@@ -17,6 +17,13 @@ namespace nest
 			glDeleteTextures(textures.size(), &textures[0]);
 			textures.clear();
 		}
+		shaderpart *part;
+		while(parts.size() != 0)
+		{
+			part = parts.back();
+			parts.pop_back();
+			delete part;
+		}
 	}
 
 	const GLchar shader3d::SHADER_VERTEX_POSITION[] = "vertex_position";

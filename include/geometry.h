@@ -53,7 +53,7 @@ namespace nest
 		/**
 		 *	Calculate target vertex array's bounding-box.
 		 */
-		static void setupAABB(aabb &bound, const float *vertexData, const int vertexDataSize);
+		static void calculateAABB(aabb &bound, const float *vertexData, const int vertexDataSize);
 
 		/**
 		 *	Transform target bounding-box by corresponding matrix.

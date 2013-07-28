@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iterator>
+#include <stdexcept>
 #include <typeinfo>
 #include <vector>
 
@@ -7,6 +8,7 @@
 #include "containerprocess.h"
 #include "mesh.h"
 #include "object3d.h"
+#include "shader3d.h"
 
 namespace nest
 {
@@ -97,6 +99,10 @@ namespace nest
 		glUniformMatrix4fv(glGetUniformLocation(mesh0->shader->program, shader3d::SHADER_WORLD_MATRIX), 1, false, mesh0->worldMatrix.raw);
 		glUniformMatrix4fv(glGetUniformLocation(mesh0->shader->program, shader3d::SHADER_INVERT_VIEW_MATRIX), 1, false, camera->invertWorldMatrix.raw);
 		glUniformMatrix4fv(glGetUniformLocation(mesh0->shader->program, shader3d::SHADER_PROJECTION_MATRIX), 1, false, camera->projectionMatrix.raw);
+
+		int i, j = mesh0->shader->parts.size();
+		for(i = 0; i < j; i++)
+			mesh0->shader->parts[i]->upload();
 
 		glBindVertexArray(mesh0->geom->attributeArray);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh0->geom->indexBuffer);
