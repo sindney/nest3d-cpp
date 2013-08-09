@@ -8,38 +8,6 @@
 
 namespace nest
 {
-	void octree::removeMesh(mesh *object)
-	{
-		if(object->node)
-		{
-			bool flag = false;
-			vector<mesh*>::iterator i;
-			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
-			{
-				if(*i == object) 
-				{
-					object->node->objects.erase(i);
-					if(object->node->objects.size() == 0)
-					{
-						if(object->node->parent)
-						{
-							object->node->parent->childs[object->node->id] = NULL;
-							delete object->node;
-						}
-					}
-					object->node = NULL;
-					flag = true;
-					break;
-				}
-			}
-			if(!flag) throw runtime_error("Error removing child: Can't locate child.");
-		}
-		else 
-		{
-			throw runtime_error("Error removing child: Target has a NULL node pointer.");
-		}
-	}
-
 	bool octree::findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, unsigned int *id, vector4 *max, vector4 *min)
 	{
 		float size = nodeMax->x - nodeMin->x;
@@ -139,7 +107,21 @@ namespace nest
 		return false;
 	}
 
-	void octree::addMesh(mesh *object)
+	octree::octree(float size, unsigned int depth)
+	{
+		this->depth = depth;
+		vector4 halfsize = vector4(size / 2, size / 2, size / 2, 1.0f);
+		root = new ocnode(NULL, 0, 0);
+		root->bound.max = halfsize;
+		root->bound.min = -halfsize;
+	}
+
+	octree::~octree()
+	{
+		if(root != NULL) delete root;
+	}
+
+	void octree::addChild(mesh *object)
 	{
 		ocnode *current = root;
 		if(collision::aabb_aabb(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
@@ -199,97 +181,35 @@ namespace nest
 			throw runtime_error("Error adding child: Target's transform out of range.");
 	}
 
-	octree::octree(float size, unsigned int depth)
+	void octree::removeChild(mesh *object)
 	{
-		this->depth = depth;
-		vector4 halfsize = vector4(size / 2, size / 2, size / 2, 1.0f);
-		root = new ocnode(NULL, 0, 0);
-		root->bound.max = halfsize;
-		root->bound.min = -halfsize;
-	}
-
-	octree::~octree()
-	{
-		if(root != NULL) delete root;
-	}
-
-	void octree::addChild(object3d *object)
-	{
-		bool is_container = typeid(*object) == typeid(container3d);
-
-		if(typeid(*object) != typeid(mesh) && !is_container) throw runtime_error("Error adding child: Invalid target type.");
-
-		if(is_container)
+		if(object->node)
 		{
-			vector<object3d*>::iterator i;
-			vector<container3d*> containers;
-			container3d *current = static_cast<container3d*>(object);
-			while(true)
+			bool flag = false;
+			vector<mesh*>::iterator i;
+			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
 			{
-				for(i = current->objects.begin(); i != current->objects.end(); i++)
+				if(*i == object) 
 				{
-					if(typeid(**i) == typeid(container3d))
+					object->node->objects.erase(i);
+					if(object->node->objects.size() == 0)
 					{
-						containers.push_back(static_cast<container3d*>(*i));
-					} 
-					else if(typeid(**i) == typeid(mesh))
-					{
-						addMesh(static_cast<mesh*>(*i));
+						if(object->node->parent)
+						{
+							object->node->parent->childs[object->node->id] = NULL;
+							delete object->node;
+						}
 					}
+					object->node = NULL;
+					flag = true;
+					break;
 				}
-
-				if(containers.size() != 0)
-				{
-					current = containers.back();
-					containers.pop_back();
-					continue;
-				}
-				break;
 			}
+			if(!flag) throw runtime_error("Error removing child: Can't locate child.");
 		}
 		else 
 		{
-			addMesh(static_cast<mesh*>(object));
-		}
-	}
-	
-	void octree::removeChild(object3d *object)
-	{
-		bool is_container = typeid(*object) == typeid(container3d);
-
-		if(typeid(*object) != typeid(mesh) && !is_container) throw runtime_error("Error removing child: Invalid target type.");
-
-		if(is_container)
-		{
-			vector<object3d*>::iterator i;
-			vector<container3d*> containers;
-			container3d *current = static_cast<container3d*>(object);
-			while(true)
-			{
-				for(i = current->objects.begin(); i != current->objects.end(); i++)
-				{
-					if(typeid(**i) == typeid(container3d))
-					{
-						containers.push_back(static_cast<container3d*>(*i));
-					} 
-					else if(typeid(**i) == typeid(mesh))
-					{
-						removeMesh(static_cast<mesh*>(*i));
-					}
-				}
-
-				if(containers.size() != 0)
-				{
-					current = containers.back();
-					containers.pop_back();
-					continue;
-				}
-				break;
-			}
-		} 
-		else 
-		{
-			removeMesh(static_cast<mesh*>(object));
+			throw runtime_error("Error removing child: Target has a NULL node pointer.");
 		}
 	}
 }

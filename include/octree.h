@@ -15,10 +15,6 @@ namespace nest
 
 		bool findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, unsigned int *id, vector4 *max, vector4 *min);
 
-		void addMesh(mesh *object);
-
-		void removeMesh(mesh *object);
-
 	public:
 
 		ocnode *root;
@@ -29,9 +25,9 @@ namespace nest
 
 		~octree();
 
-		void addChild(object3d *object);
+		void addChild(mesh *object);
 
-		void removeChild(object3d *object);
+		void removeChild(mesh *object);
 	};
 }
 
