@@ -1,8 +1,6 @@
-#include <iterator>
-#include <vector>
-
 #include "mesh.h"
 #include "ocnode.h"
+#include "octree.h"
 
 namespace nest
 {
@@ -24,32 +22,13 @@ namespace nest
 	{
 		geom = NULL;
 		shader = NULL;
-		if(node != NULL)
-		{
-			vector<mesh*>::iterator i;
-			for(i = node->objects.begin(); i != node->objects.end(); i++)
-			{
-				if(*i == this)
-				{
-					node->objects.erase(i);
-					break;
-				}
-			}
-			if(node->objects.size() == 0)
-			{
-				if(node->parent)
-				{
-					node->parent->childs[node->id] = NULL;
-					delete node;
-				}
-			}
-			node = NULL;
-		}
+		if(node != NULL) node->belonging->removeChild(this);
 	}
 
 	void mesh::recompose()
 	{
 		object3d::recompose();
 		aabb::transform(worldMatrix, geom->bound, bound);
+		if(node != NULL) node->belonging->transformChild(this);
 	}
 }

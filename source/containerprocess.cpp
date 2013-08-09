@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "containerprocess.h"
+#include "ocnode.h"
 #include "shader3d.h"
 
 namespace nest

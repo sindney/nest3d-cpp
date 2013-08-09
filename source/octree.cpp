@@ -4,6 +4,7 @@
 
 #include "collision.h"
 #include "container3d.h"
+#include "ocnode.h"
 #include "octree.h"
 
 namespace nest
@@ -111,7 +112,7 @@ namespace nest
 	{
 		this->depth = depth;
 		vector4 halfsize = vector4(size / 2, size / 2, size / 2, 1.0f);
-		root = new ocnode(NULL, 0, 0);
+		root = new ocnode(this, NULL, 0, 0);
 		root->bound.max = halfsize;
 		root->bound.min = -halfsize;
 	}
@@ -141,7 +142,7 @@ namespace nest
 				node0 = current->childs[id];
 				if(node0 == NULL) 
 				{
-					node0 = new ocnode(current, id, current->depth + 1);
+					node0 = new ocnode(this, current, id, current->depth + 1);
 					node0->bound.max = max;
 					node0->bound.min = min;
 					current->childs[id] = node0;
@@ -152,7 +153,7 @@ namespace nest
 						ocnode *node1 = current->childs[id];
 						if(node1 == NULL)
 						{
-							node1 = new ocnode(current, id, current->depth + 1);
+							node1 = new ocnode(this, current, id, current->depth + 1);
 							node1->bound.max = max;
 							node1->bound.min = min;
 							current->childs[id] = node1;
@@ -210,6 +211,27 @@ namespace nest
 		else 
 		{
 			throw runtime_error("Error removing child: Target has a NULL node pointer.");
+		}
+	}
+
+	void octree::transformChild(mesh *object)
+	{
+		if(object->node)
+		{
+			if(object->bound.max.x >= object->node->bound.max.x ||  
+				object->bound.max.y >= object->node->bound.max.y ||  
+				object->bound.max.z >= object->node->bound.max.z ||  
+				object->bound.min.x <= object->node->bound.min.x ||  
+				object->bound.min.y <= object->node->bound.min.y ||  
+				object->bound.min.z <= object->node->bound.min.z)
+			{
+				removeChild(object);
+				addChild(object);
+			}
+		}
+		else 
+		{
+			throw runtime_error("Error transforming child: Target has a NULL node pointer.");
 		}
 	}
 }

@@ -1,10 +1,12 @@
 #include "mesh.h"
 #include "ocnode.h"
+#include "octree.h"
 
 namespace nest
 {
-	ocnode::ocnode(ocnode *parent, unsigned int id, unsigned int depth)
+	ocnode::ocnode(octree *belonging, ocnode *parent, unsigned int id, unsigned int depth)
 	{
+		this->belonging = belonging;
 		this->parent = parent;
 		this->id = id;
 		this->depth = depth;

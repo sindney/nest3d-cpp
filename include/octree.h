@@ -4,11 +4,12 @@
 #include <vector>
 
 #include "mesh.h"
-#include "ocnode.h"
 #include "vector4.h"
 
 namespace nest
 {
+	class ocnode;
+
 	class octree
 	{
 	protected:
@@ -28,6 +29,8 @@ namespace nest
 		void addChild(mesh *object);
 
 		void removeChild(mesh *object);
+
+		void transformChild(mesh *object);
 	};
 }
 

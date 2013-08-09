@@ -12,6 +12,8 @@ namespace nest
 
 	class mesh;
 
+	class octree;
+
 	class ocnode
 	{
 	public:
@@ -24,9 +26,11 @@ namespace nest
 
 		ocnode *parent;
 
+		octree *belonging;
+
 		unsigned int id, depth;
 
-		ocnode(ocnode *parent, unsigned int id, unsigned int depth);
+		ocnode(octree *belonging, ocnode *parent, unsigned int id, unsigned int depth);
 
 		~ocnode();
 	};
