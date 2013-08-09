@@ -1,0 +1,38 @@
+#ifndef N3D_OCTREE_H
+#define N3D_OCTREE_H
+
+#include <vector>
+
+#include "mesh.h"
+#include "ocnode.h"
+#include "vector4.h"
+
+namespace nest
+{
+	class octree
+	{
+	protected:
+
+		bool findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, unsigned int *id, vector4 *max, vector4 *min);
+
+		void addMesh(mesh *object);
+
+		void removeMesh(mesh *object);
+
+	public:
+
+		ocnode *root;
+
+		unsigned int depth;
+
+		octree(float size, unsigned int depth);
+
+		~octree();
+
+		void addChild(object3d *object);
+
+		void removeChild(object3d *object);
+	};
+}
+
+#endif

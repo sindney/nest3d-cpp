@@ -1,10 +1,10 @@
 #include <iterator>
+#include <stdexcept>
 #include <typeinfo>
 #include <vector>
 
 #include "container3d.h"
 #include "mesh.h"
-#include "object3d.h"
 
 namespace nest
 {
@@ -41,30 +41,47 @@ namespace nest
 		}
 	}
 
-	void container3d::addChild(object3d *node)
+	void container3d::addChild(object3d *object)
 	{
-		objects.push_back(static_cast<object3d*>(node));
-		node->parent = this;
-		node->recompose();
+		objects.push_back(object);
+		object->parent = this;
+		object->recompose();
 	}
 
-	object3d* container3d::removeChild(object3d *node)
+	void container3d::removeChild(object3d *object)
 	{
-		vector<object3d*>::iterator i;
-		for(i = objects.begin(); i != objects.end(); i++)
+		bool flag = false;
+
+		vector<container3d*> containers;
+		container3d *current = this;
+		while(true)
 		{
-			if(*i == node) return removeChildAt(i);
+			vector<object3d*>::iterator i;
+			for(i = current->objects.begin(); i != current->objects.end(); i++)
+			{
+				if(*i == object)
+				{
+					object->parent = NULL;
+					object->recompose();
+					current->objects.erase(i);
+					flag = true;
+					break;
+				}
+				else if(typeid(**i) == typeid(container3d))
+				{
+					containers.push_back(static_cast<container3d*>(*i));
+				}
+			}
+			if(!flag && containers.size() != 0)
+			{
+				current = containers.back();
+				containers.pop_back();
+				continue;
+			}
+			break;
 		}
-		return NULL;
-	}
 
-	object3d* container3d::removeChildAt(vector<object3d*>::iterator index)
-	{
-		object3d *node = *index;
-		node->parent = NULL;
-		node->recompose();
-		objects.erase(index);
-		return node;
+		if(!flag) throw runtime_error("Error removing child: Can't locate child pointer in target container.");
 	}
 
 	void container3d::recompose()

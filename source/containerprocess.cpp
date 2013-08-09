@@ -1,24 +1,24 @@
 #include <algorithm>
 #include <iterator>
-#include <stdexcept>
 #include <typeinfo>
 #include <vector>
 
-#include "container3d.h"
 #include "containerprocess.h"
-#include "mesh.h"
-#include "object3d.h"
 #include "shader3d.h"
 
 namespace nest
 {
+	containerprocess::~containerprocess() 
+	{
+		if(container != NULL) delete container;
+		if(camera != NULL) delete camera;
+		if(partition != NULL) delete partition;
+		objects.clear();
+		alphaObjects.clear();
+	}
+
 	void containerprocess::calculate()
 	{
-		vector<container3d*> containers;
-		vector<object3d*>::iterator i;
-		container3d *current = container;
-		mesh *mesh0;
-
 		objects.clear();
 		alphaObjects.clear();
 		numObjects = 0;
@@ -31,11 +31,16 @@ namespace nest
 		glViewport(target->x, target->y, target->width, target->height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+		vector<container3d*> containers;
+		vector<object3d*>::iterator i;
+		container3d *container0 = container;
+		mesh *mesh0;
+
 		while(true)
 		{
-			if(current->visible)
+			if(container0->visible)
 			{
-				for(i = current->objects.begin(); i != current->objects.end(); i++)
+				for(i = container0->objects.begin(); i != container0->objects.end(); i++)
 				{
 					if(typeid(**i) == typeid(container3d))
 					{
@@ -67,11 +72,67 @@ namespace nest
 			}
 			if(containers.size() != 0)
 			{
-				current = containers.back();
+				container0 = containers.back();
 				containers.pop_back();
 				continue;
 			}
 			break;
+		}
+
+		if(partition != NULL)
+		{
+			vector<ocnode*> nodes;
+			vector<ocnode*>::iterator j;
+			vector<mesh*>::iterator k;
+			ocnode *node0 = partition->root;
+			ocnode *node1 = NULL;
+
+			while(true)
+			{
+				if(camera->culling.classifyAABB(node0->bound, camera->invertWorldMatrix))
+				{
+					if(node0->objects.size() != 0)
+					{
+						for(k = node0->objects.begin(); k != node0->objects.end(); k++)
+						{
+							mesh0 = *k;
+							if(!mesh0->cliping || mesh0->visible && camera->culling.classifyAABB(mesh0->bound, camera->invertWorldMatrix))
+							{
+								if(mesh0->alphaTest)
+								{
+									mesh0->alphaKey = mesh0->worldMatrix.raw[12] * mesh0->worldMatrix.raw[12] + 
+														mesh0->worldMatrix.raw[13] * mesh0->worldMatrix.raw[13] + 
+														mesh0->worldMatrix.raw[14] * mesh0->worldMatrix.raw[14];
+									alphaObjects.push_back(mesh0);
+								}
+								else 
+								{
+									drawMesh(mesh0);
+									objects.push_back(*k);
+								}
+								numObjects++;
+								numTriangles += mesh0->geom->numTriangles;
+								numVertices += mesh0->geom->numVertices;
+							}
+						}
+					}
+					for(j = node0->childs.begin(); j != node0->childs.end(); j++)
+					{
+						node1 = *j;
+						if(node1 != NULL && camera->culling.classifyAABB(node1->bound, camera->invertWorldMatrix))
+						{
+							nodes.push_back(node1);
+						}
+					}
+				}
+				if(nodes.size() != 0)
+				{
+					node0 = nodes.back();
+					nodes.pop_back();
+					continue;
+				}
+				break;
+			}
 		}
 
 		glEnable(GL_BLEND);

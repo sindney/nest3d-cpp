@@ -1,5 +1,5 @@
-#include "vector4.h"
 #include "matrix4.h"
+#include "vector4.h"
 #include "quaternion.h"
 
 namespace nest

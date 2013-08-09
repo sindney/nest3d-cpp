@@ -1,11 +1,12 @@
-#ifndef CONTAINERROCESS_H
-#define CONTAINERROCESS_H
+#ifndef N3D_CONTAINERROCESS_H
+#define N3D_CONTAINERROCESS_H
 
 #include <vector>
 
 #include "camera3d.h"
 #include "container3d.h"
 #include "mesh.h"
+#include "octree.h"
 #include "renderprocess.h"
 
 namespace nest
@@ -13,6 +14,8 @@ namespace nest
 	class containerprocess : public renderprocess
 	{
 	public:
+
+		octree *partition;
 
 		container3d *container;
 
@@ -28,18 +31,12 @@ namespace nest
 
 		int numVertices;
 
-		containerprocess(rendertarget *target, container3d *container, camera3d *camera)
-		 : renderprocess(target), container(container), camera(camera), numObjects(0), numTriangles(0), numVertices(0) {}
+		containerprocess(rendertarget *target, octree *partition, container3d *container, camera3d *camera)
+		 : renderprocess(target), partition(partition), container(container), camera(camera), numObjects(0), numTriangles(0), numVertices(0) {}
 
-		~containerprocess() 
-		{
-			if(container != NULL) delete container;
-			if(camera != NULL) delete camera;
-			objects.clear();
-			alphaObjects.clear();
-		}
+		~containerprocess();
 
-		virtual void calculate();
+		void calculate();
 
 		virtual void drawMesh(mesh *mesh0);
 

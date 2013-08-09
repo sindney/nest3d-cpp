@@ -1,5 +1,5 @@
-#ifndef QUATERNION_H
-#define QUATERNION_H
+#ifndef N3D_QUATERNION_H
+#define N3D_QUATERNION_H
 
 #include "vector4.h"
 

@@ -1,5 +1,5 @@
-#ifndef RENDERPROCESS_H
-#define RENDERPROCESS_H
+#ifndef N3D_RENDERPROCESS_H
+#define N3D_RENDERPROCESS_H
 
 #include "rendertarget.h"
 

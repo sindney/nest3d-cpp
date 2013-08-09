@@ -1,5 +1,5 @@
-#ifndef RENDERTARGET_H
-#define RENDERTARGET_H
+#ifndef N3D_RENDERTARGET_H
+#define N3D_RENDERTARGET_H
 
 #include "GL/glew.h"
 

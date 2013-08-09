@@ -74,7 +74,7 @@ namespace nest
 	bool frustum::classifyAABB(const aabb &bound, const matrix4 &ivm)
 	{
 		aabb target;
-		geometry::transformAABB(ivm, bound, target);
+		aabb::transform(ivm, bound, target);
 
 		vector4 center = (target.max + target.min) / 2;
 		vector4 half = target.max - center;

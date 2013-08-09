@@ -1,5 +1,5 @@
-#ifndef CAMERA3D_H
-#define CAMERA3D_H
+#ifndef N3D_CAMERA3D_H
+#define N3D_CAMERA3D_H
 
 #include "frustum.h"
 #include "matrix4.h"

@@ -1,19 +1,15 @@
-#ifndef GEOMETRY_H
-#define GEOMETRY_H
+#ifndef N3D_GEOMETRY_H
+#define N3D_GEOMETRY_H
 
 #include <string>
 #include <vector>
 
+#include "aabb.h"
 #include "matrix4.h"
 #include "vector4.h"
 
 namespace nest
 {
-	typedef struct 
-	{
-		vector4 max, min;
-	} aabb;
-
 	enum geomparams
 	{
 		GEOM_VERTEX 	= 1 << 0, 
@@ -49,16 +45,6 @@ namespace nest
 		geometry();
 
 		~geometry();
-
-		/**
-		 *	Calculate target vertex array's bounding-box.
-		 */
-		static void calculateAABB(aabb &bound, const float *vertexData, const int vertexDataSize);
-
-		/**
-		 *	Transform target bounding-box by corresponding matrix.
-		 */
-		static void transformAABB(const matrix4 &mat, const aabb &target, aabb &dest);
 
 		/**
 		 *	Calculate normal data for corresponding geometrydata.

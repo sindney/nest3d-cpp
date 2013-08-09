@@ -1,5 +1,5 @@
-#ifndef MATRIX4_H
-#define MATRIX4_H
+#ifndef N3D_MATRIX4_H
+#define N3D_MATRIX4_H
 
 #include "vector4.h"
 #include "quaternion.h"

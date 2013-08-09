@@ -1,5 +1,5 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef N3D_MESH_H
+#define N3D_MESH_H
 
 #include "geometry.h"
 #include "object3d.h"
@@ -7,6 +7,8 @@
 
 namespace nest
 {
+	class ocnode;
+	
 	class mesh : public object3d 
 	{
 	public:
@@ -31,21 +33,13 @@ namespace nest
 
 		shader3d *shader;
 
-		mesh(geometry *geom, shader3d *shader) 
-		 : alphaTest(false), alphaKey(0.0f), castShadows(false), cliping(true), visible(true), 
-		 	faceCulling(true), face(GL_BACK), geom(geom), shader(shader) {}
+		ocnode *node;
 
-		~mesh()
-		{
-			geom = NULL;
-			shader = NULL;
-		}
+		mesh(geometry *geom, shader3d *shader);
 
-		void recompose()
-		{
-			object3d::recompose();
-			geometry::transformAABB(worldMatrix, geom->bound, bound);
-		}
+		~mesh();
+
+		void recompose();
 	};
 }
 

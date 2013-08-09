@@ -1,5 +1,5 @@
-#ifndef SHADERPART_H
-#define SHADERPART_H
+#ifndef N3D_SHADERPART_H
+#define N3D_SHADERPART_H
 
 #include "GL/glew.h"
 

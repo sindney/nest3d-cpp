@@ -1,5 +1,5 @@
-#ifndef PARSER3DS_H
-#define PARSER3DS_H
+#ifndef N3D_PARSER3DS_H
+#define N3D_PARSER3DS_H
 
 #include <vector>
 

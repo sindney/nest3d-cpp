@@ -1,5 +1,5 @@
-#ifndef VECTOR4_H
-#define VECTOR4_H
+#ifndef N3D_VECTOR4_H
+#define N3D_VECTOR4_H
 
 #include <cmath>
 

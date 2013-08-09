@@ -1,5 +1,5 @@
-#ifndef SHADER3D_H
-#define SHADER3D_H
+#ifndef N3D_SHADER3D_H
+#define N3D_SHADER3D_H
 
 #include <vector>
 

@@ -1,5 +1,5 @@
-#ifndef FRUSTUM_H
-#define FRUSTUM_H
+#ifndef N3D_FRUSTUM_H
+#define N3D_FRUSTUM_H
 
 #include "geometry.h"
 #include "matrix4.h"
