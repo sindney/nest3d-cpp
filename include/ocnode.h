@@ -30,7 +30,7 @@ namespace nest
 
 		unsigned int id, depth;
 
-		ocnode(octree *belonging, ocnode *parent, unsigned int id, unsigned int depth);
+		ocnode(octree *belonging, ocnode *parent, int id, int depth);
 
 		~ocnode();
 	};

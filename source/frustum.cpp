@@ -1,8 +1,7 @@
 #include <cmath>
 
 #include "frustum.h"
-#include "geometry.h"
-#include "vector4.h"
+#include "geomath.h"
 
 namespace nest
 {
@@ -32,17 +31,17 @@ namespace nest
 		vector4 fBR = vf - (yv * fH) + (xv * fW);
 
 		// top
-		frustum::createPlane(planes[0], fTR, nTR, nTL);
+		geomath::createPlane(planes[0], fTR, nTR, nTL);
 		// bottom
-		frustum::createPlane(planes[1], nBL, nBR, fBR);
+		geomath::createPlane(planes[1], nBL, nBR, fBR);
 		// left
-		frustum::createPlane(planes[2], nTL, nBL, fBL);
+		geomath::createPlane(planes[2], nTL, nBL, fBL);
 		// right
-		frustum::createPlane(planes[3], fBR, nBR, nTR);
+		geomath::createPlane(planes[3], fBR, nBR, nTR);
 		// near
-		frustum::createPlane(planes[4], nTL, nTR, nBR);
+		geomath::createPlane(planes[4], nTL, nTR, nBR);
 		// far
-		frustum::createPlane(planes[5], fTR, fTL, fBL);
+		geomath::createPlane(planes[5], fTR, fTL, fBL);
 	}
 
 	bool frustum::classifyPoint(const vector4 &p)
@@ -92,12 +91,5 @@ namespace nest
 		}
 
 		return true;
-	}
-
-	void frustum::createPlane(vector4 &p, const vector4 &v1, const vector4 &v2, const vector4 &v3)
-	{
-		p = crossProduct(v2 - v1, v3 - v1);
-		p.normalize();
-		p.w = - (p.x * v1.x + p.y * v1.y + p.z * v1.z);
 	}
 }

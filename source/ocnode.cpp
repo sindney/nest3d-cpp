@@ -4,7 +4,7 @@
 
 namespace nest
 {
-	ocnode::ocnode(octree *belonging, ocnode *parent, unsigned int id, unsigned int depth)
+	ocnode::ocnode(octree *belonging, ocnode *parent, int id, int depth)
 	{
 		this->belonging = belonging;
 		this->parent = parent;
@@ -27,6 +27,12 @@ namespace nest
 			childs.pop_back();
 			if(child != NULL) delete child;
 		}
-		objects.clear();
+		mesh *object;
+		while(objects.size() != 0)
+		{
+			object = objects.back();
+			objects.pop_back();
+			object->node = NULL;
+		}
 	}
 }

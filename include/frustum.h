@@ -1,7 +1,7 @@
 #ifndef N3D_FRUSTUM_H
 #define N3D_FRUSTUM_H
 
-#include "geometry.h"
+#include "aabb.h"
 #include "matrix4.h"
 #include "vector4.h"
 
@@ -29,8 +29,6 @@ namespace nest
 		 *	Make sure your bounding-box is in world space, and pass the right invertViewMatrix.
 		 */
 		bool classifyAABB(const aabb &bound, const matrix4 &ivm);
-
-		static void createPlane(vector4 &p, const vector4 &v1, const vector4 &v2, const vector4 &v3);
 
 	};
 

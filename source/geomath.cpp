@@ -1,8 +1,8 @@
-#include "collision.h"
+#include "geomath.h"
 
 namespace nest
 {
-	bool collision::sphere_sphere(vector4 &center0, float radius0, vector4 &center1, float radius1)
+	bool geomath::collisionBSBS(vector4 &center0, float radius0, vector4 &center1, float radius1)
 	{
 		float x = center0.x - center1.x;
 		float y = center0.y - center1.y;
@@ -10,7 +10,7 @@ namespace nest
 		return (x * x + y * y + z * z) <= (radius0 + radius1) * (radius0 + radius1);
 	}
 
-	bool collision::aabb_sphere(vector4 &max, vector4 &min, vector4 &center, float radius)
+	bool geomath::collisionAABBBS(vector4 &max, vector4 &min, vector4 &center, float radius)
 	{
 		float x = center.x;
 		float y = center.y;
@@ -36,7 +36,7 @@ namespace nest
 		return (x * x + y * y + z * z) <= (radius * radius);
 	}
 
-	bool collision::aabb_aabb(vector4 &max0, vector4 &min0, vector4 &max1, vector4 &min1)
+	bool geomath::collisionAABBAABB(vector4 &max0, vector4 &min0, vector4 &max1, vector4 &min1)
 	{
 		if(min0.x > max1.x) return false;
 		if(max0.x < min1.x) return false;
@@ -45,5 +45,12 @@ namespace nest
 		if(min0.z > max1.z) return false;
 		if(max0.z < min1.z) return false;
 		return true;
+	}
+
+	void geomath::createPlane(vector4 &p, const vector4 &v1, const vector4 &v2, const vector4 &v3)
+	{
+		p = crossProduct(v2 - v1, v3 - v1);
+		p.normalize();
+		p.w = - (p.x * v1.x + p.y * v1.y + p.z * v1.z);
 	}
 }

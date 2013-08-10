@@ -2,49 +2,49 @@
 #include <typeinfo>
 #include <vector>
 
-#include "collision.h"
 #include "container3d.h"
+#include "geomath.h"
 #include "ocnode.h"
 #include "octree.h"
 
 namespace nest
 {
-	bool octree::findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, unsigned int *id, vector4 *max, vector4 *min)
+	bool octree::findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, int *id, vector4 *max, vector4 *min)
 	{
 		float size = nodeMax->x - nodeMin->x;
 		float halfsize = size / 2;
 		// top top left
 		vector4 maxTTL = *nodeMax;
 		vector4 minTTL = *nodeMin + vector4(halfsize, halfsize, halfsize, 1.0f);
-		bool BTTL = collision::aabb_aabb(*objMax, *objMin, maxTTL, minTTL);
+		bool BTTL = geomath::collisionAABBAABB(*objMax, *objMin, maxTTL, minTTL);
 		// top top right
 		vector4 maxTTR = *nodeMax - vector4(halfsize, 0.0f, 0.0f, 1.0f);
 		vector4 minTTR = *nodeMin + vector4(0.0f, halfsize, halfsize, 1.0f);
-		bool BTTR = collision::aabb_aabb(*objMax, *objMin, maxTTR, minTTR);
+		bool BTTR = geomath::collisionAABBAABB(*objMax, *objMin, maxTTR, minTTR);
 		// top bottom left
 		vector4 maxTBL = *nodeMax - vector4(0.0f, 0.0f, halfsize, 1.0f);
 		vector4 minTBL = *nodeMin + vector4(halfsize, halfsize, 0.0f, 1.0f);
-		bool BTBL = collision::aabb_aabb(*objMax, *objMin, maxTBL, minTBL);
+		bool BTBL = geomath::collisionAABBAABB(*objMax, *objMin, maxTBL, minTBL);
 		// top bottom right
 		vector4 maxTBR = *nodeMax - vector4(halfsize, 0.0f, halfsize, 1.0f);
 		vector4 minTBR = *nodeMin + vector4(0.0f, halfsize, 0.0f, 1.0f);
-		bool BTBR = collision::aabb_aabb(*objMax, *objMin, maxTBR, minTBR);
+		bool BTBR = geomath::collisionAABBAABB(*objMax, *objMin, maxTBR, minTBR);
 		// bottom top left
 		vector4 maxBTL = *nodeMax - vector4(0.0f, halfsize, 0.0f, 1.0f);
 		vector4 minBTL = *nodeMin + vector4(halfsize, 0.0f, halfsize, 1.0f);
-		bool BBTL = collision::aabb_aabb(*objMax, *objMin, maxBTL, minBTL);
+		bool BBTL = geomath::collisionAABBAABB(*objMax, *objMin, maxBTL, minBTL);
 		// bottom top right
 		vector4 maxBTR = *nodeMax - vector4(halfsize, halfsize, 0.0f, 1.0f);
 		vector4 minBTR = *nodeMin + vector4(0.0f, 0.0f, halfsize, 1.0f);
-		bool BBTR = collision::aabb_aabb(*objMax, *objMin, maxBTR, minBTR);
+		bool BBTR = geomath::collisionAABBAABB(*objMax, *objMin, maxBTR, minBTR);
 		// bottom bottom left
 		vector4 maxBBL = *nodeMax - vector4(0.0f, halfsize, halfsize, 1.0f);
 		vector4 minBBL = *nodeMin + vector4(halfsize, 0.0f, 0.0f, 1.0f);
-		bool BBBL = collision::aabb_aabb(*objMax, *objMin, maxBBL, minBBL);
+		bool BBBL = geomath::collisionAABBAABB(*objMax, *objMin, maxBBL, minBBL);
 		// bottom bottom right
 		vector4 maxBBR = *nodeMax - vector4(halfsize, halfsize, halfsize, 1.0f);
 		vector4 minBBR = *nodeMin;
-		bool BBBR = collision::aabb_aabb(*objMax, *objMin, maxBBR, minBBR);
+		bool BBBR = geomath::collisionAABBAABB(*objMax, *objMin, maxBBR, minBBR);
 
 		if(BTTL && (BTTR || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
 			BTTR && (BTTL || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
@@ -108,7 +108,7 @@ namespace nest
 		return false;
 	}
 
-	octree::octree(float size, unsigned int depth)
+	octree::octree(float size, int depth)
 	{
 		this->depth = depth;
 		vector4 halfsize = vector4(size / 2, size / 2, size / 2, 1.0f);
@@ -125,9 +125,9 @@ namespace nest
 	void octree::addChild(mesh *object)
 	{
 		ocnode *current = root;
-		if(collision::aabb_aabb(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
+		if(geomath::collisionAABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
 		{
-			unsigned int id;
+			int id;
 			vector4 max, min;
 			ocnode *node0;
 			while(true)

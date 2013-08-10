@@ -14,15 +14,15 @@ namespace nest
 	{
 	protected:
 
-		bool findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, unsigned int *id, vector4 *max, vector4 *min);
+		bool findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, int *id, vector4 *max, vector4 *min);
 
 	public:
 
 		ocnode *root;
 
-		unsigned int depth;
+		int depth;
 
-		octree(float size, unsigned int depth);
+		octree(float size, int depth);
 
 		~octree();
 
