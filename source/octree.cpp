@@ -16,35 +16,35 @@ namespace nest
 		// top top left
 		vector4 maxTTL = *nodeMax;
 		vector4 minTTL = *nodeMin + vector4(halfsize, halfsize, halfsize, 1.0f);
-		bool BTTL = geomath::collisionAABBAABB(*objMax, *objMin, maxTTL, minTTL);
+		bool BTTL = geomath::AABBAABB(*objMax, *objMin, maxTTL, minTTL);
 		// top top right
 		vector4 maxTTR = *nodeMax - vector4(halfsize, 0.0f, 0.0f, 1.0f);
 		vector4 minTTR = *nodeMin + vector4(0.0f, halfsize, halfsize, 1.0f);
-		bool BTTR = geomath::collisionAABBAABB(*objMax, *objMin, maxTTR, minTTR);
+		bool BTTR = geomath::AABBAABB(*objMax, *objMin, maxTTR, minTTR);
 		// top bottom left
 		vector4 maxTBL = *nodeMax - vector4(0.0f, 0.0f, halfsize, 1.0f);
 		vector4 minTBL = *nodeMin + vector4(halfsize, halfsize, 0.0f, 1.0f);
-		bool BTBL = geomath::collisionAABBAABB(*objMax, *objMin, maxTBL, minTBL);
+		bool BTBL = geomath::AABBAABB(*objMax, *objMin, maxTBL, minTBL);
 		// top bottom right
 		vector4 maxTBR = *nodeMax - vector4(halfsize, 0.0f, halfsize, 1.0f);
 		vector4 minTBR = *nodeMin + vector4(0.0f, halfsize, 0.0f, 1.0f);
-		bool BTBR = geomath::collisionAABBAABB(*objMax, *objMin, maxTBR, minTBR);
+		bool BTBR = geomath::AABBAABB(*objMax, *objMin, maxTBR, minTBR);
 		// bottom top left
 		vector4 maxBTL = *nodeMax - vector4(0.0f, halfsize, 0.0f, 1.0f);
 		vector4 minBTL = *nodeMin + vector4(halfsize, 0.0f, halfsize, 1.0f);
-		bool BBTL = geomath::collisionAABBAABB(*objMax, *objMin, maxBTL, minBTL);
+		bool BBTL = geomath::AABBAABB(*objMax, *objMin, maxBTL, minBTL);
 		// bottom top right
 		vector4 maxBTR = *nodeMax - vector4(halfsize, halfsize, 0.0f, 1.0f);
 		vector4 minBTR = *nodeMin + vector4(0.0f, 0.0f, halfsize, 1.0f);
-		bool BBTR = geomath::collisionAABBAABB(*objMax, *objMin, maxBTR, minBTR);
+		bool BBTR = geomath::AABBAABB(*objMax, *objMin, maxBTR, minBTR);
 		// bottom bottom left
 		vector4 maxBBL = *nodeMax - vector4(0.0f, halfsize, halfsize, 1.0f);
 		vector4 minBBL = *nodeMin + vector4(halfsize, 0.0f, 0.0f, 1.0f);
-		bool BBBL = geomath::collisionAABBAABB(*objMax, *objMin, maxBBL, minBBL);
+		bool BBBL = geomath::AABBAABB(*objMax, *objMin, maxBBL, minBBL);
 		// bottom bottom right
 		vector4 maxBBR = *nodeMax - vector4(halfsize, halfsize, halfsize, 1.0f);
 		vector4 minBBR = *nodeMin;
-		bool BBBR = geomath::collisionAABBAABB(*objMax, *objMin, maxBBR, minBBR);
+		bool BBBR = geomath::AABBAABB(*objMax, *objMin, maxBBR, minBBR);
 
 		if(BTTL && (BTTR || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
 			BTTR && (BTTL || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
@@ -125,7 +125,7 @@ namespace nest
 	void octree::addChild(mesh *object)
 	{
 		ocnode *current = root;
-		if(geomath::collisionAABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
+		if(geomath::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
 		{
 			int id;
 			vector4 max, min;

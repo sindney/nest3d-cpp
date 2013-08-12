@@ -2,11 +2,8 @@
 #define N3D_GEOMETRY_H
 
 #include <string>
-#include <vector>
 
 #include "aabb.h"
-#include "matrix4.h"
-#include "vector4.h"
 
 namespace nest
 {
