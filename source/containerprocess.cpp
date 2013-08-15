@@ -87,17 +87,26 @@ namespace nest
 			vector<mesh*>::iterator k;
 			ocnode *node0 = partition->root;
 			ocnode *node1 = NULL;
+			bool all;
 
 			while(true)
 			{
 				if(camera->culling.classifyAABB(node0->bound, camera->invertWorldMatrix))
 				{
+					all = camera->culling.classifyPoint(node0->bound.min) && 
+						camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.min.z, 1.0f)) && 
+						camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
+						camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
+						camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.max.z, 1.0f)) && 
+						camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
+						camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
+						camera->culling.classifyPoint(node0->bound.max);
 					if(node0->objects.size() != 0)
 					{
 						for(k = node0->objects.begin(); k != node0->objects.end(); k++)
 						{
 							mesh0 = *k;
-							if(!mesh0->cliping || mesh0->visible && camera->culling.classifyAABB(mesh0->bound, camera->invertWorldMatrix))
+							if(mesh0->visible && (all || camera->culling.classifyAABB(mesh0->bound, camera->invertWorldMatrix)))
 							{
 								if(mesh0->alphaTest)
 								{
