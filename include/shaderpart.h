@@ -40,7 +40,7 @@ namespace nest
 
 		GLint location;
 		
-		GLfloat v0, v1, v2;
+		GLfloat v0, v1;
 
 		shaderpart2f(GLint location, GLfloat v0, GLfloat v1) : location(location), v0(v0), v1(v1) {}
 
@@ -106,7 +106,7 @@ namespace nest
 
 		GLint location;
 		
-		GLint v0, v1, v2;
+		GLint v0, v1;
 
 		shaderpart2i(GLint location, GLint v0, GLint v1) : location(location), v0(v0), v1(v1) {}
 
@@ -172,7 +172,7 @@ namespace nest
 
 		GLint location;
 		
-		GLuint v0, v1, v2;
+		GLuint v0, v1;
 
 		shaderpart2ui(GLint location, GLuint v0, GLuint v1) : location(location), v0(v0), v1(v1) {}
 
