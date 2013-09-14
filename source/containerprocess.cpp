@@ -84,29 +84,31 @@ namespace nest
 		{
 			vector<ocnode*> nodes;
 			vector<ocnode*>::iterator j;
-			vector<mesh*>::iterator k;
 			ocnode *node0 = partition->root;
 			ocnode *node1 = NULL;
-			bool all;
+			vector<mesh*>::iterator k;
+			vector<bool> nodemarks;
+			bool current;
+			bool parent = false;
 
 			while(true)
 			{
-				if(camera->culling.classifyAABB(node0->bound, camera->invertWorldMatrix))
+				if(parent || camera->culling.classifyAABB(node0->bound, camera->invertWorldMatrix))
 				{
-					all = camera->culling.classifyPoint(node0->bound.min) && 
-						camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.min.z, 1.0f)) && 
-						camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
-						camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
-						camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.max.z, 1.0f)) && 
-						camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
-						camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
-						camera->culling.classifyPoint(node0->bound.max);
+					current = parent ? true : camera->culling.classifyPoint(node0->bound.min) && 
+							camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.min.z, 1.0f)) && 
+							camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
+							camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
+							camera->culling.classifyPoint(vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.max.z, 1.0f)) && 
+							camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
+							camera->culling.classifyPoint(vector4(node0->bound.max.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
+							camera->culling.classifyPoint(node0->bound.max);
 					if(node0->objects.size() != 0)
 					{
 						for(k = node0->objects.begin(); k != node0->objects.end(); k++)
 						{
 							mesh0 = *k;
-							if(mesh0->visible && (all || camera->culling.classifyAABB(mesh0->bound, camera->invertWorldMatrix)))
+							if(mesh0->visible && (current || camera->culling.classifyAABB(mesh0->bound, camera->invertWorldMatrix)))
 							{
 								if(mesh0->alphaTest)
 								{
@@ -132,6 +134,7 @@ namespace nest
 						if(node1 != NULL && camera->culling.classifyAABB(node1->bound, camera->invertWorldMatrix))
 						{
 							nodes.push_back(node1);
+							nodemarks.push_back(current);
 						}
 					}
 				}
@@ -139,6 +142,8 @@ namespace nest
 				{
 					node0 = nodes.back();
 					nodes.pop_back();
+					parent = nodemarks.back();
+					nodemarks.pop_back();
 					continue;
 				}
 				break;
