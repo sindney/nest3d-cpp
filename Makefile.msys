@@ -7,6 +7,6 @@ OUTPUT = lib
 
 all: 
 	g++ -c source/*.cpp $(INCLUDE)
-	ar rvs $(OUTPUT)/nest3d.a *.o
-	g++ -o $(OUTPUT)/nest3d.dll *.o $(LIB_PATH) $(LIBS)
+	ar rvs $(OUTPUT)/libnest.a *.o
+	g++ -o $(OUTPUT)/libnest.dll *.o $(LIB_PATH) $(LIBS)
 	rm ./*.o

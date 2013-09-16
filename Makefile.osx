@@ -8,6 +8,6 @@ OUTPUT = lib
 
 all: 
 	g++ -c source/*.cpp $(INCLUDE)
-	ar rvs $(OUTPUT)/nest3d.a *.o
-	g++ -dynamiclib $(FRAMEWORKS) *.o $(LIB_PATH) $(LIBS) -o $(OUTPUT)/nest3d.dylib
+	ar rvs $(OUTPUT)/libnest.a *.o
+	g++ -dynamiclib $(FRAMEWORKS) *.o $(LIB_PATH) $(LIBS) -o $(OUTPUT)/libnest.dylib
 	rm ./*.o
