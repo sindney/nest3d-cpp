@@ -1,7 +1,7 @@
-# for msys + mingw
+# msys + mingw
 
-INCLUDE = -I"GLEW\include" -I"include"
-LIB_PATH = -L"GLEW\lib"
+INCLUDE = -I"GLEW/include" -I"include"
+LIB_PATH = -L"GLEW/lib"
 LIBS = -lGLEW32 -lOpenGL32 -m32 -shared
 OUTPUT = lib
 

@@ -1,0 +1,13 @@
+# mac osx
+
+INCLUDE = -I"GLEW/include" -I"include"
+LIB_PATH = -L"GLEW/lib" -L"/System/Library/Frameworks/OpenGL.framework/Libraries"
+LIBS = -lGLEW
+FRAMEWORKS = -framework OpenGL
+OUTPUT = lib
+
+all: 
+	g++ -c source/*.cpp $(INCLUDE)
+	ar rvs $(OUTPUT)/nest3d.a *.o
+	g++ -dynamiclib $(FRAMEWORKS) *.o $(LIB_PATH) $(LIBS) -o $(OUTPUT)/nest3d.dylib
+	rm ./*.o
