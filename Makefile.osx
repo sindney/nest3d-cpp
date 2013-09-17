@@ -4,10 +4,9 @@ INCLUDE = -I"GLEW/include" -I"include"
 LIB_PATH = -L"GLEW/lib" -L"/System/Library/Frameworks/OpenGL.framework/Libraries"
 LIBS = -lGLEW
 FRAMEWORKS = -framework OpenGL
-OUTPUT = lib
 
 all: 
 	g++ -c source/*.cpp $(INCLUDE)
-	ar rvs $(OUTPUT)/libnest.a *.o
-	g++ -dynamiclib $(FRAMEWORKS) *.o $(LIB_PATH) $(LIBS) -o $(OUTPUT)/libnest.dylib
+	ar rvs lib/libnest.a *.o
+	g++ -dynamiclib -install_name @executable_path/libnest.dylib $(FRAMEWORKS) *.o $(LIB_PATH) $(LIBS) -o lib/libnest.dylib
 	rm ./*.o
