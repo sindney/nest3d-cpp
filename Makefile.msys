@@ -1,12 +1,14 @@
 # msys + mingw
 
-INCLUDE = -I"GLEW/include" -I"include"
-LIB_PATH = -L"GLEW/lib"
-LIBS = -lGLEW32 -lOpenGL32 -m32 -shared
-OUTPUT = lib
+NEST_INCLUDE = include
+NEST_SOURCE = source
+NEST_LIB = lib
+GLEW_INCLUDE = GLEW/include
+GLEW_LIB = GLEW/lib
 
 all: 
-	g++ -c source/*.cpp $(INCLUDE)
-	ar rvs $(OUTPUT)/libnest.a *.o
-	g++ -o $(OUTPUT)/libnest.dll *.o $(LIB_PATH) $(LIBS)
-	rm ./*.o
+	g++ -c $(NEST_SOURCE)/*.cpp -I"$(NEST_INCLUDE)" -I"$(GLEW_INCLUDE)"
+	ar rvs $(NEST_LIB)/libnest.a *.o
+	g++ -L$(GLEW_LIB) -lGLEW32 -lOpenGL32 -m32 -shared *.o \
+		-o $(NEST_LIB)/libnest.dll
+	-rm *.o

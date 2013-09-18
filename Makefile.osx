@@ -1,12 +1,16 @@
 # mac osx
 
-INCLUDE = -I"GLEW/include" -I"include"
-LIB_PATH = -L"GLEW/lib" -L"/System/Library/Frameworks/OpenGL.framework/Libraries"
-LIBS = -lGLEW
-FRAMEWORKS = -framework OpenGL
+NEST_INCLUDE = include
+NEST_SOURCE = source
+NEST_LIB = lib
+GLEW_INCLUDE = GLEW/include
+GLEW_LIB = GLEW/lib
+OPENGL_LIB = /System/Library/Frameworks/OpenGL.framework/Libraries
 
 all: 
-	g++ -c source/*.cpp $(INCLUDE)
-	ar rvs lib/libnest.a *.o
-	g++ -dynamiclib -install_name @executable_path/libnest.dylib $(FRAMEWORKS) *.o $(LIB_PATH) $(LIBS) -o lib/libnest.dylib
-	rm ./*.o
+	g++ -c $(NEST_SOURCE)/*.cpp -I"$(NEST_INCLUDE)" -I"$(GLEW_INCLUDE)"
+	ar rvs $(NEST_LIB)/libnest.a *.o
+	g++ -dynamiclib -install_name @executable_path/libnest.dylib \
+		-framework OpenGL -L$(OPENGL_LIB) -L$(GLEW_LIB) -lGLEW *.o \
+		-o $(NEST_LIB)/libnest.dylib
+	-rm *.o

@@ -1,6 +1,7 @@
 #include <stdexcept>
 
 #include "geomath.h"
+
 namespace nest
 {
 	bool geomath::BSBS(vector4 &center0, float radius0, vector4 &center1, float radius1)
