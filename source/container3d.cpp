@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "container3d.h"
-#include "mesh.h"
 
 namespace nest
 {
@@ -13,7 +12,6 @@ namespace nest
 		vector<container3d*> containers;
 		container3d *current = this;
 		object3d *object0 = NULL;
-		mesh *mesh0 = NULL;
 		while(true)
 		{
 			while(current->objects.size() != 0)
@@ -21,14 +19,9 @@ namespace nest
 				object0 = current->objects.back();
 				current->objects.pop_back();
 				if(typeid(*object0) == typeid(container3d))
-				{
 					containers.push_back(static_cast<container3d*>(object0));
-				} 
-				else if(typeid(*object0) == typeid(mesh))
-				{
-					mesh0 = static_cast<mesh*>(object0);
-					delete mesh0;
-				}
+				else 
+					delete object0;
 			}
 			if(current != this) delete current;
 			if(containers.size() != 0)

@@ -31,14 +31,14 @@ namespace nest
 
 		int numVertices;
 
-		containerprocess(rendertarget *target, octree *partition, container3d *container, camera3d *camera)
-		 : renderprocess(target), partition(partition), container(container), camera(camera), numObjects(0), numTriangles(0), numVertices(0) {}
+		int id;
+
+		containerprocess(int id, rendertarget *target, octree *partition, container3d *container, camera3d *camera)
+		 : id(id), renderprocess(target), partition(partition), container(container), camera(camera), numObjects(0), numTriangles(0), numVertices(0) {}
 
 		~containerprocess();
 
 		void calculate();
-
-		virtual void drawMesh(mesh *mesh0);
 
 		bool operator() (mesh *i, mesh *j) { return i->alphaKey > j->alphaKey; }
 	};

@@ -47,7 +47,7 @@ namespace nest
 					{
 						containers.push_back(static_cast<container3d*>(*i));
 					} 
-					else if(typeid(**i) == typeid(mesh))
+					else 
 					{
 						mesh0 = static_cast<mesh*>(*i);
 						if(!mesh0->cliping || mesh0->visible && camera->culling.classifyAABB(mesh0->bound, camera->invertWorldMatrix))
@@ -61,12 +61,12 @@ namespace nest
 							}
 							else 
 							{
-								drawMesh(mesh0);
+								mesh0->draw(id, camera);
 								objects.push_back(*i);
 							}
 							numObjects++;
-							numTriangles += mesh0->geom->numTriangles;
-							numVertices += mesh0->geom->numVertices;
+							numTriangles += mesh0->numTriangles();
+							numVertices += mesh0->numVertices();
 						}
 					}
 				}
@@ -119,12 +119,12 @@ namespace nest
 								}
 								else 
 								{
-									drawMesh(mesh0);
+									mesh0->draw(id, camera);
 									objects.push_back(*k);
 								}
 								numObjects++;
-								numTriangles += mesh0->geom->numTriangles;
-								numVertices += mesh0->geom->numVertices;
+								numTriangles += mesh0->numTriangles();
+								numVertices += mesh0->numVertices();
 							}
 						}
 					}
@@ -157,36 +157,8 @@ namespace nest
 
 		vector<mesh*>::iterator j;
 		for(j = alphaObjects.begin(); j != alphaObjects.end(); j++)
-			drawMesh(static_cast<mesh*>(*j));
+			static_cast<mesh*>(*j)->draw(id, camera);
 		
 		glDisable(GL_BLEND);
-	}
-
-	void containerprocess::drawMesh(mesh *mesh0)
-	{
-		if(mesh0->faceCulling)
-		{
-			glEnable(GL_CULL_FACE);
-			glCullFace(mesh0->face);
-		}
-		else glDisable(GL_CULL_FACE);
-
-		glUseProgram(mesh0->shader->program);
-		glUniformMatrix4fv(glGetUniformLocation(mesh0->shader->program, shader3d::SHADER_WORLD_MATRIX), 1, false, mesh0->worldMatrix.raw);
-		glUniformMatrix4fv(glGetUniformLocation(mesh0->shader->program, shader3d::SHADER_INVERT_VIEW_MATRIX), 1, false, camera->invertWorldMatrix.raw);
-		glUniformMatrix4fv(glGetUniformLocation(mesh0->shader->program, shader3d::SHADER_PROJECTION_MATRIX), 1, false, camera->projectionMatrix.raw);
-
-		int i, j = mesh0->shader->parts.size();
-		for(i = 0; i < j; i++)
-			mesh0->shader->parts[i]->upload();
-
-		glBindVertexArray(mesh0->geom->attributeArray);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh0->geom->indexBuffer);
-
-		glDrawElements(GL_TRIANGLES, mesh0->geom->numTriangles * 3, GL_UNSIGNED_INT, 0);
-
-		glUseProgram(0);
-		glBindVertexArray(0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }

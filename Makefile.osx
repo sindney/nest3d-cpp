@@ -8,7 +8,7 @@ GLEW_LIB = GLEW/lib
 OPENGL_LIB = /System/Library/Frameworks/OpenGL.framework/Libraries
 
 all: 
-	g++ -c $(NEST_SOURCE)/*.cpp -I"$(NEST_INCLUDE)" -I"$(GLEW_INCLUDE)"
+	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(GLEW_INCLUDE)
 	ar rvs $(NEST_LIB)/libnest.a *.o
 	g++ -dynamiclib -install_name @executable_path/libnest.dylib \
 		-framework OpenGL -L$(OPENGL_LIB) -L$(GLEW_LIB) -lGLEW *.o \
