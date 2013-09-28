@@ -9,6 +9,6 @@ GLEW_LIB = GLEW/lib
 all: 
 	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(GLEW_INCLUDE)
 	ar rvs $(NEST_LIB)/libnest.a *.o
-	g++ -L$(GLEW_LIB) -lGLEW32 -lOpenGL32 -m32 -shared *.o \
-		-o $(NEST_LIB)/libnest.dll
+	g++ -o $(NEST_LIB)/libnest.dll *.o \
+		-L$(GLEW_LIB) -lGLEW32 -lOpenGL32 -m32 -shared
 	-rm *.o
