@@ -28,8 +28,8 @@ namespace nest
 	 *	}
 	 *	draw(int process, camera3d *camera)
 	 *	{
-	 *		// Process passes a int to id the current rendering process.
-	 *		// So that we can use a switch to draw different approaches in different condictions.
+	 *		// Process passes an int to id the current rendering process.
+	 *		// So that we can use a switch to draw different approaches in different conditions.
 	 *		// And you can overlad draw() function to suit your custom containerprocess/renderprocess classes.
 	 *	}
 	 *	numVertices()
