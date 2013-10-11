@@ -13,7 +13,7 @@ namespace nest
 
 		vector4 planes[6];
 
-		void create(float angle, float ratio, float near, float far);
+		void create(float fov, float ratio, float near, float far);
 
 		/**
 		 *	Transform p(world space) to view space first.

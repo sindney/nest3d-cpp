@@ -1,6 +1,6 @@
+#include <stdexcept>
+
 #include "matrix4.h"
-#include "vector4.h"
-#include "quaternion.h"
 
 namespace nest
 {
@@ -89,7 +89,8 @@ namespace nest
 		float det = raw[0] * (raw[5] * raw[10] - raw[6] * raw[9])
 					+ raw[1] * (raw[6] * raw[8] - raw[4] * raw[10])
 					+ raw[2] * (raw[4] * raw[9] - raw[5] * raw[8]);
-					
+		if(det == 0) throw std::runtime_error("Error inversing target matrix.");
+		
 		float det2 = 1.0f / det;
 		
 		matrix4 result;
@@ -119,57 +120,32 @@ namespace nest
 		return matrix4(this->raw);
 	}
 
-	void matrix4::project(matrix4 &m, const vector4 &v)
-	{
-		m.raw[0] = 1.0f - v.x * v.x;
-		m.raw[5] = 1.0f - v.y * v.y;
-		m.raw[10] = 1.0f - v.z * v.z;
-		m.raw[1] = m.raw[4] = -v.x * v.y;
-		m.raw[2] = m.raw[8] = -v.x * v.z;
-		m.raw[6] = m.raw[9] = -v.y * v.z;
-	}
-
-	void matrix4::reflect(matrix4 &m, const vector4 &v)
-	{
-		float ax = -2.0f * v.x;
-		float ay = -2.0f * v.y;
-		float az = -2.0f * v.z;
-		
-		m.raw[0] = 1.0f + ax * v.x;
-		m.raw[1] = 1.0f + ay * v.y;
-		m.raw[2] = 1.0f + az * v.z;
-		m.raw[1] = m.raw[6] = ax * v.y;
-		m.raw[2] = m.raw[8] = ax * v.z;
-		m.raw[6] = m.raw[9] = ay * v.z;
-	}
-
-	void matrix4::perspectiveProjection(matrix4 &a, float fov, float aspect, float near, float far)
+	void matrix4::perspectiveProjection(matrix4 &a, float fov, float ratio, float near, float far)
 	{
 		float ys = 1.0f / tan(fov / 2.0f);
-		float xs = ys / aspect;
+		float xs = ys / ratio;
 		int i;
 		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
-		a.raw[0] = xs;
-		a.raw[5] = ys;
+		a.raw[0] = ys;
+		a.raw[5] = xs;
 		a.raw[10] = (far + near) / (near - far);
 		a.raw[11] = -1;
 		a.raw[14] = 2 * far * near / (near - far);
 	}
 
-	void matrix4::orthographicProjection(matrix4 &a, float width, float height, float near, float far)
+	void matrix4::orthographicProjection(matrix4 &a, float fov, float ratio, float near, float far)
 	{
+		float scale = tan(fov * 0.5) * near;
+		float r = ratio * scale;
 		int i;
 		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
-		a.raw[0] = 1 / width;
-		a.raw[5] = 1 / height;
+		a.raw[0] = 1 / r;
+		a.raw[5] = 1 / scale;
 		a.raw[10] = -2 / (far - near);
-		a.raw[11] = - (far + near) / (far - near);
+		a.raw[11] = (far + near) / (near - far);
 		a.raw[15] = 1;
 	}
 
-	/**
-	 *	v.w = 1 or 0 indicates if we should take position in account.
-	 */
 	vector4 operator * (const vector4 &v, const matrix4 &m)
 	{
 		return vector4(

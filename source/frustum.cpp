@@ -5,9 +5,9 @@
 
 namespace nest
 {
-	void frustum::create(float angle, float ratio, float near, float far)
+	void frustum::create(float fov, float ratio, float near, float far)
 	{
-		float r = tan(angle * 0.5);
+		float r = tan(fov * 0.5);
 		float nH = near * r;
 		float nW = nH * ratio;
 		float fH = far * r;

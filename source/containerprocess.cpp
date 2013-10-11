@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "containerprocess.h"
+#include "meshpainter.h"
 #include "ocnode.h"
 #include "shader3d.h"
 
@@ -61,7 +62,7 @@ namespace nest
 							}
 							else 
 							{
-								mesh0->draw(id, camera);
+								mesh0->painter->draw(mesh0, camera, id);
 								objects.push_back(*i);
 							}
 							numObjects++;
@@ -119,7 +120,7 @@ namespace nest
 								}
 								else 
 								{
-									mesh0->draw(id, camera);
+									mesh0->painter->draw(mesh0, camera, id);
 									objects.push_back(*k);
 								}
 								numObjects++;
@@ -157,7 +158,10 @@ namespace nest
 
 		vector<mesh*>::iterator j;
 		for(j = alphaObjects.begin(); j != alphaObjects.end(); j++)
-			static_cast<mesh*>(*j)->draw(id, camera);
+		{
+			mesh0 = static_cast<mesh*>(*j);
+			mesh0->painter->draw(mesh0, camera, id);
+		}
 		
 		glDisable(GL_BLEND);
 	}

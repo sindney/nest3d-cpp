@@ -15,16 +15,16 @@ namespace nest
 
 		frustum culling;
 
-		float fov, aspect, near, far;
+		float fov, ratio, near, far;
 
-		void configure(float fov, float aspect, float near, float far)
+		void configure(float fov, float ratio, float near, float far)
 		{
 			this->fov = fov;
-			this->aspect = aspect;
+			this->ratio = ratio;
 			this->near = near;
 			this->far = far;
-			culling.create(fov, aspect, near, far);
-			matrix4::perspectiveProjection(projectionMatrix, fov, aspect, near, far);
+			culling.create(fov, ratio, near, far);
+			matrix4::perspectiveProjection(projectionMatrix, fov, ratio, near, far);
 		}
 		
 	};

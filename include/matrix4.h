@@ -10,13 +10,9 @@ namespace nest
 	{
 	public:
 
-		static void project(matrix4 &m, const vector4 &v);
-		
-		static void reflect(matrix4 &m, const vector4 &v);
+		static void perspectiveProjection(matrix4 &a, float fov, float ratio, float near, float far);
 
-		static void perspectiveProjection(matrix4 &a, float fov, float aspect, float near, float far);
-
-		static void orthographicProjection(matrix4 &a, float r, float t, float n, float f);
+		static void orthographicProjection(matrix4 &a, float fov, float ratio, float near, float far);
 		
 		GLfloat raw[16];
 
@@ -43,7 +39,7 @@ namespace nest
 		
 		void rotate(const vector4 &axis, float theta);
 		
-		void rotate(const vector4 &angles);
+		void rotate(const vector4 &fovs);
 
 		void rotate(const quaternion &a);
 		
