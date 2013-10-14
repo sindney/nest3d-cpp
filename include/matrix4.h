@@ -6,13 +6,21 @@
 
 namespace nest
 {
+	/**
+	 *	0	4	8	12
+	 *	1	5	9	13
+	 *	2	6	10	14
+	 *	3	7	11	15
+	 */
 	class matrix4 
 	{
 	public:
 
-		static void perspectiveProjection(matrix4 &a, float fov, float ratio, float near, float far);
+		static void perspectiveFov(matrix4 &a, GLfloat fov, GLfloat ratio, GLfloat near, GLfloat far);
 
-		static void orthographicProjection(matrix4 &a, float fov, float ratio, float near, float far);
+		static void perspectiveOffCenter(matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
+
+		static void orthoOffCenter(matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
 		
 		GLfloat raw[16];
 
@@ -21,7 +29,7 @@ namespace nest
 			identity();
 		}
 
-		matrix4(const float a[])
+		matrix4(const GLfloat a[])
 		{
 			int i;
 			for(i = 0; i < 16; i++) raw[i] = a[i];
@@ -37,7 +45,7 @@ namespace nest
 		
 		void translate(const vector4 &a);
 		
-		void rotate(const vector4 &axis, float theta);
+		void rotate(const vector4 &axis, GLfloat theta);
 		
 		void rotate(const vector4 &fovs);
 
@@ -50,9 +58,7 @@ namespace nest
 		matrix4 clone();
 	};
 
-	vector4 operator * (const vector4 &v, const matrix4 &m);
-
-	vector4 &operator *= (vector4 &v, const matrix4 &m);
+	vector4 operator * (const matrix4 &m, const vector4 &v);
 
 	matrix4 operator * (const matrix4 &a, const matrix4 &b);
 

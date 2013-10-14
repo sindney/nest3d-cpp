@@ -1,11 +1,12 @@
-#ifndef N3D_SHADERPART_H
-#define N3D_SHADERPART_H
+#ifndef N3D_MESHSHADER_H
+#define N3D_MESHSHADER_H
+
+#include <vector>
 
 #include "GL/glew.h"
 
 namespace nest
 {
-
 	class shaderpart
 	{
 	public:
@@ -409,6 +410,45 @@ namespace nest
 					break;
 			}
 		}
+	};
+
+	class meshshader
+	{
+	public:
+
+		GLuint program, vertexShader, fragmentShader;
+
+		std::vector<GLuint> textures;
+
+		std::vector<shaderpart*> parts;
+
+		meshshader() : program(0), vertexShader(0), fragmentShader(0) {}
+
+		~meshshader();
+
+		static const GLchar VERTEX_POSITION[];
+
+		static const GLchar VERTEX_UV[];
+
+		static const GLchar VERTEX_NORMAL[];
+
+		static const GLchar VERTEX_TANGENT[];
+
+		static const GLchar FRAGMENT_COLOR[];
+
+		static const GLchar PROJECTION_MATRIX[];
+
+		static const GLchar INVERT_VIEW_MATRIX[];
+
+		static const GLchar WORLD_MATRIX[];
+
+		static const GLchar TEXTURE_DIFFUSE[];
+
+		static const GLchar TEXTURE_SPECULAR[];
+
+		static const GLchar TEXTURE_NORMAL[];
+
+		static void configure(meshshader &shader, const char *vertex, const char *fragment);
 	};
 }
 

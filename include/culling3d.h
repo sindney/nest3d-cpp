@@ -1,5 +1,5 @@
-#ifndef N3D_FRUSTUM_H
-#define N3D_FRUSTUM_H
+#ifndef N3D_CULLING3D_H
+#define N3D_CULLING3D_H
 
 #include "aabb.h"
 #include "matrix4.h"
@@ -7,7 +7,7 @@
 
 namespace nest
 {
-	class frustum
+	class culling3d
 	{
 	public:
 

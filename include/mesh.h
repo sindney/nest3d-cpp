@@ -51,8 +51,8 @@ namespace nest
 
 		meshpainter *painter;
 
-		mesh()
-		 : alphaTest(false), alphaKey(0.0), cliping(true), visible(true), faceCulling(true), face(GL_BACK), node(NULL), painter(NULL) {}
+		mesh(meshpainter *painter)
+		 : alphaTest(false), alphaKey(0.0), cliping(true), visible(true), faceCulling(true), face(GL_BACK), node(NULL), painter(painter) {}
 
 		virtual unsigned int numVertices() = 0;
 

@@ -1,8 +1,8 @@
-#include "shader3d.h"
+#include "meshshader.h"
 
 namespace nest
 {
-	shader3d::~shader3d()
+	meshshader::~meshshader()
 	{
 		if(program != 0)
 		{
@@ -26,29 +26,29 @@ namespace nest
 		}
 	}
 
-	const GLchar shader3d::SHADER_VERTEX_POSITION[] = "vertex_position";
+	const GLchar meshshader::VERTEX_POSITION[] = "vertex_position";
 
-	const GLchar shader3d::SHADER_VERTEX_UV[] = "vertex_uv";
+	const GLchar meshshader::VERTEX_UV[] = "vertex_uv";
 
-	const GLchar shader3d::SHADER_VERTEX_NORMAL[] = "vertex_normal";
+	const GLchar meshshader::VERTEX_NORMAL[] = "vertex_normal";
 
-	const GLchar shader3d::SHADER_VERTEX_TANGENT[] = "vertex_tangent";
+	const GLchar meshshader::VERTEX_TANGENT[] = "vertex_tangent";
 
-	const GLchar shader3d::SHADER_FRAGMENT_COLOR[] = "fragment_color";
+	const GLchar meshshader::FRAGMENT_COLOR[] = "fragment_color";
 
-	const GLchar shader3d::SHADER_PROJECTION_MATRIX[] = "projection_matrix";
+	const GLchar meshshader::PROJECTION_MATRIX[] = "projection_matrix";
 
-	const GLchar shader3d::SHADER_INVERT_VIEW_MATRIX[] = "invert_view_matrix";
+	const GLchar meshshader::INVERT_VIEW_MATRIX[] = "invert_view_matrix";
 
-	const GLchar shader3d::SHADER_WORLD_MATRIX[] = "world_matrix";
+	const GLchar meshshader::WORLD_MATRIX[] = "world_matrix";
 
-	const GLchar shader3d::SHADER_TEXTURE_DIFFUSE[] = "texture_diffuse";
+	const GLchar meshshader::TEXTURE_DIFFUSE[] = "texture_diffuse";
 
-	const GLchar shader3d::SHADER_TEXTURE_SPECULAR[] = "texture_specular";
+	const GLchar meshshader::TEXTURE_SPECULAR[] = "texture_specular";
 
-	const GLchar shader3d::SHADER_TEXTURE_NORMAL[] = "texture_normal";
+	const GLchar meshshader::TEXTURE_NORMAL[] = "texture_normal";
 
-	void shader3d::configure(shader3d &shader, const char *vertex, const char *fragment)
+	void meshshader::configure(meshshader &shader, const char *vertex, const char *fragment)
 	{
 		if(shader.program != 0)
 		{
@@ -67,7 +67,7 @@ namespace nest
 		shader.program = glCreateProgram();
 		glAttachShader(shader.program, shader.vertexShader);
 		glAttachShader(shader.program, shader.fragmentShader);
-		glBindFragDataLocation(shader.program, 0, shader3d::SHADER_FRAGMENT_COLOR);
+		glBindFragDataLocation(shader.program, 0, meshshader::FRAGMENT_COLOR);
 		glLinkProgram(shader.program);
 	}
 }

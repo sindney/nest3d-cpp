@@ -6,10 +6,10 @@ namespace nest
 {
 	void matrix4::identity()
 	{
-		raw[0] = 1.0f; raw[1] = 0.0f; raw[2] = 0.0f; raw[3] = 0.0f;
-		raw[4] = 0.0f; raw[5] = 1.0f; raw[6] = 0.0f; raw[7] = 0.0f;
-		raw[8] = 0.0f; raw[9] = 0.0f; raw[10] = 1.0f; raw[11] = 0.0f;
-		raw[12] = 0.0f; raw[13] = 0.0f; raw[14] = 0.0f; raw[15] = 1.0f;
+		raw[0] = 1.0f; raw[4] = 0.0f; raw[8] = 0.0f; raw[12] = 0.0f;
+		raw[1] = 0.0f; raw[5] = 1.0f; raw[9] = 0.0f; raw[13] = 0.0f;
+		raw[2] = 0.0f; raw[6] = 0.0f; raw[10] = 1.0f; raw[14] = 0.0f;
+		raw[3] = 0.0f; raw[7] = 0.0f; raw[11] = 0.0f; raw[15] = 1.0f;
 	}
 
 	void matrix4::translate(const vector4 &a)
@@ -17,15 +17,15 @@ namespace nest
 		raw[12] = a.x; raw[13] = a.y; raw[14] = a.z;
 	}
 
-	void matrix4::rotate(const vector4 &axis, float theta)
+	void matrix4::rotate(const vector4 &axis, GLfloat theta)
 	{
-		float s = sin(theta);
-		float c = cos(theta);
+		GLfloat s = sin(theta);
+		GLfloat c = cos(theta);
 		
-		float a = 1.0f - c;
-		float ax = a * axis.x;
-		float ay = a * axis.y;
-		float az = a * axis.z;
+		GLfloat a = 1.0f - c;
+		GLfloat ax = a * axis.x;
+		GLfloat ay = a * axis.y;
+		GLfloat az = a * axis.z;
 		
 		raw[0] = ax * axis.x + c;
 		raw[1] = ax * axis.y + axis.z * s;
@@ -41,12 +41,12 @@ namespace nest
 	// Y, X, Z, YAW, PITCH, ROLL
 	void matrix4::rotate(const vector4 &angles)
 	{
-		float sa = sin(angles.x);
-		float ca = cos(angles.x);
-		float sb = sin(angles.y);
-		float cb = cos(angles.y);
-		float sc = sin(angles.z);
-		float cc = cos(angles.z);
+		GLfloat sa = sin(angles.x);
+		GLfloat ca = cos(angles.x);
+		GLfloat sb = sin(angles.y);
+		GLfloat cb = cos(angles.y);
+		GLfloat sc = sin(angles.z);
+		GLfloat cc = cos(angles.z);
 
 		raw[0] = cb * cc + sb * sa * sc;
 		raw[1] = ca * sc;
@@ -61,10 +61,10 @@ namespace nest
 
 	void matrix4::rotate(const quaternion &a)
 	{
-		float ww = 2.0f * a.w;
-		float xx = 2.0f * a.x;
-		float yy = 2.0f * a.y;
-		float zz = 2.0f * a.z;
+		GLfloat ww = 2.0f * a.w;
+		GLfloat xx = 2.0f * a.x;
+		GLfloat yy = 2.0f * a.y;
+		GLfloat zz = 2.0f * a.z;
 		
 		raw[0] = 1.0f - yy * a.y - zz * a.z;
 		raw[1] = xx * a.y + ww * a.z;
@@ -79,19 +79,19 @@ namespace nest
 
 	void matrix4::scale(const vector4 &a)
 	{
-		raw[0] = a.x;  raw[1] = 0.0f; raw[2] = 0.0f;
-		raw[4] = 0.0f; raw[5] = a.y;  raw[6] = 0.0f;
-		raw[8] = 0.0f; raw[9] = 0.0f; raw[10] = a.z;
+		raw[0] = a.x;  raw[4] = 0.0f; raw[8] = 0.0f;
+		raw[1] = 0.0f; raw[5] = a.y;  raw[9] = 0.0f;
+		raw[2] = 0.0f; raw[6] = 0.0f; raw[10] = a.z;
 	}
 
 	matrix4 matrix4::inverse()
 	{
-		float det = raw[0] * (raw[5] * raw[10] - raw[6] * raw[9])
+		GLfloat det = raw[0] * (raw[5] * raw[10] - raw[6] * raw[9])
 					+ raw[1] * (raw[6] * raw[8] - raw[4] * raw[10])
 					+ raw[2] * (raw[4] * raw[9] - raw[5] * raw[8]);
 		if(det == 0) throw std::runtime_error("Error inversing target matrix.");
 		
-		float det2 = 1.0f / det;
+		GLfloat det2 = 1.0f / det;
 		
 		matrix4 result;
 		
@@ -120,10 +120,10 @@ namespace nest
 		return matrix4(this->raw);
 	}
 
-	void matrix4::perspectiveProjection(matrix4 &a, float fov, float ratio, float near, float far)
+	void matrix4::perspectiveFov(matrix4 &a, GLfloat fov, GLfloat ratio, GLfloat near, GLfloat far)
 	{
-		float ys = 1.0f / tan(fov / 2.0f);
-		float xs = ys / ratio;
+		GLfloat ys = 1.0f / tan(fov / 2.0f);
+		GLfloat xs = ys / ratio;
 		int i;
 		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
 		a.raw[0] = ys;
@@ -133,20 +133,33 @@ namespace nest
 		a.raw[14] = 2 * far * near / (near - far);
 	}
 
-	void matrix4::orthographicProjection(matrix4 &a, float fov, float ratio, float near, float far)
+	void matrix4::perspectiveOffCenter(matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
 	{
-		float scale = tan(fov * 0.5) * near;
-		float r = ratio * scale;
 		int i;
 		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
-		a.raw[0] = 1 / r;
-		a.raw[5] = 1 / scale;
+		a.raw[0] = 2 * near / (right - left);
+		a.raw[5] = 2 * near / (top - bottom);
+		a.raw[8] = (right + left) / (right - left);
+		a.raw[9] = (top + bottom) / (top - bottom);
+		a.raw[10] = (far + near) / (near - far);
+		a.raw[11] = -1;
+		a.raw[14] = 2 * far * near / (near - far);
+	}
+
+	void matrix4::orthoOffCenter(matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
+	{
+		int i;
+		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
+		a.raw[0] = 2 / (right - left);
+		a.raw[5] = 2 / (top - bottom);
 		a.raw[10] = -2 / (far - near);
-		a.raw[11] = (far + near) / (near - far);
+		a.raw[12] = (right + left) / (left - right);
+		a.raw[13] = (top + bottom) / (bottom - top);
+		a.raw[14] = (far + near) / (near - far);
 		a.raw[15] = 1;
 	}
 
-	vector4 operator * (const vector4 &v, const matrix4 &m)
+	vector4 operator * (const matrix4 &m, const vector4 &v)
 	{
 		return vector4(
 			v.x * m.raw[0] + v.y * m.raw[4] + v.z * m.raw[8] + v.w * m.raw[12], 
@@ -154,12 +167,6 @@ namespace nest
 			v.x * m.raw[2] + v.y * m.raw[6] + v.z * m.raw[10] + v.w * m.raw[14], 
 			1.0f
 		);
-	}
-
-	vector4 &operator *= (vector4 &v, const matrix4 &m)
-	{
-		v = v * m;
-		return v;
 	}
 
 	matrix4 operator * (const matrix4 &a, const matrix4 &b)

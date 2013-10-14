@@ -34,14 +34,14 @@ namespace nest
 	void aabb::transform(const matrix4 &mat, const aabb &target, aabb &dest)
 	{
 		vector4 vertices[] = {
-			target.min * mat, 
-			vector4(target.max.x, target.min.y, target.min.z, 1.0f) * mat, 
-			vector4(target.min.x, target.max.y, target.min.z, 1.0f) * mat, 
-			vector4(target.max.x, target.max.y, target.min.z, 1.0f) * mat, 
-			vector4(target.min.x, target.min.y, target.max.z, 1.0f) * mat, 
-			vector4(target.max.x, target.min.y, target.max.z, 1.0f) * mat, 
-			vector4(target.min.x, target.max.y, target.max.z, 1.0f) * mat, 
-			target.max * mat, 
+			mat * target.min, 
+			mat * vector4(target.max.x, target.min.y, target.min.z, 1.0f), 
+			mat * vector4(target.min.x, target.max.y, target.min.z, 1.0f), 
+			mat * vector4(target.max.x, target.max.y, target.min.z, 1.0f), 
+			mat * vector4(target.min.x, target.min.y, target.max.z, 1.0f), 
+			mat * vector4(target.max.x, target.min.y, target.max.z, 1.0f), 
+			mat * vector4(target.min.x, target.max.y, target.max.z, 1.0f), 
+			mat * target.max
 		};
 
 		dest.max = dest.min = vertices[0];

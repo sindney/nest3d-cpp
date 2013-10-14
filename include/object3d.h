@@ -37,7 +37,7 @@ namespace nest
 		{
 			invertLocalMatrix = localMatrix.inverse();
 			worldMatrix = localMatrix;
-			if(parent != NULL) worldMatrix *= parent->worldMatrix;
+			if(parent != NULL) worldMatrix = parent->worldMatrix * worldMatrix;
 			invertWorldMatrix = worldMatrix.inverse();
 		}
 	};

@@ -1,11 +1,11 @@
 #include <cmath>
 
-#include "frustum.h"
+#include "culling3d.h"
 #include "geomath.h"
 
 namespace nest
 {
-	void frustum::create(float fov, float ratio, float near, float far)
+	void culling3d::create(float fov, float ratio, float near, float far)
 	{
 		float r = tan(fov * 0.5);
 		float nH = near * r;
@@ -44,7 +44,7 @@ namespace nest
 		geomath::createPlane(planes[5], fTR, fTL, fBL);
 	}
 
-	bool frustum::classifyPoint(const vector4 &p)
+	bool culling3d::classifyPoint(const vector4 &p)
 	{
 		int i;
 		vector4 *plane;
@@ -56,7 +56,7 @@ namespace nest
 		return true;
 	}
 
-	bool frustum::classifyBSphere(const vector4 &center, float radius)
+	bool culling3d::classifyBSphere(const vector4 &center, float radius)
 	{
 		int i;
 		float d;
@@ -70,7 +70,7 @@ namespace nest
 		return true;
 	}
 
-	bool frustum::classifyAABB(const aabb &bound, const matrix4 &ivm)
+	bool culling3d::classifyAABB(const aabb &bound, const matrix4 &ivm)
 	{
 		aabb target;
 		aabb::transform(ivm, bound, target);

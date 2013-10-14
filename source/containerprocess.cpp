@@ -6,7 +6,6 @@
 #include "containerprocess.h"
 #include "meshpainter.h"
 #include "ocnode.h"
-#include "shader3d.h"
 
 namespace nest
 {
