@@ -22,7 +22,7 @@ namespace nest
 			if(tree != NULL) delete tree;
 		}
 
-		void calculate();
+		void calculate(int id);
 
 	};
 }

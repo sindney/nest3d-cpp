@@ -35,7 +35,7 @@ namespace nest
 			rejected.clear();
 		}
 
-		virtual void calculate() = 0;
+		virtual void calculate(int id) = 0;
 
 	};
 }

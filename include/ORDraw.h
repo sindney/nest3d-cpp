@@ -9,7 +9,7 @@ namespace nest
 	{
 	public:
 
-		virtual void calculate(Mesh *mesh, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix) = 0;
+		virtual void calculate(Mesh *mesh, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix, int id) = 0;
 
 	};
 }

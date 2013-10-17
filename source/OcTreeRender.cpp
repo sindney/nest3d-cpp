@@ -10,7 +10,7 @@ namespace nest
 {
 	using namespace std;
 
-	void OcTreeRender::calculate() 
+	void OcTreeRender::calculate(int id) 
 	{
 		passed0.clear();
 		passed1.clear();
@@ -59,7 +59,7 @@ namespace nest
 							else 
 							{
 								draw = mesh->draw ? mesh->draw : this->draw;
-								draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
+								draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix, id);
 								passed0.push_back(mesh);
 								numMeshes++;
 								numTris += mesh->numTris();
