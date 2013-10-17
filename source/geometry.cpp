@@ -1,12 +1,10 @@
 #include <cmath>
 
-#include "geometry.h"
-#include "matrix4.h"
-#include "vector4.h"
+#include "Geometry.h"
 
 namespace nest
 {
-	geometry::geometry()
+	Geometry::Geometry()
 	{
 		vertexData = NULL;
 		uvData = NULL;
@@ -18,12 +16,12 @@ namespace nest
 		normalBuffer = 0;
 		tangentBuffer = 0;
 		indexBuffer = 0;
-		numVertices = 0;
-		numTriangles = 0;
+		numVts = 0;
+		numTris = 0;
 		attributeArray = 0;
 	}
 
-	geometry::~geometry()
+	Geometry::~Geometry()
 	{
 		if(vertexBuffer != 0) glDeleteBuffers(1, &vertexBuffer);
 		if(uvBuffer != 0) glDeleteBuffers(1, &uvBuffer);
@@ -38,12 +36,12 @@ namespace nest
 		if(indexData != NULL) delete [] indexData;
 	}
 
-	void geometry::calculateNormal(geometry &geom)
+	void Geometry::calculateNormal(Geometry &geom)
 	{
-		if(geom.normalData == NULL) geom.normalData = new GLfloat[geom.numVertices * 3];
+		if(geom.normalData == NULL) geom.normalData = new GLfloat[geom.numVts * 3];
 
 		int i, j;
-		for(i = 0; i < geom.numVertices; i++)
+		for(i = 0; i < geom.numVts; i++)
 		{
 			j = i * 3;
 			geom.normalData[j] = 0;
@@ -53,9 +51,9 @@ namespace nest
 
 		GLuint a, b, c;
 		GLfloat x1, y1, z1, x2, y2, z2, x3, y3, z3;
-		vector4 vt1, vt2;
+		Vector4 vt1, vt2;
 
-		for(i = 0; i < geom.numTriangles; i++)
+		for(i = 0; i < geom.numTris; i++)
 		{
 			j = i * 3;
 			a = geom.indexData[j] * 3;
@@ -91,7 +89,7 @@ namespace nest
 			geom.normalData[c + 2] += vt1.z;
 		}
 
-		for(i = 0; i < geom.numVertices; i++)
+		for(i = 0; i < geom.numVts; i++)
 		{
 			j = i * 3;
 			x3 = geom.normalData[j];
@@ -104,13 +102,13 @@ namespace nest
 		}
 	}
 
-	void geometry::calculateTangent(geometry &geom)
+	void Geometry::calculateTangent(Geometry &geom)
 	{
 		if(geom.normalData == NULL) calculateNormal(geom);
-		if(geom.tangentData == NULL) geom.tangentData = new GLfloat[geom.numVertices * 3];
+		if(geom.tangentData == NULL) geom.tangentData = new GLfloat[geom.numVts * 3];
 
 		int i, j;
-		for(i = 0; i < geom.numVertices; i++)
+		for(i = 0; i < geom.numVts; i++)
 		{
 			j = i * 3;
 			geom.tangentData[j] = 0;
@@ -120,9 +118,9 @@ namespace nest
 
 		GLuint a, b, c, d;
 		GLfloat u1, u2, u3, v1, v2, v3;
-		vector4 p1, p2, p3, p4, p5;
+		Vector4 p1, p2, p3, p4, p5;
 
-		for(i = 0; i < geom.numTriangles; i++)
+		for(i = 0; i < geom.numTris; i++)
 		{
 			j = i * 3;
 			a = geom.indexData[j] * 3;
@@ -164,7 +162,7 @@ namespace nest
 			geom.tangentData[c + 2] += p4.z;
 		}
 
-		for (i = 0; i < geom.numVertices; i++) {
+		for (i = 0; i < geom.numVts; i++) {
 			j = i * 3;
 			v1 = geom.tangentData[j];
 			v2 = geom.tangentData[j + 1];
@@ -176,7 +174,7 @@ namespace nest
 		}
 	}
 
-	void geometry::configure(geometry &geom, int params)
+	void Geometry::configure(Geometry &geom, int params)
 	{
 		GLuint count = 0;
 		if(geom.attributeArray != 0) glDeleteVertexArrays(1, &geom.attributeArray);
@@ -190,7 +188,7 @@ namespace nest
 			{
 				glGenBuffers(1, &geom.vertexBuffer);
 				glBindBuffer(GL_ARRAY_BUFFER, geom.vertexBuffer);
-				glBufferData(GL_ARRAY_BUFFER, geom.numVertices * 3 * sizeof(GLfloat), geom.vertexData, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, geom.numVts * 3 * sizeof(GLfloat), geom.vertexData, GL_STATIC_DRAW);
 				glEnableVertexAttribArray(count);
 				glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			}
@@ -203,7 +201,7 @@ namespace nest
 			{
 				glGenBuffers(1, &geom.uvBuffer);
 				glBindBuffer(GL_ARRAY_BUFFER, geom.uvBuffer);
-				glBufferData(GL_ARRAY_BUFFER, geom.numVertices * 2 * sizeof(GLfloat), geom.uvData, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, geom.numVts * 2 * sizeof(GLfloat), geom.uvData, GL_STATIC_DRAW);
 				glEnableVertexAttribArray(count);
 				glVertexAttribPointer(count++, 2, GL_FLOAT, GL_FALSE, 0, 0);
 			}
@@ -216,7 +214,7 @@ namespace nest
 			{
 				glGenBuffers(1, &geom.normalBuffer);
 				glBindBuffer(GL_ARRAY_BUFFER, geom.normalBuffer);
-				glBufferData(GL_ARRAY_BUFFER, geom.numVertices * 3 * sizeof(GLfloat), geom.normalData, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, geom.numVts * 3 * sizeof(GLfloat), geom.normalData, GL_STATIC_DRAW);
 				glEnableVertexAttribArray(count);
 				glVertexAttribPointer(count++, 3, GL_FLOAT, GL_TRUE, 0, 0);
 			}
@@ -229,7 +227,7 @@ namespace nest
 			{
 				glGenBuffers(1, &geom.tangentBuffer);
 				glBindBuffer(GL_ARRAY_BUFFER, geom.tangentBuffer);
-				glBufferData(GL_ARRAY_BUFFER, geom.numVertices * 3 * sizeof(GLfloat), geom.tangentData, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, geom.numVts * 3 * sizeof(GLfloat), geom.tangentData, GL_STATIC_DRAW);
 				glEnableVertexAttribArray(count);
 				glVertexAttribPointer(count++, 3, GL_FLOAT, GL_TRUE, 0, 0);
 			}
@@ -240,7 +238,7 @@ namespace nest
 		{
 			glGenBuffers(1, &geom.indexBuffer);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geom.indexBuffer);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, geom.numTriangles * 3 * sizeof(GLuint), geom.indexData, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, geom.numTris * 3 * sizeof(GLuint), geom.indexData, GL_STATIC_DRAW);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

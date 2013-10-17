@@ -3,36 +3,33 @@
 
 #include <vector>
 
-#include "aabb.h"
-#include "vector4.h"
+#include "AABB.h"
 
 namespace nest
 {
-	using namespace std;
+	class Mesh;
 
-	class mesh;
+	class OcTree;
 
-	class octree;
-
-	class ocnode
+	class OcNode
 	{
 	public:
 
-		aabb bound;
+		AABB bound;
 
-		vector<mesh*> objects;
+		std::vector<Mesh*> objects;
 
-		vector<ocnode*> childs;
+		std::vector<OcNode*> childs;
 
-		ocnode *parent;
+		OcNode *parent;
 
-		octree *belonging;
+		OcTree *belonging;
 
 		unsigned int id, depth;
 
-		ocnode(octree *belonging, ocnode *parent, int id, int depth);
+		OcNode(OcTree *belonging, OcNode *parent, int id, int depth);
 
-		~ocnode();
+		~OcNode();
 	};
 }
 

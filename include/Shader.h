@@ -1,5 +1,5 @@
-#ifndef N3D_MESHSHADER_H
-#define N3D_MESHSHADER_H
+#ifndef N3D_SHADER_H
+#define N3D_SHADER_H
 
 #include <vector>
 
@@ -7,11 +7,11 @@
 
 namespace nest
 {
-	class shaderpart
+	class ShaderPart
 	{
 	public:
 
-		virtual ~shaderpart() {};
+		virtual ~ShaderPart() {};
 
 		virtual void upload() = 0;
 
@@ -19,7 +19,7 @@ namespace nest
 
 	// single float
 
-	class shaderpart1f : public shaderpart
+	class ShaderPart1f : public ShaderPart
 	{
 	public:
 
@@ -27,7 +27,7 @@ namespace nest
 
 		GLfloat v0;
 
-		shaderpart1f(GLint location, GLfloat v0) : location(location), v0(v0) {}
+		ShaderPart1f(GLint location, GLfloat v0) : location(location), v0(v0) {}
 
 		void upload()
 		{
@@ -35,7 +35,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart2f : public shaderpart
+	class ShaderPart2f : public ShaderPart
 	{
 	public:
 
@@ -43,7 +43,7 @@ namespace nest
 		
 		GLfloat v0, v1;
 
-		shaderpart2f(GLint location, GLfloat v0, GLfloat v1) : location(location), v0(v0), v1(v1) {}
+		ShaderPart2f(GLint location, GLfloat v0, GLfloat v1) : location(location), v0(v0), v1(v1) {}
 
 		void upload()
 		{
@@ -51,7 +51,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart3f : public shaderpart
+	class ShaderPart3f : public ShaderPart
 	{
 	public:
 
@@ -59,7 +59,7 @@ namespace nest
 		
 		GLfloat v0, v1, v2;
 
-		shaderpart3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) : location(location), v0(v0), v1(v1), v2(v2) {}
+		ShaderPart3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) : location(location), v0(v0), v1(v1), v2(v2) {}
 
 		void upload()
 		{
@@ -67,7 +67,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart4f : public shaderpart
+	class ShaderPart4f : public ShaderPart
 	{
 	public:
 
@@ -75,7 +75,7 @@ namespace nest
 		
 		GLfloat v0, v1, v2, v3;
 
-		shaderpart4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
+		ShaderPart4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
 
 		void upload()
 		{
@@ -85,7 +85,7 @@ namespace nest
 
 	// single int
 
-	class shaderpart1i : public shaderpart
+	class ShaderPart1i : public ShaderPart
 	{
 	public:
 
@@ -93,7 +93,7 @@ namespace nest
 		
 		GLint v0;
 
-		shaderpart1i(GLint location, GLint v0) : location(location), v0(v0) {}
+		ShaderPart1i(GLint location, GLint v0) : location(location), v0(v0) {}
 
 		void upload()
 		{
@@ -101,7 +101,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart2i : public shaderpart
+	class ShaderPart2i : public ShaderPart
 	{
 	public:
 
@@ -109,7 +109,7 @@ namespace nest
 		
 		GLint v0, v1;
 
-		shaderpart2i(GLint location, GLint v0, GLint v1) : location(location), v0(v0), v1(v1) {}
+		ShaderPart2i(GLint location, GLint v0, GLint v1) : location(location), v0(v0), v1(v1) {}
 
 		void upload()
 		{
@@ -117,7 +117,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart3i : public shaderpart
+	class ShaderPart3i : public ShaderPart
 	{
 	public:
 
@@ -125,7 +125,7 @@ namespace nest
 		
 		GLint v0, v1, v2;
 
-		shaderpart3i(GLint location, GLint v0, GLint v1, GLint v2) : location(location), v0(v0), v1(v1), v2(v2) {}
+		ShaderPart3i(GLint location, GLint v0, GLint v1, GLint v2) : location(location), v0(v0), v1(v1), v2(v2) {}
 
 		void upload()
 		{
@@ -133,7 +133,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart4i : public shaderpart
+	class ShaderPart4i : public ShaderPart
 	{
 	public:
 
@@ -141,7 +141,7 @@ namespace nest
 		
 		GLint v0, v1, v2, v3;
 
-		shaderpart4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
+		ShaderPart4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
 
 		void upload()
 		{
@@ -151,7 +151,7 @@ namespace nest
 
 	// single unsigned int
 
-	class shaderpart1ui : public shaderpart
+	class ShaderPart1ui : public ShaderPart
 	{
 	public:
 
@@ -159,7 +159,7 @@ namespace nest
 		
 		GLuint v0;
 
-		shaderpart1ui(GLint location, GLuint v0) : location(location), v0(v0) {}
+		ShaderPart1ui(GLint location, GLuint v0) : location(location), v0(v0) {}
 
 		void upload()
 		{
@@ -167,7 +167,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart2ui : public shaderpart
+	class ShaderPart2ui : public ShaderPart
 	{
 	public:
 
@@ -175,7 +175,7 @@ namespace nest
 		
 		GLuint v0, v1;
 
-		shaderpart2ui(GLint location, GLuint v0, GLuint v1) : location(location), v0(v0), v1(v1) {}
+		ShaderPart2ui(GLint location, GLuint v0, GLuint v1) : location(location), v0(v0), v1(v1) {}
 
 		void upload()
 		{
@@ -183,7 +183,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart3ui : public shaderpart
+	class ShaderPart3ui : public ShaderPart
 	{
 	public:
 
@@ -191,7 +191,7 @@ namespace nest
 		
 		GLuint v0, v1, v2;
 
-		shaderpart3ui(GLint location, GLuint v0, GLuint v1, GLuint v2) : location(location), v0(v0), v1(v1), v2(v2) {}
+		ShaderPart3ui(GLint location, GLuint v0, GLuint v1, GLuint v2) : location(location), v0(v0), v1(v1), v2(v2) {}
 
 		void upload()
 		{
@@ -199,7 +199,7 @@ namespace nest
 		}
 	};
 
-	class shaderpart4ui : public shaderpart
+	class ShaderPart4ui : public ShaderPart
 	{
 	public:
 
@@ -207,7 +207,7 @@ namespace nest
 		
 		GLuint v0, v1, v2, v3;
 
-		shaderpart4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
+		ShaderPart4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
 
 		void upload()
 		{
@@ -217,7 +217,7 @@ namespace nest
 
 	// float array
 
-	class shaderpartfv : public shaderpart
+	class ShaderPartfv : public ShaderPart
 	{
 	public:
 
@@ -229,9 +229,9 @@ namespace nest
 
 		GLsizei count;
 
-		shaderpartfv(GLint location, unsigned int per, GLsizei count, GLfloat *value) : location(location), per(per), count(count), value(value) {}
+		ShaderPartfv(GLint location, unsigned int per, GLsizei count, GLfloat *value) : location(location), per(per), count(count), value(value) {}
 
-		~shaderpartfv()
+		~ShaderPartfv()
 		{
 			if(value != NULL) delete [] value;
 		}
@@ -258,7 +258,7 @@ namespace nest
 
 	// int array
 
-	class shaderpartiv : public shaderpart
+	class ShaderPartiv : public ShaderPart
 	{
 	public:
 
@@ -270,9 +270,9 @@ namespace nest
 
 		GLsizei count;
 
-		shaderpartiv(GLint location, unsigned int per, GLsizei count, GLint *value) : location(location), per(per), count(count), value(value) {}
+		ShaderPartiv(GLint location, unsigned int per, GLsizei count, GLint *value) : location(location), per(per), count(count), value(value) {}
 
-		~shaderpartiv()
+		~ShaderPartiv()
 		{
 			if(value != NULL) delete [] value;
 		}
@@ -299,7 +299,7 @@ namespace nest
 
 	// unsigned array
 	
-	class shaderpartuiv : public shaderpart
+	class ShaderPartuiv : public ShaderPart
 	{
 	public:
 
@@ -311,9 +311,9 @@ namespace nest
 
 		GLsizei count;
 
-		shaderpartuiv(GLint location, unsigned int per, GLsizei count, GLuint *value) : location(location), per(per), count(count), value(value) {}
+		ShaderPartuiv(GLint location, unsigned int per, GLsizei count, GLuint *value) : location(location), per(per), count(count), value(value) {}
 
-		~shaderpartuiv()
+		~ShaderPartuiv()
 		{
 			if(value != NULL) delete [] value;
 		}
@@ -340,7 +340,7 @@ namespace nest
 
 	// matrix
 
-	class shaderpartmatrix : public shaderpart
+	class ShaderPartMatrix : public ShaderPart
 	{
 	public:
 
@@ -354,10 +354,10 @@ namespace nest
 
 		GLboolean transpose;
 
-		shaderpartmatrix(GLint location, unsigned int w, unsigned int h, GLsizei count, GLboolean transpose, GLfloat *value)
+		ShaderPartMatrix(GLint location, unsigned int w, unsigned int h, GLsizei count, GLboolean transpose, GLfloat *value)
 		 : location(location), w(w), h(h), count(count), transpose(transpose), value(value) {}
 
-		~shaderpartmatrix()
+		~ShaderPartMatrix()
 		{
 			if(value != NULL) delete [] value;
 		}
@@ -412,7 +412,7 @@ namespace nest
 		}
 	};
 
-	class meshshader
+	class Shader
 	{
 	public:
 
@@ -420,11 +420,11 @@ namespace nest
 
 		std::vector<GLuint> textures;
 
-		std::vector<shaderpart*> parts;
+		std::vector<ShaderPart*> parts;
 
-		meshshader() : program(0), vertexShader(0), fragmentShader(0) {}
+		Shader() : program(0), vertexShader(0), fragmentShader(0) {}
 
-		~meshshader();
+		~Shader();
 
 		static const GLchar VERTEX_POSITION[];
 
@@ -448,7 +448,7 @@ namespace nest
 
 		static const GLchar TEXTURE_NORMAL[];
 
-		static void configure(meshshader &shader, const char *vertex, const char *fragment);
+		static void configure(Shader *shader, const char *vertex, const char *fragment);
 	};
 }
 

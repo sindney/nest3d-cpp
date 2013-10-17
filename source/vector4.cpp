@@ -1,12 +1,12 @@
-#include "vector4.h"
+#include "Vector4.h"
 
 namespace nest
 {
-	const vector4 X_AXIS = vector4(1.0f, 0.0f, 0.0f, 1.0f);
+	const Vector4 X_AXIS = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 
-	const vector4 Y_AXIS = vector4(0.0f, 1.0f, 0.0f, 1.0f);
+	const Vector4 Y_AXIS = Vector4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	const vector4 Z_AXIS = vector4(0.0f, 0.0f, 1.0f, 1.0f);
+	const Vector4 Z_AXIS = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
 		
-	const vector4 ZERO;
+	const Vector4 ZERO;
 }

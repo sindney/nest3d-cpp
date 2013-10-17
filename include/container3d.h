@@ -3,32 +3,30 @@
 
 #include <vector>
 
-#include "object3d.h"
+#include "Object3d.h"
 
 namespace nest
 {
-	using namespace std;
-
-	class container3d : public object3d
+	class Container3d : public Object3d
 	{
 	public:
 
-		vector<object3d*> objects;
+		std::vector<Object3d*> objects;
 
 		bool castShadows;
 
 		bool visible;
 
-		container3d() : castShadows(false), visible(true) {}
+		Container3d() : castShadows(false), visible(true) {}
 
-		~container3d();
+		~Container3d();
 
-		void addChild(object3d *object);
+		void addChild(Object3d *object);
 
 		/**
 		 *	Remove child from partition tree first, then from it's container.
 		 */
-		void removeChild(object3d *object);
+		void removeChild(Object3d *object);
 
 		void recompose();
 	};

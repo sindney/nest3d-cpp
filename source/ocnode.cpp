@@ -1,10 +1,10 @@
-#include "mesh.h"
-#include "ocnode.h"
-#include "octree.h"
+#include "Mesh.h"
+#include "OcNode.h"
+#include "OcTree.h"
 
 namespace nest
 {
-	ocnode::ocnode(octree *belonging, ocnode *parent, int id, int depth)
+	OcNode::OcNode(OcTree *belonging, OcNode *parent, int id, int depth)
 	{
 		this->belonging = belonging;
 		this->parent = parent;
@@ -18,16 +18,16 @@ namespace nest
 		}
 	}
 
-	ocnode::~ocnode()
+	OcNode::~OcNode()
 	{
-		ocnode *child;
+		OcNode *child;
 		while(childs.size() != 0)
 		{
 			child = childs.back();
 			childs.pop_back();
 			if(child != NULL) delete child;
 		}
-		mesh *object;
+		Mesh *object;
 		while(objects.size() != 0)
 		{
 			object = objects.back();

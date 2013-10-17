@@ -3,8 +3,7 @@
 
 #include <vector>
 
-#include "geometry.h"
-#include "vector4.h"
+#include "Geometry.h"
 
 namespace nest
 {
@@ -16,30 +15,30 @@ namespace nest
 
 		unsigned int index;
 
-	} rayGEOMResult;
+	} RayGeomResult;
 
-	class geomath
+	class Geomath
 	{
 	public:
 
-		static bool BSBS(vector4 &center0, float radius0, vector4 &center1, float radius1);
+		static bool BSBS(Vector4 &center0, float radius0, Vector4 &center1, float radius1);
 
-		static bool AABBBS(vector4 &max, vector4 &min, vector4 &center, float radius);
+		static bool AABBBS(Vector4 &max, Vector4 &min, Vector4 &center, float radius);
 
-		static bool AABBAABB(vector4 &max0, vector4 &min0, vector4 &max1, vector4 &min1);
+		static bool AABBAABB(Vector4 &max0, Vector4 &min0, Vector4 &max1, Vector4 &min1);
 
-		static void createPlane(vector4 &p, const vector4 &v1, const vector4 &v2, const vector4 &v3);
+		static void createPlane(Vector4 &p, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3);
 
-		static bool rayBS(vector4 &result, vector4 &orgion, vector4 &delta, vector4 &center, float radius);
+		static bool rayBS(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &center, float radius);
 
-		static bool rayAABB(vector4 &result, vector4 &orgion, vector4 &delta, vector4 &max, vector4 &min);
+		static bool rayAABB(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &max, Vector4 &min);
 
-		static bool rayTRI(float* t, float* u, float* v, vector4 &orgion, vector4 &delta, vector4 &p0, vector4 &p1, vector4 &p2);
+		static bool rayTri(float* t, float* u, float* v, Vector4 &orgion, Vector4 &delta, Vector4 &p0, Vector4 &p1, Vector4 &p2);
 
 		/**
-		 *	You need to transform your ray to geometry space(same as mesh local space).
+		 *	You need to transform your ray to Geometry space(aka mesh local space).
 		 */
-		static bool rayGEOM(vector<rayGEOMResult> *results, rayGEOMResult *result, bool uv, vector4 &orgion, vector4 &delta, geometry &geom);
+		static bool rayGeom(vector<RayGeomResult> *results, RayGeomResult *result, bool uv, Vector4 &orgion, Vector4 &delta, Geometry &geom);
 	};
 }
 

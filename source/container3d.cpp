@@ -3,23 +3,25 @@
 #include <typeinfo>
 #include <vector>
 
-#include "container3d.h"
+#include "Container3d.h"
 
 namespace nest
 {
-	container3d::~container3d()
+	using namespace std;
+
+	Container3d::~Container3d()
 	{
-		vector<container3d*> containers;
-		container3d *current = this;
-		object3d *object0 = NULL;
+		vector<Container3d*> containers;
+		Container3d *current = this;
+		Object3d *object0 = NULL;
 		while(true)
 		{
 			while(current->objects.size() != 0)
 			{
 				object0 = current->objects.back();
 				current->objects.pop_back();
-				if(typeid(*object0) == typeid(container3d))
-					containers.push_back(static_cast<container3d*>(object0));
+				if(typeid(*object0) == typeid(Container3d))
+					containers.push_back(static_cast<Container3d*>(object0));
 				else 
 					delete object0;
 			}
@@ -34,22 +36,22 @@ namespace nest
 		}
 	}
 
-	void container3d::addChild(object3d *object)
+	void Container3d::addChild(Object3d *object)
 	{
 		objects.push_back(object);
 		object->parent = this;
 		object->recompose();
 	}
 
-	void container3d::removeChild(object3d *object)
+	void Container3d::removeChild(Object3d *object)
 	{
 		bool flag = false;
 
-		vector<container3d*> containers;
-		container3d *current = this;
+		vector<Container3d*> containers;
+		Container3d *current = this;
 		while(true)
 		{
-			vector<object3d*>::iterator i;
+			vector<Object3d*>::iterator i;
 			for(i = current->objects.begin(); i != current->objects.end(); i++)
 			{
 				if(*i == object)
@@ -60,9 +62,9 @@ namespace nest
 					flag = true;
 					break;
 				}
-				else if(typeid(**i) == typeid(container3d))
+				else if(typeid(**i) == typeid(Container3d))
 				{
-					containers.push_back(static_cast<container3d*>(*i));
+					containers.push_back(static_cast<Container3d*>(*i));
 				}
 			}
 			if(!flag && containers.size() != 0)
@@ -77,10 +79,10 @@ namespace nest
 		if(!flag) throw runtime_error("Error removing child: Can't locate child pointer in target container.");
 	}
 
-	void container3d::recompose()
+	void Container3d::recompose()
 	{
-		object3d::recompose();
-		vector<object3d*>::iterator i;
+		Object3d::recompose();
+		vector<Object3d*>::iterator i;
 		for(i = objects.begin(); i != objects.end(); i++)
 		{
 			(*i)->recompose();

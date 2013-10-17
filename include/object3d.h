@@ -3,35 +3,35 @@
 
 #include <string>
 
-#include "matrix4.h"
+#include "Matrix4.h"
 
 namespace nest
 {
-	class object3d
+	class Object3d
 	{
 	public:
 
 		std::string name;
 
-		matrix4 localMatrix;
+		Matrix4 localMatrix;
 
-		matrix4 invertLocalMatrix;
+		Matrix4 invertLocalMatrix;
 
-		matrix4 worldMatrix;
+		Matrix4 worldMatrix;
 
-		matrix4 invertWorldMatrix;
+		Matrix4 invertWorldMatrix;
 
-		object3d *parent;
+		Object3d *parent;
 
-		object3d() : parent(NULL) {}
+		Object3d() : parent(NULL) {}
 
-		virtual ~object3d()
+		virtual ~Object3d()
 		{
 			parent = NULL;
 		}
 
 		/**
-		 *	Update object3d's transform by localMatrix.
+		 *	Update Object3d's transform by localMatrix.
 		 */
 		virtual void recompose()
 		{

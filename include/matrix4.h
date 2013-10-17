@@ -1,8 +1,8 @@
 #ifndef N3D_MATRIX4_H
 #define N3D_MATRIX4_H
 
-#include "vector4.h"
-#include "quaternion.h"
+#include "AABB.h"
+#include "Quaternion.h"
 
 namespace nest
 {
@@ -12,30 +12,30 @@ namespace nest
 	 *	2	6	10	14
 	 *	3	7	11	15
 	 */
-	class matrix4 
+	class Matrix4 
 	{
 	public:
 
-		static void perspectiveFov(matrix4 &a, GLfloat fov, GLfloat ratio, GLfloat near, GLfloat far);
+		static void perspectiveFov(Matrix4 &a, GLfloat fov, GLfloat ratio, GLfloat near, GLfloat far);
 
-		static void perspectiveOffCenter(matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
+		static void perspectiveOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
 
-		static void orthoOffCenter(matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
+		static void orthoOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
 		
 		GLfloat raw[16];
 
-		matrix4()
+		Matrix4()
 		{
 			identity();
 		}
 
-		matrix4(const GLfloat a[])
+		Matrix4(const GLfloat a[])
 		{
 			int i;
 			for(i = 0; i < 16; i++) raw[i] = a[i];
 		}
 
-		matrix4(const matrix4 &a) 
+		Matrix4(const Matrix4 &a) 
 		{
 			int i;
 			for(i = 0; i < 16; i++) raw[i] = a.raw[i];
@@ -43,26 +43,28 @@ namespace nest
 
 		void identity();
 		
-		void translate(const vector4 &a);
+		void translate(const Vector4 &a);
 		
-		void rotate(const vector4 &axis, GLfloat theta);
+		void rotate(const Vector4 &axis, GLfloat theta);
 		
-		void rotate(const vector4 &fovs);
+		void rotate(const Vector4 &fovs);
 
-		void rotate(const quaternion &a);
+		void rotate(const Quaternion &a);
 		
-		void scale(const vector4 &a);
+		void scale(const Vector4 &a);
 		
-		matrix4 inverse();
+		Matrix4 inverse();
 
-		matrix4 clone();
+		Matrix4 clone();
 	};
 
-	vector4 operator * (const matrix4 &m, const vector4 &v);
+	AABB operator * (const Matrix4 &m, const AABB &b);
+	
+	Vector4 operator * (const Matrix4 &m, const Vector4 &v);
 
-	matrix4 operator * (const matrix4 &a, const matrix4 &b);
+	Matrix4 operator * (const Matrix4 &a, const Matrix4 &b);
 
-	matrix4 &operator *= (matrix4 &a, const matrix4 &b);
+	Matrix4 &operator *= (Matrix4 &a, const Matrix4 &b);
 }
 
 #endif

@@ -2,49 +2,48 @@
 #include <typeinfo>
 #include <vector>
 
-#include "container3d.h"
-#include "geomath.h"
-#include "ocnode.h"
-#include "octree.h"
+#include "Geomath.h"
+#include "OcNode.h"
+#include "OcTree.h"
 
 namespace nest
 {
-	bool octree::findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, int *id, vector4 *max, vector4 *min)
+	bool OcTree::findNode(Vector4 *objMax, Vector4 *objMin, Vector4 *nodeMax, Vector4 *nodeMin, int *id, Vector4 *max, Vector4 *min)
 	{
 		float size = nodeMax->x - nodeMin->x;
 		float halfsize = size / 2;
 		// top top left
-		vector4 maxTTL = *nodeMax;
-		vector4 minTTL = *nodeMin + vector4(halfsize, halfsize, halfsize, 1.0f);
-		bool BTTL = geomath::AABBAABB(*objMax, *objMin, maxTTL, minTTL);
+		Vector4 maxTTL = *nodeMax;
+		Vector4 minTTL = *nodeMin + Vector4(halfsize, halfsize, halfsize, 1.0f);
+		bool BTTL = Geomath::AABBAABB(*objMax, *objMin, maxTTL, minTTL);
 		// top top right
-		vector4 maxTTR = *nodeMax - vector4(halfsize, 0.0f, 0.0f, 1.0f);
-		vector4 minTTR = *nodeMin + vector4(0.0f, halfsize, halfsize, 1.0f);
-		bool BTTR = geomath::AABBAABB(*objMax, *objMin, maxTTR, minTTR);
+		Vector4 maxTTR = *nodeMax - Vector4(halfsize, 0.0f, 0.0f, 1.0f);
+		Vector4 minTTR = *nodeMin + Vector4(0.0f, halfsize, halfsize, 1.0f);
+		bool BTTR = Geomath::AABBAABB(*objMax, *objMin, maxTTR, minTTR);
 		// top bottom left
-		vector4 maxTBL = *nodeMax - vector4(0.0f, 0.0f, halfsize, 1.0f);
-		vector4 minTBL = *nodeMin + vector4(halfsize, halfsize, 0.0f, 1.0f);
-		bool BTBL = geomath::AABBAABB(*objMax, *objMin, maxTBL, minTBL);
+		Vector4 maxTBL = *nodeMax - Vector4(0.0f, 0.0f, halfsize, 1.0f);
+		Vector4 minTBL = *nodeMin + Vector4(halfsize, halfsize, 0.0f, 1.0f);
+		bool BTBL = Geomath::AABBAABB(*objMax, *objMin, maxTBL, minTBL);
 		// top bottom right
-		vector4 maxTBR = *nodeMax - vector4(halfsize, 0.0f, halfsize, 1.0f);
-		vector4 minTBR = *nodeMin + vector4(0.0f, halfsize, 0.0f, 1.0f);
-		bool BTBR = geomath::AABBAABB(*objMax, *objMin, maxTBR, minTBR);
+		Vector4 maxTBR = *nodeMax - Vector4(halfsize, 0.0f, halfsize, 1.0f);
+		Vector4 minTBR = *nodeMin + Vector4(0.0f, halfsize, 0.0f, 1.0f);
+		bool BTBR = Geomath::AABBAABB(*objMax, *objMin, maxTBR, minTBR);
 		// bottom top left
-		vector4 maxBTL = *nodeMax - vector4(0.0f, halfsize, 0.0f, 1.0f);
-		vector4 minBTL = *nodeMin + vector4(halfsize, 0.0f, halfsize, 1.0f);
-		bool BBTL = geomath::AABBAABB(*objMax, *objMin, maxBTL, minBTL);
+		Vector4 maxBTL = *nodeMax - Vector4(0.0f, halfsize, 0.0f, 1.0f);
+		Vector4 minBTL = *nodeMin + Vector4(halfsize, 0.0f, halfsize, 1.0f);
+		bool BBTL = Geomath::AABBAABB(*objMax, *objMin, maxBTL, minBTL);
 		// bottom top right
-		vector4 maxBTR = *nodeMax - vector4(halfsize, halfsize, 0.0f, 1.0f);
-		vector4 minBTR = *nodeMin + vector4(0.0f, 0.0f, halfsize, 1.0f);
-		bool BBTR = geomath::AABBAABB(*objMax, *objMin, maxBTR, minBTR);
+		Vector4 maxBTR = *nodeMax - Vector4(halfsize, halfsize, 0.0f, 1.0f);
+		Vector4 minBTR = *nodeMin + Vector4(0.0f, 0.0f, halfsize, 1.0f);
+		bool BBTR = Geomath::AABBAABB(*objMax, *objMin, maxBTR, minBTR);
 		// bottom bottom left
-		vector4 maxBBL = *nodeMax - vector4(0.0f, halfsize, halfsize, 1.0f);
-		vector4 minBBL = *nodeMin + vector4(halfsize, 0.0f, 0.0f, 1.0f);
-		bool BBBL = geomath::AABBAABB(*objMax, *objMin, maxBBL, minBBL);
+		Vector4 maxBBL = *nodeMax - Vector4(0.0f, halfsize, halfsize, 1.0f);
+		Vector4 minBBL = *nodeMin + Vector4(halfsize, 0.0f, 0.0f, 1.0f);
+		bool BBBL = Geomath::AABBAABB(*objMax, *objMin, maxBBL, minBBL);
 		// bottom bottom right
-		vector4 maxBBR = *nodeMax - vector4(halfsize, halfsize, halfsize, 1.0f);
-		vector4 minBBR = *nodeMin;
-		bool BBBR = geomath::AABBAABB(*objMax, *objMin, maxBBR, minBBR);
+		Vector4 maxBBR = *nodeMax - Vector4(halfsize, halfsize, halfsize, 1.0f);
+		Vector4 minBBR = *nodeMin;
+		bool BBBR = Geomath::AABBAABB(*objMax, *objMin, maxBBR, minBBR);
 
 		if(BTTL && (BTTR || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
 			BTTR && (BTTL || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
@@ -108,28 +107,28 @@ namespace nest
 		return false;
 	}
 
-	octree::octree(float size, int depth)
+	OcTree::OcTree(float size, int depth)
 	{
 		this->depth = depth;
-		vector4 halfsize = vector4(size / 2, size / 2, size / 2, 1.0f);
-		root = new ocnode(this, NULL, 0, 0);
+		Vector4 halfsize = Vector4(size / 2, size / 2, size / 2, 1.0f);
+		root = new OcNode(this, NULL, 0, 0);
 		root->bound.max = halfsize;
 		root->bound.min = -halfsize;
 	}
 
-	octree::~octree()
+	OcTree::~OcTree()
 	{
 		if(root != NULL) delete root;
 	}
 
-	void octree::addChild(mesh *object)
+	void OcTree::addChild(Mesh *object)
 	{
-		ocnode *current = root;
-		if(geomath::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
+		OcNode *current = root;
+		if(Geomath::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
 		{
 			int id;
-			vector4 max, min;
-			ocnode *node0;
+			Vector4 max, min;
+			OcNode *node0;
 			while(true)
 			{
 				if(findNode(&object->bound.max, &object->bound.min, &current->bound.max, &current->bound.min, &id, &max, &min))
@@ -142,7 +141,7 @@ namespace nest
 				node0 = current->childs[id];
 				if(node0 == NULL) 
 				{
-					node0 = new ocnode(this, current, id, current->depth + 1);
+					node0 = new OcNode(this, current, id, current->depth + 1);
 					node0->bound.max = max;
 					node0->bound.min = min;
 					current->childs[id] = node0;
@@ -150,18 +149,18 @@ namespace nest
 					if(node0->parent->objects.size() == 1 && 
 						!findNode(&node0->parent->objects[0]->bound.max, &node0->parent->objects[0]->bound.min, &current->bound.max, &current->bound.min, &id, &max, &min))
 					{
-						ocnode *node1 = current->childs[id];
+						OcNode *node1 = current->childs[id];
 						if(node1 == NULL)
 						{
-							node1 = new ocnode(this, current, id, current->depth + 1);
+							node1 = new OcNode(this, current, id, current->depth + 1);
 							node1->bound.max = max;
 							node1->bound.min = min;
 							current->childs[id] = node1;
 						}
-						mesh *mesh0 = static_cast<mesh*>(node0->parent->objects.back());
+						Mesh *Mesh0 = static_cast<Mesh*>(node0->parent->objects.back());
 						node0->parent->objects.pop_back();
-						mesh0->node = node1;
-						node1->objects.push_back(mesh0);
+						Mesh0->node = node1;
+						node1->objects.push_back(Mesh0);
 					}
 
 					object->node = node0;
@@ -182,12 +181,12 @@ namespace nest
 			throw runtime_error("Error adding child: Target's transform out of range.");
 	}
 
-	void octree::removeChild(mesh *object)
+	void OcTree::removeChild(Mesh *object)
 	{
 		if(object->node)
 		{
 			bool flag = false;
-			vector<mesh*>::iterator i;
+			vector<Mesh*>::iterator i;
 			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
 			{
 				if(*i == object) 
@@ -214,7 +213,7 @@ namespace nest
 		}
 	}
 
-	void octree::transformChild(mesh *object)
+	void OcTree::transformChild(Mesh *object)
 	{
 		if(object->node)
 		{

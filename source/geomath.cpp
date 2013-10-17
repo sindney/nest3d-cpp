@@ -1,10 +1,10 @@
 #include <stdexcept>
 
-#include "geomath.h"
+#include "Geomath.h"
 
 namespace nest
 {
-	bool geomath::BSBS(vector4 &center0, float radius0, vector4 &center1, float radius1)
+	bool Geomath::BSBS(Vector4 &center0, float radius0, Vector4 &center1, float radius1)
 	{
 		float x = center0.x - center1.x;
 		float y = center0.y - center1.y;
@@ -12,7 +12,7 @@ namespace nest
 		return (x * x + y * y + z * z) <= (radius0 + radius1) * (radius0 + radius1);
 	}
 
-	bool geomath::AABBBS(vector4 &max, vector4 &min, vector4 &center, float radius)
+	bool Geomath::AABBBS(Vector4 &max, Vector4 &min, Vector4 &center, float radius)
 	{
 		float x = center.x;
 		float y = center.y;
@@ -38,7 +38,7 @@ namespace nest
 		return (x * x + y * y + z * z) <= (radius * radius);
 	}
 
-	bool geomath::AABBAABB(vector4 &max0, vector4 &min0, vector4 &max1, vector4 &min1)
+	bool Geomath::AABBAABB(Vector4 &max0, Vector4 &min0, Vector4 &max1, Vector4 &min1)
 	{
 		if(min0.x > max1.x) return false;
 		if(max0.x < min1.x) return false;
@@ -49,16 +49,16 @@ namespace nest
 		return true;
 	}
 
-	void geomath::createPlane(vector4 &p, const vector4 &v1, const vector4 &v2, const vector4 &v3)
+	void Geomath::createPlane(Vector4 &p, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3)
 	{
 		p = crossProduct(v2 - v1, v3 - v1);
 		p.normalize();
 		p.w = - (p.x * v1.x + p.y * v1.y + p.z * v1.z);
 	}
 
-	bool geomath::rayBS(vector4 &result, vector4 &orgion, vector4 &delta, vector4 &center, float radius)
+	bool Geomath::rayBS(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &center, float radius)
 	{
-		vector4 e = center - orgion;
+		Vector4 e = center - orgion;
 		float lens = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
 		float len = sqrt(lens);
 		float a = e * delta / len;
@@ -72,7 +72,7 @@ namespace nest
 		return true;
 	}
 
-	bool geomath::rayAABB(vector4 &result, vector4 &orgion, vector4 &delta, vector4 &max, vector4 &min)
+	bool Geomath::rayAABB(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &max, Vector4 &min)
 	{
 		bool inside = true;
 		float xt, xn;
@@ -180,15 +180,15 @@ namespace nest
 		return true;
 	}
 
-	bool geomath::rayTRI(float* t, float* u, float* v, vector4 &orgion, vector4 &delta, vector4 &p0, vector4 &p1, vector4 &p2)
+	bool Geomath::rayTri(float* t, float* u, float* v, Vector4 &orgion, Vector4 &delta, Vector4 &p0, Vector4 &p1, Vector4 &p2)
 	{
-		vector4 e1 = p1 - p0;
-		vector4 e2 = p2 - p0;
-		vector4 p = crossProduct(delta, e2);
+		Vector4 e1 = p1 - p0;
+		Vector4 e2 = p2 - p0;
+		Vector4 p = crossProduct(delta, e2);
 		float det = e1 * p;
 		if(det < 0.0001f) return false;
-		vector4 t0 = orgion - p0;
-		vector4 q = crossProduct(t0, e1);
+		Vector4 t0 = orgion - p0;
+		Vector4 q = crossProduct(t0, e1);
 		float ivt = 1.0f / det;
 		*t = e2 * q;
 		*t *= ivt;
@@ -204,18 +204,18 @@ namespace nest
 		return true;
 	}
 
-	bool geomath::rayGEOM(vector<rayGEOMResult> *results, rayGEOMResult *result, bool uv, vector4 &orgion, vector4 &delta, geometry &geom)
+	bool Geomath::rayGeom(vector<RayGeomResult> *results, RayGeomResult *result, bool uv, Vector4 &orgion, Vector4 &delta, Geometry &geom)
 	{
 		if(geom.vertexData == NULL || geom.indexData == NULL) 
-			throw runtime_error("Error ray geometry intersection test: Geometry's vertexData || indexData not found.");
-		vector4 vt1;
+			throw runtime_error("Error Ray-Geometry intersection test: Geometry's vertexData || indexData not found.");
+		Vector4 vt1;
 		if(!rayAABB(vt1, orgion, delta, geom.bound.max, geom.bound.min)) return false;
 		bool flag = result != NULL;
-		rayGEOMResult current;
-		vector4 p0, p1, p2;
+		RayGeomResult current;
+		Vector4 p0, p1, p2;
 		float t, u, v;
 		int i, j, k;
-		for(i = 0; i < geom.numTriangles; i++)
+		for(i = 0; i < geom.numTris; i++)
 		{
 			j = i * 3;
 			k = geom.indexData[j] * 3;
@@ -230,7 +230,7 @@ namespace nest
 			p2.x = geom.vertexData[k];
 			p2.y = geom.vertexData[k + 1];
 			p2.z = geom.vertexData[k + 2];
-			if(rayTRI(&t, uv ? &u : NULL, uv ? &v : NULL, orgion, delta, p0, p1, p2))
+			if(rayTri(&t, uv ? &u : NULL, uv ? &v : NULL, orgion, delta, p0, p1, p2))
 			{
 				current.t = t;
 				current.index = geom.indexData[j];

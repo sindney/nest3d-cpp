@@ -3,17 +3,17 @@
 
 #include <vector>
 
-#include "geometry.h"
+#include "Geometry.h"
 
 namespace nest
 {
-	class parser3ds
+	class Parser3ds
 	{
 	public:
 
-		std::vector<geometry*> result;
+		std::vector<Geometry*> result;
 
-		~parser3ds();
+		~Parser3ds();
 
 		void parse(const char *location);
 	};

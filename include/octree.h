@@ -3,34 +3,33 @@
 
 #include <vector>
 
-#include "mesh.h"
-#include "vector4.h"
+#include "Mesh.h"
 
 namespace nest
 {
-	class ocnode;
+	class OcNode;
 
-	class octree
+	class OcTree
 	{
 	protected:
 
-		bool findNode(vector4 *objMax, vector4 *objMin, vector4 *nodeMax, vector4 *nodeMin, int *id, vector4 *max, vector4 *min);
+		bool findNode(Vector4 *objMax, Vector4 *objMin, Vector4 *nodeMax, Vector4 *nodeMin, int *id, Vector4 *max, Vector4 *min);
 
 	public:
 
-		ocnode *root;
+		OcNode *root;
 
 		int depth;
 
-		octree(float size, int depth);
+		OcTree(float size, int depth);
 
-		~octree();
+		~OcTree();
 
-		void addChild(mesh *object);
+		void addChild(Mesh *object);
 
-		void removeChild(mesh *object);
+		void removeChild(Mesh *object);
 
-		void transformChild(mesh *object);
+		void transformChild(Mesh *object);
 	};
 }
 

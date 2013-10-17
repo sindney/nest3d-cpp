@@ -3,11 +3,11 @@
 
 #include <string>
 
-#include "aabb.h"
+#include "AABB.h"
 
 namespace nest
 {
-	enum geomparams
+	enum GeomParams
 	{
 		GEOM_VERTEX 	= 1 << 0, 
 		GEOM_UV			= 1 << 2, 
@@ -15,13 +15,13 @@ namespace nest
 		GEOM_TANGENT	= 1 << 4
 	};
 
-	class geometry
+	class Geometry
 	{
 	public:
 
 		std::string name;
 
-		aabb bound;
+		AABB bound;
 
 		GLfloat *vertexData, *uvData, *normalData, *tangentData;
 
@@ -31,7 +31,7 @@ namespace nest
 
 		GLuint indexBuffer;
 
-		GLuint numVertices, numTriangles;
+		GLuint numVts, numTris;
 
 		GLuint attributeArray;
 
@@ -39,24 +39,24 @@ namespace nest
 		 *	When you change the lenght of vertexData.
 		 *	You should make sure that it's uv/normal/tangent are in the right size or just delete and NULL them.
 		 */
-		geometry();
+		Geometry();
 
-		~geometry();
-
-		/**
-		 *	Calculate normal data for corresponding geometrydata.
-		 */
-		static void calculateNormal(geometry &geom);
+		~Geometry();
 
 		/**
-		 *	Calculate tangent data for corresponding geometrydata.
+		 *	Calculate normal data for corresponding Geometrydata.
 		 */
-		static void calculateTangent(geometry &geom);
+		static void calculateNormal(Geometry &geom);
 
 		/**
-		 *	Setup target geometry object by corresponding geometrydata for opengl rendering pipeline.
+		 *	Calculate tangent data for corresponding Geometrydata.
 		 */
-		static void configure(geometry &geom, int params);
+		static void calculateTangent(Geometry &geom);
+
+		/**
+		 *	Setup target Geometry object by corresponding Geometrydata for opengl rendering pipeline.
+		 */
+		static void configure(Geometry &geom, int params);
 	};
 }
 

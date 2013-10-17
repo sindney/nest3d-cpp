@@ -1,19 +1,25 @@
 #ifndef N3D_RENDERPROCESS_H
 #define N3D_RENDERPROCESS_H
 
-#include "rendertarget.h"
+#include "RenderTarget.h"
 
 namespace nest
 {
-	class renderprocess
+	class RenderProcess
 	{
 	public:
 
-		rendertarget *target;
+		RenderTarget *target;
 
-		renderprocess(rendertarget *target) : target(target) {}
+		int numMeshes;
 
-		virtual ~renderprocess()
+		int numTris;
+
+		int numVts;
+
+		RenderProcess(RenderTarget *target) : target(target), numMeshes(0), numTris(0), numVts(0) {}
+
+		virtual ~RenderProcess()
 		{
 			if(target != NULL) delete target;
 		}

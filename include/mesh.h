@@ -1,35 +1,33 @@
 #ifndef N3D_MESH_H
 #define N3D_MESH_H
 
-#include "aabb.h"
-#include "camera3d.h"
-#include "object3d.h"
+#include "AABB.h"
+#include "Object3d.h"
 
 namespace nest
 {
-	class meshpainter;
+	class ORDraw;
 
-	class ocnode;
+	class OcNode;
 	
 	/**
-	 *	When you extend this class, include ocnode.h + octree.h.
+	 *	When you extend this class, include OcNode.h + OcTree.h + ORDraw.h
 	 *	And you'll need to rewrite all those virtual functions.
 	 *	delocate()
 	 *	{
 	 *		if(node != NULL) node->belonging->removeChild(this);
-	 *		node = NULL;
-	 *		painter = NULL;
+	 *		draw = NULL;
 	 *		...
 	 *	}
 	 *	recompose()
 	 *	{
-	 *		object2d::recompose();
-	 *		aabr::transform(worldMatrix, geom->bound, bound);
+	 *		Object3d::recompose();
+	 *		bound = worldMatrix * geom->bound;
 	 *		if(node != NULL) node->belonging->transformChild(this);
 	 *		...
 	 *	}
 	 **/
-	class mesh : public object3d 
+	class Mesh : public Object3d 
 	{
 	public:
 
@@ -45,18 +43,18 @@ namespace nest
 
 		GLenum face;
 		
-		aabb bound;
+		AABB bound;
 
-		ocnode *node;
+		OcNode *node;
 
-		meshpainter *painter;
+		ORDraw *draw;
 
-		mesh(meshpainter *painter)
-		 : alphaTest(false), alphaKey(0.0), cliping(true), visible(true), faceCulling(true), face(GL_BACK), node(NULL), painter(painter) {}
+		Mesh(ORDraw *draw)
+		 : alphaTest(false), alphaKey(0.0), cliping(true), visible(true), faceCulling(true), face(GL_BACK), node(NULL), draw(draw) {}
 
-		virtual unsigned int numVertices() = 0;
+		virtual unsigned int numVts() = 0;
 
-		virtual unsigned int numTriangles() = 0;
+		virtual unsigned int numTris() = 0;
 	};
 }
 

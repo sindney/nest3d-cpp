@@ -1,19 +1,18 @@
 #include <stdexcept>
 #include <fstream>
 
-#include "geometry.h"
-#include "parser3ds.h"
+#include "Parser3ds.h"
 
 namespace nest
 {
 	using namespace std;
 
-	parser3ds::~parser3ds()
+	Parser3ds::~Parser3ds()
 	{
 		result.clear();
 	}
 
-	void parser3ds::parse(const char *location)
+	void Parser3ds::parse(const char *location)
 	{
 		const unsigned int HEADER = 0x4d4d;
 		const unsigned int VERSION = 0x0002;
@@ -47,7 +46,7 @@ namespace nest
 
 		int i, j;
 		unsigned int length;
-		geometry *geom;
+		Geometry *geom;
 
 		while(file.tellg() < file_size)
 		{
@@ -63,7 +62,7 @@ namespace nest
 				case EDITOR:
 					break;
 				case OBJECTS:
-					geom = new geometry();
+					geom = new Geometry();
 					getline(file, geom->name, '\0');
 					result.push_back(geom);
 					break;
@@ -71,7 +70,7 @@ namespace nest
 					break;
 				case VERTICES:
 					file.read(reinterpret_cast<char *>(&ushort0), USHORT_SIZE);
-					geom->numVertices = ushort0;
+					geom->numVts = ushort0;
 					geom->vertexData = new GLfloat[ushort0 * 3];
 					for(i = 0; i < ushort0; i++)
 					{
@@ -98,7 +97,7 @@ namespace nest
 					break;
 				case INDICES:
 					file.read(reinterpret_cast<char *>(&ushort0), USHORT_SIZE);
-					geom->numTriangles = ushort0;
+					geom->numTris = ushort0;
 					geom->indexData = new GLuint[ushort0 * 3];
 					for(i = 0; i < ushort0; i++)
 					{

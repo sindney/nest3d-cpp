@@ -1,26 +1,28 @@
 #ifndef N3D_AABB_H
 #define N3D_AABB_H
 
-#include "matrix4.h"
-#include "vector4.h"
+#include "Vector4.h"
 
 namespace nest
 {
-	class aabb
+	class AABB
 	{
 	public:
 
-		vector4 max, min;
+		Vector4 max, min;
+
+		AABB &operator = (const AABB &a) 
+		{
+			max = a.max;
+			min = a.min;
+			return *this;
+		}
 
 		/**
 		 *	Calculate target vertex array's bounding-box.
 		 */
-		static void configure(aabb &bound, const float *vertexData, const int vertexDataSize);
+		static void configure(AABB &bound, const float *vertexData, const int vertexDataSize);
 
-		/**
-		 *	Transform target bounding-box by corresponding matrix.
-		 */
-		static void transform(const matrix4 &mat, const aabb &target, aabb &dest);
 	};
 }
 

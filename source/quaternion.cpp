@@ -1,11 +1,10 @@
 #include <cmath>
 
-#include "quaternion.h"
-#include "vector4.h"
+#include "Quaternion.h"
 
 namespace nest
 {
-	void quaternion::rotate(const vector4 &axis, GLfloat theta)
+	void Quaternion::rotate(const Vector4 &axis, GLfloat theta)
 	{
 		GLfloat t2 = theta * .5f;
 		GLfloat st2 = sin(t2);
@@ -15,7 +14,7 @@ namespace nest
 		z = axis.z * st2;
 	}
 
-	void quaternion::normalize()
+	void Quaternion::normalize()
 	{
 		GLfloat mag = (GLfloat)sqrt(x * x + y * y + z * z + w * w);
 		if(mag > 0.0f)
@@ -32,9 +31,9 @@ namespace nest
 		}
 	}
 
-	vector4 quaternion::getRotation()
+	Vector4 Quaternion::getRotation()
 	{
-		vector4 result;
+		Vector4 result;
 		result.w = acos(w) * 2.0f;
 		
 		GLfloat a = 1.0f - w * w;
@@ -53,9 +52,9 @@ namespace nest
 		return result;
 	}
 
-	quaternion quaternion::operator * (const quaternion &a) const 
+	Quaternion Quaternion::operator * (const Quaternion &a) const 
 	{
-		quaternion result;
+		Quaternion result;
 		result.w = w * a.w - x * a.x - y * a.y - z * a.z;
 		result.x = w * a.x + x * a.w + z * a.y - y * a.z;
 		result.y = w * a.y + y * a.w + x * a.z - z * a.x;
@@ -63,20 +62,20 @@ namespace nest
 		return result;
 	}
 
-	quaternion &quaternion::operator *= (const quaternion &a)
+	Quaternion &Quaternion::operator *= (const Quaternion &a)
 	{
 		*this = *this * a;
 		return *this;
 	}
 
-	GLfloat dotProduct(const quaternion &a, const quaternion &b)
+	GLfloat dotProduct(const Quaternion &a, const Quaternion &b)
 	{
 		return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
 	}
 
-	quaternion slerp(const quaternion &a, const quaternion &b, GLfloat t)
+	Quaternion slerp(const Quaternion &a, const Quaternion &b, GLfloat t)
 	{
-		quaternion result;
+		Quaternion result;
 		
 		GLfloat cos = dotProduct(a, b);
 		if (cos == 0.0f) {
@@ -109,16 +108,16 @@ namespace nest
 		return result;
 	}
 
-	quaternion conjugate(const quaternion &a)
+	Quaternion conjugate(const Quaternion &a)
 	{
-		quaternion result;
+		Quaternion result;
 		result.w = a.w;
 		result.x = -a.x;
 		result.y = -a.y;
 		result.z = -a.z;
 	}
 
-	quaternion pow(const quaternion &a, GLfloat exp)
+	Quaternion pow(const Quaternion &a, GLfloat exp)
 	{
 		if(fabs(a.w) > .9999f) return a;
 		
@@ -126,7 +125,7 @@ namespace nest
 		GLfloat alpha2 = alpha * exp;
 		GLfloat mul = sin(alpha2) / sin(alpha);
 		
-		quaternion result;
+		Quaternion result;
 		result.w = cos(alpha2);
 		result.x = a.x * mul;
 		result.y = a.y * mul;

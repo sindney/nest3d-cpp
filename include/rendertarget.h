@@ -1,23 +1,21 @@
 #ifndef N3D_RENDERTARGET_H
 #define N3D_RENDERTARGET_H
 
+#include <vector>
+
 #include "GL/glew.h"
 
 namespace nest
 {
-	class rendertarget
+	class RenderTarget
 	{
 	public:
 
 		GLuint frameBuffer;
 
-		GLuint *renderBuffers;
+		std::vector<GLuint> buffers;
 
-		GLuint renderBufferSize;
-
-		GLuint *textures;
-
-		GLuint textureSize;
+		std::vector<GLuint> textures;
 
 		GLint x;
 
@@ -27,28 +25,22 @@ namespace nest
 
 		GLsizei height;
 
-		rendertarget(GLint x, GLint y, GLint width, GLint height, GLuint frameBuffer = 0, 
-					GLuint *renderBuffers = NULL, GLuint renderBufferSize = 0, 
-					GLuint *textures = NULL, GLuint textureSize = 0)
+		RenderTarget(GLint x, GLint y, GLint width, GLint height, GLuint frameBuffer = 0)
 		{
 			this->x = x;
 			this->y = y;
 			this->width = width;
 			this->height = height;
 			this->frameBuffer = frameBuffer;
-			this->renderBuffers = renderBuffers;
-			this->renderBufferSize = renderBufferSize;
-			this->textures = textures;
-			this->textureSize = textureSize;
 		}
 
-		~rendertarget()
+		~RenderTarget()
 		{
-			glDeleteTextures(textureSize, textures);
-			glDeleteRenderbuffers(renderBufferSize, renderBuffers);
+			glDeleteTextures(textures.size(), &textures[0]);
+			glDeleteRenderbuffers(buffers.size(), &buffers[0]);
 			glDeleteFramebuffers(1, &frameBuffer);
-			if(textures != NULL) delete [] textures;
-			if(renderBuffers != NULL) delete [] renderBuffers;
+			textures.clear();
+			buffers.clear();
 		}
 	};
 }
