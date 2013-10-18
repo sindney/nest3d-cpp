@@ -28,6 +28,9 @@ namespace nest
 		 */
 		void removeChild(Object3d *object);
 
+		/**
+		 *	Update Container3d's transform by localMatrix.
+		 */
 		void recompose();
 	};
 }

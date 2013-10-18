@@ -37,7 +37,7 @@ namespace nest
 
 		/**
 		 *	When you change the lenght of vertexData.
-		 *	You should make sure that it's uv/normal/tangent are in the right size or just delete and NULL them.
+		 *	<p>You should make sure that it's uv/normal/tangent are in the right size or just delete and NULL them.</p>
 		 */
 		Geometry();
 

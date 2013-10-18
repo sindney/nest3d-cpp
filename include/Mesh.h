@@ -11,21 +11,21 @@ namespace nest
 	class OcNode;
 	
 	/**
-	 *	When you extend this class, include OcNode.h + OcTree.h + ORDraw.h
-	 *	And you'll need to rewrite all those virtual functions.
-	 *	delocate()
-	 *	{
-	 *		if(node != NULL) node->belonging->removeChild(this);
-	 *		draw = NULL;
-	 *		...
-	 *	}
-	 *	recompose()
-	 *	{
-	 *		Object3d::recompose();
-	 *		bound = worldMatrix * geom->bound;
-	 *		if(node != NULL) node->belonging->transformChild(this);
-	 *		...
-	 *	}
+	 *	@code{.cpp}
+	delocate()
+	{
+		if(node != NULL) node->belonging->removeChild(this);
+		draw = NULL;
+		...
+	}
+	recompose()
+	{
+		Object3d::recompose();
+		bound = worldMatrix * geom->bound;
+		if(node != NULL) node->belonging->transformChild(this);
+		...
+	}
+	@endcode
 	 **/
 	class Mesh : public Object3d 
 	{

@@ -9,6 +9,10 @@ namespace nest
 {
 	using namespace std;
 
+	/**
+	 *	Ray & Geometry intersection test result.
+	 *	<p>Result = Orgion + t * Delta</p>
+	 */
 	typedef struct
 	{
 		float t, u, v;
@@ -36,7 +40,7 @@ namespace nest
 		static bool rayTri(float* t, float* u, float* v, Vector4 &orgion, Vector4 &delta, Vector4 &p0, Vector4 &p1, Vector4 &p2);
 
 		/**
-		 *	You need to transform your ray to Geometry space(aka mesh local space).
+		 *	You need to transform your ray to Geometry space(aka mesh local space) first.
 		 */
 		static bool rayGeom(vector<RayGeomResult> *results, RayGeomResult *result, bool uv, Vector4 &orgion, Vector4 &delta, Geometry &geom);
 	};

@@ -14,6 +14,9 @@ namespace nest
 
 		ObjectCulling *culling;
 
+		/**
+		 *	@param culling Camera's culling part.
+		 */
 		Camera3d(ObjectCulling *culling) : culling(culling) {}
 
 		~Camera3d()

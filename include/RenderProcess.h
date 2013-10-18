@@ -5,6 +5,13 @@
 
 namespace nest
 {
+	/**
+	 *	Extend this class to achieve a complete draw process.
+	 *	
+	 *	@see ObjectRender
+	 *	@see ContainerRender
+	 *	@see OcTreeRender
+	 */
 	class RenderProcess
 	{
 	public:

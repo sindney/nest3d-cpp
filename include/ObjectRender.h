@@ -9,6 +9,11 @@
 
 namespace nest
 {
+	/**
+	 *	Vector passed0 stores those meshes with alphaTest off and passed specific culling function.
+	 *	<p>Vector passed1 stores those meshes with alphaTest on and passed specific culling function.</p>
+	 *	<p>Vector rejected stores those meshes who didn't pass the culling function.</p>
+	 */
 	class ObjectRender
 	{
 	public:
@@ -35,6 +40,11 @@ namespace nest
 			rejected.clear();
 		}
 
+		/**
+		 *	Test the visibility of all root's child and call their draw function.
+		 *	
+		 *	@param id Identity int to pass to draw function.
+		 */
 		virtual void calculate(int id) = 0;
 
 	};
