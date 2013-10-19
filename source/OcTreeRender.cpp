@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <iterator>
 #include <typeinfo>
-#include <vector>
 
 #include "OcNode.h"
 #include "OcTreeRender.h"
@@ -10,11 +9,12 @@ namespace nest
 {
 	using namespace std;
 
-	void OcTreeRender::calculate(int id) 
+	void OcTreeRender::calculate(int id, vector<Mesh*> *passed0, vector<Mesh*> *passed1, vector<Mesh*> *rejected) 
 	{
-		passed0.clear();
-		passed1.clear();
-		rejected.clear();
+		bool recordPassed0 = passed0 != NULL;
+		bool recordPassed1 = passed1 != NULL;
+		bool recordRejected = rejected != NULL;
+
 		numMeshes = numTris = numVts = 0;
 
 		vector<Mesh*>::iterator i;
@@ -47,35 +47,38 @@ namespace nest
 					for(i = node0->objects.begin(); i != node0->objects.end(); i++)
 					{
 						mesh = *i;
-						if(mesh->visible && (current || camera->culling->classifyAABB(camera->invertWorldMatrix * mesh->bound)))
+						if(mesh->visible)
 						{
-							if(mesh->alphaTest)
+							if(current || camera->culling->classifyAABB(camera->invertWorldMatrix * mesh->bound))
 							{
-								mesh->alphaKey = mesh->worldMatrix.raw[12] * mesh->worldMatrix.raw[12] + 
-													mesh->worldMatrix.raw[13] * mesh->worldMatrix.raw[13] + 
-													mesh->worldMatrix.raw[14] * mesh->worldMatrix.raw[14];
-								passed1.push_back(mesh);
+								if(!mesh->alphaTest)
+								{
+									draw = mesh->draw ? mesh->draw : this->draw;
+									draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix, id);
+									if(recordPassed0) passed0->push_back(mesh);
+									numMeshes++;
+									numTris += mesh->numTris();
+									numVts += mesh->numVts();
+								}
+								else if(recordPassed1) 
+								{
+									mesh->alphaKey = mesh->worldMatrix.raw[12] * mesh->worldMatrix.raw[12] + 
+														mesh->worldMatrix.raw[13] * mesh->worldMatrix.raw[13] + 
+														mesh->worldMatrix.raw[14] * mesh->worldMatrix.raw[14];
+									passed1->push_back(mesh);
+								}
 							}
-							else 
+							else if(recordRejected)
 							{
-								draw = mesh->draw ? mesh->draw : this->draw;
-								draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix, id);
-								passed0.push_back(mesh);
-								numMeshes++;
-								numTris += mesh->numTris();
-								numVts += mesh->numVts();
+								rejected->push_back(mesh);
 							}
-						}
-						else if(recordRejectedMeshes)
-						{
-							rejected.push_back(mesh);
 						}
 					}
 				}
 				for(j = node0->childs.begin(); j != node0->childs.end(); j++)
 				{
 					node1 = *j;
-					if(node1 != NULL && camera->culling->classifyAABB(camera->invertWorldMatrix * node1->bound))
+					if(node1 != NULL && (current || camera->culling->classifyAABB(camera->invertWorldMatrix * node1->bound)))
 					{
 						nodes.push_back(node1);
 						marks.push_back(current);

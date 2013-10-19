@@ -13,11 +13,9 @@ namespace nest
 
 		std::vector<Object3d*> objects;
 
-		bool castShadows;
-
 		bool visible;
 
-		Container3d() : castShadows(false), visible(true) {}
+		Container3d() : visible(true) {}
 
 		~Container3d();
 
