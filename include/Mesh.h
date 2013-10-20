@@ -1,8 +1,12 @@
 #ifndef N3D_MESH_H
 #define N3D_MESH_H
 
+#include <vector>
+
 #include "AABB.h"
+#include "Geometry.h"
 #include "Object3d.h"
+#include "Shader.h"
 
 namespace nest
 {
@@ -10,23 +14,6 @@ namespace nest
 
 	class OcNode;
 	
-	/**
-	 *	@code{.cpp}
-	delocate()
-	{
-		if(node != NULL) node->belonging->removeChild(this);
-		draw = NULL;
-		...
-	}
-	recompose()
-	{
-		Object3d::recompose();
-		bound = worldMatrix * geom->bound;
-		if(node != NULL) node->belonging->transformChild(this);
-		...
-	}
-	@endcode
-	 **/
 	class Mesh : public Object3d 
 	{
 	public:
@@ -42,19 +29,30 @@ namespace nest
 		bool faceCulling;
 
 		GLenum face;
-		
-		AABB bound;
 
 		OcNode *node;
 
 		ORDraw *draw;
 
-		Mesh(ORDraw *draw)
-		 : alphaTest(false), alphaKey(0.0), cliping(true), visible(true), faceCulling(true), face(GL_BACK), node(NULL), draw(draw) {}
+		/**
+		 *	Note one Geometry can be used in several Meshes.
+		 *	<p>So you need to take care of it's delocation.</p>
+		 */
+		Geometry *geometry;
 
-		virtual unsigned int numVts() = 0;
+		/**
+		 *	Note one Shader can be used in several Meshes.
+		 *	<p>So you need to take care of it's delocation.</p>
+		 */
+		Shader *shader;
 
-		virtual unsigned int numTris() = 0;
+		AABB bound;
+
+		Mesh(ORDraw *draw, Geometry *geometry, Shader *shader);
+
+		~Mesh();
+
+		void recompose();
 	};
 }
 

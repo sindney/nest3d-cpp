@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iterator>
+#include <list>
 #include <typeinfo>
 
 #include "ContainerRender.h"
@@ -8,17 +9,19 @@ namespace nest
 {
 	using namespace std;
 
-	void ContainerRender::calculate(int id, vector<Mesh*> *passed0, vector<Mesh*> *passed1, vector<Mesh*> *rejected)
+	void ContainerRender::calculate(vector<Mesh*> *result0, vector<Mesh*> *result1, vector<Mesh*> *result2)
 	{
-		bool recordPassed0 = passed0 != NULL;
-		bool recordPassed1 = passed1 != NULL;
-		bool recordRejected = rejected != NULL;
+		bool mark0 = result0 != NULL;
+		bool mark1 = result1 != NULL;
+		bool mark2 = result2 != NULL;
 
 		numMeshes = numTris = numVts = 0;
 
-		vector<Container3d*> containers;
+		list<Container3d*> containers;
+
 		vector<Object3d*>::iterator i;
 		Container3d *current = root;
+
 		Mesh *mesh;
 		ORDraw *draw;
 
@@ -42,23 +45,23 @@ namespace nest
 								if(!mesh->alphaTest)
 								{
 									draw = mesh->draw ? mesh->draw : this->draw;
-									draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix, id);
-									if(recordPassed0) passed0->push_back(mesh);
+									draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
+									if(mark0) result0->push_back(mesh);
 									numMeshes++;
-									numTris += mesh->numTris();
-									numVts += mesh->numVts();
+									numTris += mesh->geometry->numTris;
+									numVts += mesh->geometry->numVts;
 								}
-								else if(recordPassed1)
+								else if(mark1)
 								{
 									mesh->alphaKey = mesh->worldMatrix.raw[12] * mesh->worldMatrix.raw[12] + 
-														mesh->worldMatrix.raw[13] * mesh->worldMatrix.raw[13] + 
-														mesh->worldMatrix.raw[14] * mesh->worldMatrix.raw[14];
-									passed1->push_back(mesh);
+													mesh->worldMatrix.raw[13] * mesh->worldMatrix.raw[13] + 
+													mesh->worldMatrix.raw[14] * mesh->worldMatrix.raw[14];
+									result1->push_back(mesh);
 								}
 							}
-							else if(recordRejected)
+							else if(mark2)
 							{
-								rejected->push_back(mesh);
+								result2->push_back(mesh);
 							}
 						}
 					}

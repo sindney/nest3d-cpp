@@ -217,6 +217,9 @@ namespace nest
 
 	// float array
 
+	/**
+	 *	You take care of the delocation of the float array pointer.
+	 */
 	class ShaderPartfv : public ShaderPart
 	{
 	public:
@@ -233,7 +236,7 @@ namespace nest
 
 		~ShaderPartfv()
 		{
-			if(value != NULL) delete [] value;
+			value = NULL;
 		}
 
 		void upload()
@@ -258,6 +261,9 @@ namespace nest
 
 	// int array
 
+	/**
+	 *	You take care of the delocation of the int array pointer.
+	 */
 	class ShaderPartiv : public ShaderPart
 	{
 	public:
@@ -274,7 +280,7 @@ namespace nest
 
 		~ShaderPartiv()
 		{
-			if(value != NULL) delete [] value;
+			value = NULL;
 		}
 
 		void upload()
@@ -299,6 +305,9 @@ namespace nest
 
 	// unsigned array
 	
+	/**
+	 *	You take care of the delocation of the uint array pointer.
+	 */
 	class ShaderPartuiv : public ShaderPart
 	{
 	public:
@@ -315,7 +324,7 @@ namespace nest
 
 		~ShaderPartuiv()
 		{
-			if(value != NULL) delete [] value;
+			value = NULL;
 		}
 
 		void upload()
@@ -340,6 +349,9 @@ namespace nest
 
 	// matrix
 
+	/**
+	 *	You take care of the delocation of the float array pointer.
+	 */
 	class ShaderPartMatrix : public ShaderPart
 	{
 	public:
@@ -359,7 +371,7 @@ namespace nest
 
 		~ShaderPartMatrix()
 		{
-			if(value != NULL) delete [] value;
+			value = NULL;
 		}
 
 		void upload()
