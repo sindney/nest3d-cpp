@@ -1,7 +1,6 @@
 #ifndef N3D_FRUSTUMCULLING_H
 #define N3D_FRUSTUMCULLING_H
 
-#include "AABB.h"
 #include "ObjectCulling.h"
 
 namespace nest

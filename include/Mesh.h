@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "AABB.h"
 #include "Geometry.h"
 #include "Object3d.h"
 #include "Shader.h"

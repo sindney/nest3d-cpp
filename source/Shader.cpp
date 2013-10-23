@@ -38,9 +38,13 @@ namespace nest
 
 	const GLchar Shader::PROJECTION_MATRIX[] = "projection_matrix";
 
+	const GLchar Shader::VIEW_MATRIX[] = "view_matrix";
+
 	const GLchar Shader::INVERT_VIEW_MATRIX[] = "invert_view_matrix";
 
 	const GLchar Shader::WORLD_MATRIX[] = "world_matrix";
+
+	const GLchar Shader::INVERT_WORLD_MATRIX[] = "invert_world_matrix";
 
 	const GLchar Shader::TEXTURE_DIFFUSE[] = "texture_diffuse";
 

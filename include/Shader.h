@@ -450,9 +450,13 @@ namespace nest
 
 		static const GLchar PROJECTION_MATRIX[];
 
+		static const GLchar VIEW_MATRIX[];
+
 		static const GLchar INVERT_VIEW_MATRIX[];
 
 		static const GLchar WORLD_MATRIX[];
+
+		static const GLchar INVERT_WORLD_MATRIX[];
 
 		static const GLchar TEXTURE_DIFFUSE[];
 
