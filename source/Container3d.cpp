@@ -1,7 +1,6 @@
 #include <iterator>
 #include <stdexcept>
 #include <typeinfo>
-#include <vector>
 
 #include "Container3d.h"
 
@@ -86,6 +85,44 @@ namespace nest
 		for(i = objects.begin(); i != objects.end(); i++)
 		{
 			(*i)->recompose();
+		}
+	}
+
+	void Container3d::dispatch(const string *event, bool depthFirst)
+	{
+		vector<Object3d*>::iterator i;
+		Object3d *object0 = NULL;
+		if(depthFirst)
+		{
+			for(i = objects.begin(); i != objects.end(); i++)
+			{
+				object0 = *i;
+				object0->dispatch(event);
+				if(typeid(**i) == typeid(Container3d))
+					static_cast<Container3d*>(object0)->dispatch(event, depthFirst);
+			}
+		}
+		else 
+		{
+			vector<Container3d*> containers;
+			Container3d *current = this;
+			while(true)
+			{
+				for(i = current->objects.begin(); i != current->objects.end(); i++)
+				{
+					object0 = *i;
+					object0->dispatch(event);
+					if(typeid(**i) == typeid(Container3d))
+						containers.push_back(static_cast<Container3d*>(object0));
+				}
+				if(containers.size() != 0)
+				{
+					current = containers.back();
+					containers.pop_back();
+					continue;
+				}
+				break;
+			}
 		}
 	}
 }

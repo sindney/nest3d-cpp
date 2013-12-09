@@ -7,14 +7,6 @@
 
 namespace nest
 {
-	enum GeomParams
-	{
-		GEOM_VERTEX 	= 1 << 0, 
-		GEOM_UV			= 1 << 2, 
-		GEOM_NORMAL		= 1 << 3, 
-		GEOM_TANGENT	= 1 << 4
-	};
-
 	class Geometry
 	{
 	public:
@@ -52,11 +44,6 @@ namespace nest
 		 *	Calculate tangent data for corresponding Geometrydata.
 		 */
 		static void calculateTangent(Geometry &geom);
-
-		/**
-		 *	Setup target Geometry object by corresponding Geometrydata for opengl rendering pipeline.
-		 */
-		static void configure(Geometry &geom, int params);
 	};
 }
 

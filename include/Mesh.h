@@ -1,18 +1,20 @@
 #ifndef N3D_MESH_H
 #define N3D_MESH_H
 
-#include <vector>
-
-#include "Geometry.h"
 #include "Object3d.h"
-#include "Shader.h"
 
 namespace nest
 {
-	class ORDraw;
-
 	class OcNode;
+
+	class MeshRender;
 	
+	/**
+	 *	You'd rewrite recompose function when you extend this class.
+	 *	First, call Object3d::recompose() then translate it's bbox, bound = worldMatrix * geometry->bound.
+	 *	Finally transform it's node, node->belonging->transformChild(this) and you're done.
+	 *	Don't forget to rewrite numVts, numTris as well.
+	 */
 	class Mesh : public Object3d 
 	{
 	public:
@@ -31,27 +33,17 @@ namespace nest
 
 		OcNode *node;
 
-		ORDraw *draw;
-
-		/**
-		 *	Note one Geometry can be used in several Meshes.
-		 *	<p>So you need to take care of it's delocation.</p>
-		 */
-		Geometry *geometry;
-
-		/**
-		 *	Note one Shader can be used in several Meshes.
-		 *	<p>So you need to take care of it's delocation.</p>
-		 */
-		Shader *shader;
+		MeshRender *render;
 
 		AABB bound;
 
-		Mesh(ORDraw *draw, Geometry *geometry, Shader *shader);
+		Mesh(MeshRender *render);
 
 		~Mesh();
 
-		void recompose();
+		virtual int numVts();
+
+		virtual int numTris();
 	};
 }
 

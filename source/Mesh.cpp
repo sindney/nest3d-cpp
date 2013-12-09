@@ -4,7 +4,7 @@
 
 namespace nest
 {
-	Mesh::Mesh(ORDraw *draw, Geometry *geometry, Shader *shader)
+	Mesh::Mesh(MeshRender *render)
 	{
 		this->alphaTest = false;
 		this->alphaKey = 0.0;
@@ -13,24 +13,23 @@ namespace nest
 		this->faceCulling = true;
 		this->face = GL_BACK;
 		this->node = NULL;
-		this->draw = draw;
-		this->geometry = geometry;
-		this->shader = shader;
+		this->render = render;
 	}
 
 	Mesh::~Mesh()
 	{
 		if(node != NULL) node->belonging->removeChild(this);
 		node = NULL;
-		draw = NULL;
-		geometry = NULL;
-		shader = NULL;
+		render = NULL;
 	}
 
-	void Mesh::recompose()
+	int Mesh::numVts()
 	{
-		Object3d::recompose();
-		bound = worldMatrix * geometry->bound;
-		if(node != NULL) node->belonging->transformChild(this);
+		return 0;
+	}
+
+	int Mesh::numTris()
+	{
+		return 0;
 	}
 }

@@ -7,10 +7,12 @@ namespace nest
 {
 	/**
 	 *	Extend this class to achieve a complete draw process.
+	 *	First, setup render target using RenderTarget class.
+	 *	Then, use ObjectRender to draw meshes to your RenderTarget.
+	 *	And you can have multiple RenderTargets && ObjetRenders.
 	 *	
 	 *	@see ObjectRender
-	 *	@see ContainerRender
-	 *	@see OcTreeRender
+	 *	@see RenderTarget
 	 */
 	class RenderProcess
 	{

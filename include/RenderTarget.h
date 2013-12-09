@@ -7,26 +7,27 @@
 
 namespace nest
 {
+	/**
+	 *	When we draw a RenderTarget, we pass it's id to MeshRender's calculate function to have different render behavior.
+	 *	@see MeshRender
+	 */
 	class RenderTarget
 	{
 	public:
 
 		GLuint frameBuffer;
 
-		std::vector<GLuint> buffers;
+		std::vector<GLuint> buffers, textures;
 
-		std::vector<GLuint> textures;
+		GLint x, y;
 
-		GLint x;
+		GLsizei width, height;
 
-		GLint y;
+		int id;
 
-		GLsizei width;
-
-		GLsizei height;
-
-		RenderTarget(GLint x, GLint y, GLint width, GLint height, GLuint frameBuffer = 0)
+		RenderTarget(int id, GLint x, GLint y, GLint width, GLint height, GLuint frameBuffer = 0)
 		{
+			this->id = id;
 			this->x = x;
 			this->y = y;
 			this->width = width;

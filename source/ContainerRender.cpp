@@ -1,15 +1,15 @@
 #include <algorithm>
 #include <iterator>
-#include <list>
 #include <typeinfo>
 
 #include "ContainerRender.h"
+#include "MeshRender.h"
 
 namespace nest
 {
 	using namespace std;
 
-	void ContainerRender::calculate(vector<Mesh*> *result0, vector<Mesh*> *result1, vector<Mesh*> *result2)
+	void ContainerRender::calculate(int id, vector<Mesh*> *result0, vector<Mesh*> *result1, vector<Mesh*> *result2)
 	{
 		bool mark0 = result0 != NULL;
 		bool mark1 = result1 != NULL;
@@ -17,13 +17,12 @@ namespace nest
 
 		numMeshes = numTris = numVts = 0;
 
-		list<Container3d*> containers;
+		vector<Container3d*> containers;
 
 		vector<Object3d*>::iterator i;
 		Container3d *current = root;
 
 		Mesh *mesh;
-		ORDraw *draw;
 
 		while(true)
 		{
@@ -44,12 +43,11 @@ namespace nest
 							{
 								if(!mesh->alphaTest)
 								{
-									draw = mesh->draw ? mesh->draw : this->draw;
-									draw->calculate(mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
+									mesh->render->calculate(id, mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
 									if(mark0) result0->push_back(mesh);
 									numMeshes++;
-									numTris += mesh->geometry->numTris;
-									numVts += mesh->geometry->numVts;
+									numTris += mesh->numTris();
+									numVts += mesh->numVts();
 								}
 								else if(mark1)
 								{

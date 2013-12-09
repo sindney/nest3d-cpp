@@ -4,11 +4,10 @@
 #include <vector>
 
 #include "AABB.h"
+#include "Mesh.h"
 
 namespace nest
 {
-	class Mesh;
-
 	class OcTree;
 
 	class OcNode
