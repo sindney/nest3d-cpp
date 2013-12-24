@@ -8,55 +8,87 @@ namespace nest
 
 	EventDispatcher::~EventDispatcher()
 	{
-		map<string, EventActor*>::iterator i;
-		for(i = actors.begin(); i != actors.end(); i++)
+		ACTOR_LIST_MAP::iterator i = actorsMap.begin();
+		ACTOR_LIST::iterator j;
+		ACTOR_LIST *actors = NULL;
+		EventActor *actor = NULL;
+		while(i != actorsMap.end())
 		{
-			if(i->second->autoClean) delete i->second;
-			i->second = NULL;
-			actors.erase(i);
+			actors = static_cast<ACTOR_LIST*>(&i->second);
+			j = actors->begin();
+			while(j != actors->end())
+			{
+				actor = static_cast<EventActor*>(*j);
+				if(actor->autoClean) delete actor;
+				actors->erase(j);
+				j++;
+			}
+			actorsMap.erase(i);
+			i++;
 		}
 	}
 
 	void EventDispatcher::dispatch(const string *event)
 	{
-		map<string, EventActor*>::iterator i = actors.find(*event);
-		if(i != actors.end())
+		ACTOR_LIST_MAP::iterator i = actorsMap.find(*event);
+		if(i != actorsMap.end())
 		{
-			EventActor *actor = static_cast<EventActor*>(i->second);
-			actor->respond(event, this);
-			if(actor->actOnce) 
+			ACTOR_LIST *actors = static_cast<ACTOR_LIST*>(&i->second);
+			ACTOR_LIST::iterator j = actors->begin();
+			EventActor *actor = NULL;
+			while(j != actors->end())
 			{
-				if(actor->autoClean) delete actor;
-				i->second = NULL;
-				actors.erase(i);
+				actor = static_cast<EventActor*>(*j);
+				actor->respond(event, this);
+				if(actor->actOnce)
+				{
+					if(actor->autoClean) delete actor;
+					actors->erase(j);
+				}
+				j++;
 			}
+			if(actors->size() == 0)
+				actorsMap.erase(i);
 		}
 	}
 
-	bool EventDispatcher::addEventActor(const string *event, EventActor *actor)
+	void EventDispatcher::addEventActor(const string *event, EventActor *actor)
 	{
-		if(!hasEventActor(event))
+		ACTOR_LIST_MAP::iterator i = actorsMap.find(*event);
+		if(i == actorsMap.end()) 
 		{
-			actors.insert(map<string, EventActor*>::value_type(*event, actor));
-			return true;
+			ACTOR_LIST actors;
+			actors.push_back(actor);
+			actorsMap.insert(ACTOR_LIST_MAP::value_type(*event, actors));
 		}
-		return false;
+		else
+			i->second.push_back(actor);
 	}
 
 	bool EventDispatcher::hasEventActor(const string *event)
 	{
-		map<string, EventActor*>::iterator i = actors.find(*event);
-		return i != actors.end();
+		ACTOR_LIST_MAP::iterator i = actorsMap.find(*event);
+		return i != actorsMap.end();
 	}
 
-	EventActor *EventDispatcher::removeEventActor(const string *event)
+	bool EventDispatcher::removeEventActor(const string *event, EventActor *actor)
 	{
-		EventActor *result = NULL;
-		map<string, EventActor*>::iterator i = actors.find(*event);
-		if(i != actors.end())
+		bool result = false;
+		ACTOR_LIST_MAP::iterator i = actorsMap.find(*event);
+		if(i != actorsMap.end())
 		{
-			result = i->second;
-			actors.erase(i);
+			ACTOR_LIST *actors = static_cast<ACTOR_LIST*>(&i->second);
+			ACTOR_LIST::iterator j;
+			for(j = actors->begin(); j != actors->end(); j++)
+			{
+				if(actor == static_cast<EventActor*>(*j))
+				{
+					actors->erase(j);
+					result = true;
+					break;
+				}
+			}
+			if(actors->size() == 0) actorsMap.erase(i);
 		}
 		return result;
 	}
