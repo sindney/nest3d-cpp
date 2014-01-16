@@ -7,13 +7,15 @@ namespace nest
 {
 	class OcNode;
 
+	class OcTree;
+
 	class MeshRender;
 	
 	/**
 	 *	You'd rewrite recompose function when you extend this class.
-	 *	First, call Object3d::recompose() then translate it's bbox, bound = worldMatrix * geometry->bound.
-	 *	Finally transform it's node, node->belonging->transformChild(this) and you're done.
-	 *	Don't forget to rewrite numVts, numTris as well.
+	 *	Object3d::recompose(); // Update transfoem matriices.
+	 *	bound = worldMatrix * geometry->bound; // Translate Bounding box.
+	 *	tree->transformChild(this); // Translate node in octree.
 	 */
 	class Mesh : public Object3d 
 	{
@@ -33,6 +35,11 @@ namespace nest
 
 		OcNode *node;
 
+		OcTree *tree;
+
+		/**
+		 *	You take care of this pointer's deletion.
+		 */
 		MeshRender *render;
 
 		AABB bound;
@@ -41,9 +48,9 @@ namespace nest
 
 		~Mesh();
 
-		virtual int numVts();
+		virtual int numVts() = 0;
 
-		virtual int numTris();
+		virtual int numTris() = 0;
 	};
 }
 

@@ -4,13 +4,14 @@
 
 #include "MeshRender.h"
 #include "OcNode.h"
+#include "OcTree.h"
 #include "OcTreeRender.h"
 
 namespace nest
 {
 	using namespace std;
-
-	void OcTreeRender::calculate(int id, vector<Mesh*> *result0, vector<Mesh*> *result1, vector<Mesh*> *result2) 
+	
+	void OcTreeRender::draw(Camera3d *camera, int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2) 
 	{
 		bool mark0 = result0 != NULL;
 		bool mark1 = result1 != NULL;
@@ -20,6 +21,7 @@ namespace nest
 
 		vector<Mesh*>::iterator i;
 		Mesh *mesh;
+		AABB bound;
 
 		vector<OcNode*> nodes;
 		vector<OcNode*>::iterator j;
@@ -32,16 +34,10 @@ namespace nest
 
 		while(true)
 		{
-			if(parent || camera->culling->classifyAABB(camera->invertWorldMatrix * node0->bound))
+			bound = camera->invertWorldMatrix * node0->bound;
+			if(parent || camera->culling->classifyAABB(bound))
 			{
-				current = parent ? true : camera->culling->classifyPoint(node0->bound.min) && 
-						camera->culling->classifyPoint(Vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.min.z, 1.0f)) && 
-						camera->culling->classifyPoint(Vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
-						camera->culling->classifyPoint(Vector4(node0->bound.min.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
-						camera->culling->classifyPoint(Vector4(node0->bound.min.x, node0->bound.max.y, node0->bound.max.z, 1.0f)) && 
-						camera->culling->classifyPoint(Vector4(node0->bound.max.x, node0->bound.min.y, node0->bound.max.z, 1.0f)) && 
-						camera->culling->classifyPoint(Vector4(node0->bound.max.x, node0->bound.max.y, node0->bound.min.z, 1.0f)) && 
-						camera->culling->classifyPoint(node0->bound.max);
+				current = parent ? true : camera->culling->classifyPoint(bound.min) && camera->culling->classifyPoint(bound.max);
 				if(node0->objects.size() != 0)
 				{
 					for(i = node0->objects.begin(); i != node0->objects.end(); i++)
@@ -53,11 +49,11 @@ namespace nest
 							{
 								if(!mesh->alphaTest)
 								{
-									mesh->render->calculate(id, mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
-									if(mark0) result0->push_back(mesh);
+									mesh->render->draw(id, mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
 									numMeshes++;
 									numTris += mesh->numTris();
 									numVts += mesh->numVts();
+									if(mark0) result0->push_back(mesh);
 								}
 								else if(mark1)
 								{

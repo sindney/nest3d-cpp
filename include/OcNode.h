@@ -8,8 +8,6 @@
 
 namespace nest
 {
-	class OcTree;
-
 	class OcNode
 	{
 	public:
@@ -22,12 +20,13 @@ namespace nest
 
 		OcNode *parent;
 
-		OcTree *belonging;
+		int id, depth;
 
-		unsigned int id, depth;
+		OcNode(OcNode *parent, int id, int depth);
 
-		OcNode(OcTree *belonging, OcNode *parent, int id, int depth);
-
+		/**
+		 *	If mesh is not attached to any container, then it'll be deleted during OcNode's delocation.
+		 */
 		~OcNode();
 	};
 }

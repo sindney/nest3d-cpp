@@ -13,23 +13,15 @@ namespace nest
 		this->faceCulling = true;
 		this->face = GL_BACK;
 		this->node = NULL;
+		this->tree = NULL;
 		this->render = render;
 	}
 
 	Mesh::~Mesh()
 	{
-		if(node != NULL) node->belonging->removeChild(this);
+		if(node != NULL && tree != NULL) tree->removeChild(this);
 		node = NULL;
+		tree = NULL;
 		render = NULL;
-	}
-
-	int Mesh::numVts()
-	{
-		return 0;
-	}
-
-	int Mesh::numTris()
-	{
-		return 0;
 	}
 }

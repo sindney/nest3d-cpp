@@ -1,32 +1,32 @@
 #ifndef N3D_CONTAINERRENDER_H
 #define N3D_CONTAINERRENDER_H
 
-#include "Container3d.h"
 #include "ObjectRender.h"
 
 namespace nest
 {
+	class Container3d;
+
 	/**
-	 *	An ObjectRender that renders container3d tree.
+	 *	A render that renders meshes in container3d.
 	 */
-	class ContainerRender : public ObjectRender
+	class ContainerRender : public ObjectRender 
 	{
 	public:
 
+		/**
+		 *	You take care of this pointer's deletion.
+		 */
 		Container3d *root;
 
-		/**
-		 *	@param root Target container3d.
-		 */
-		ContainerRender(Container3d *root, Camera3d *camera)
-		 : root(root), ObjectRender(camera) {}
+		ContainerRender(Container3d *root) : root(root) {}
 
 		~ContainerRender()
 		{
-			if(root != NULL) delete root;
+			root = NULL;
 		}
 
-		void calculate(int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2);
+		void draw(Camera3d *camera, int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2);
 
 	};
 }

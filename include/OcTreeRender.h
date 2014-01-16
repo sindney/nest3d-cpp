@@ -1,33 +1,33 @@
 #ifndef N3D_OCTREERENDER_H
 #define N3D_OCTREERENDER_H
 
-#include "OcTree.h"
 #include "ObjectRender.h"
 
 namespace nest
 {
+	class OcTree;
+	
 	/**
-	 *	An ObjectRender that renders objects stored in octree.
+	 *	A render that renders meshes in octree.
 	 */
-	class OcTreeRender : public ObjectRender
+	class OcTreeRender : public ObjectRender 
 	{
 	public:
 
+		/**
+		 *	You take care of this pointer's deletion.
+		 */
 		OcTree *tree;
 
-		/**
-		 *	@param tree Target octree.
-		 */
-		OcTreeRender(OcTree *tree, Camera3d *camera)
-		 : tree(tree), ObjectRender(camera) {}
+		OcTreeRender(OcTree *tree) : tree(tree) {}
 
 		~OcTreeRender()
 		{
-			if(tree != NULL) delete tree;
+			tree = NULL;
 		}
 
-		void calculate(int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2);
-
+		void draw(Camera3d *camera, int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2);
+		
 	};
 }
 

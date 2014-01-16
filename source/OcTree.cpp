@@ -3,11 +3,176 @@
 #include <vector>
 
 #include "Geomath.h"
-#include "OcNode.h"
 #include "OcTree.h"
+#include "OcNode.h"
 
 namespace nest
 {
+	OcTree::OcTree(float size, int depth)
+	{
+		this->depth = depth;
+		Vector4 halfsize = Vector4(size / 2, size / 2, size / 2, 1.0f);
+		root = new OcNode(NULL, 0, 0);
+		root->bound.max = halfsize;
+		root->bound.min = -halfsize;
+	}
+
+	OcTree::~OcTree()
+	{
+		if(root != NULL) delete root;
+	}
+
+	int OcTree::getDepth()
+	{
+		return depth;
+	}
+
+	void OcTree::addChild(Mesh *object)
+	{
+		if(object->node == NULL && object->tree == NULL)
+		{
+			// we start the search process from root node.
+			OcNode *current = root;
+			// check if mesh is collided or with-in root node.
+			if(Geomath::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
+			{
+				int id;
+				Vector4 max, min;
+				OcNode *node0;
+				// loop through the tree to find the right location for mesh.
+				while(true)
+				{
+					// check current node's child to see where to store our mesh.
+					if(findNode(&object->bound.max, &object->bound.min, &current->bound.max, &current->bound.min, &id, &max, &min))
+					{
+						// store our mesh in current node.
+						object->node = current;
+						object->tree = this;
+						current->objects.push_back(object);
+						// then break the loop.
+						break;
+					}
+
+					// store our mesh in current node's child[id] node.
+					node0 = current->childs[id];
+					if(node0 == NULL) 
+					{
+						// this node0 is not allocated, so we new it here.
+						node0 = new OcNode(current, id, current->depth + 1);
+						node0->bound.max = max;
+						node0->bound.min = min;
+						// and store it to current.childs[id]
+						current->childs[id] = node0;
+
+						if(node0->parent->objects.size() == 1 && 
+							!findNode(&node0->parent->objects[0]->bound.max, &node0->parent->objects[0]->bound.min, &current->bound.max, &current->bound.min, &id, &max, &min))
+						{
+							// if you passed the if expression above.
+							// it means there's one mesh in current node already and it's necessary to divide current node for that mesh.
+							// then we find the node to store that old mesh.
+							OcNode *node1 = current->childs[id];
+							if(node1 == NULL)
+							{
+								// new it if it's null.
+								node1 = new OcNode(current, id, current->depth + 1);
+								node1->bound.max = max;
+								node1->bound.min = min;
+								current->childs[id] = node1;
+							}
+							// then we push that old mesh to node1.
+							Mesh *mesh0 = static_cast<Mesh*>(node0->parent->objects.back());
+							node0->parent->objects.pop_back();
+							mesh0->node = node1;
+							node1->objects.push_back(mesh0);
+						}
+
+						// finally we push our mesh to node0, aka current node's child[id].
+						object->node = node0;
+						object->tree = this;
+						node0->objects.push_back(object);
+						// we're done here so break the loop.
+						break;
+					}
+					// here means node0 i allocated already.
+					// so we check if we'v reached depth limition.
+					if(node0->depth + 1 < depth) 
+					{
+						// if not, value current to node0 and start the loop all over again.
+						current = node0;
+						continue;
+					}
+					// if so, we just push our mesh to node0 and we're done.
+					object->node = node0;
+					object->tree = this;
+					node0->objects.push_back(object);
+					break;
+				}
+			}
+			else
+				throw runtime_error("Error adding child: Target's transform out of range.");
+		}
+		else 
+			throw runtime_error("Error adding child: Target has a tree pointer, remove it from that tree first.");
+	}
+
+	void OcTree::removeChild(Mesh *object)
+	{
+		if(object->node != NULL && object->tree != NULL)
+		{
+			bool flag = false;
+			vector<Mesh*>::iterator i;
+			// loop through node's objects vector to find target mesh.
+			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
+			{
+				if(*i == object) 
+				{
+					// if we found it, we earse it from node.
+					object->node->objects.erase(i);
+					if(object->node->objects.size() == 0)
+					{
+						// there's no mesh in node after delete process.
+						// then we remove the node from memory.
+						if(object->node->parent)
+						{
+							object->node->parent->childs[object->node->id] = NULL;
+							delete object->node;
+						}
+					}
+					object->node = NULL;
+					object->tree = NULL;
+					flag = true;
+					break;
+				}
+			}
+			if(!flag) throw runtime_error("Error removing child: Can't locate child.");
+		}
+		else 
+		{
+			throw runtime_error("Error removing child: Target has a NULL node pointer.");
+		}
+	}
+
+	void OcTree::transformChild(Mesh *object)
+	{
+		if(object->node != NULL && object->tree != NULL)
+		{
+			if(object->bound.max.x >= object->node->bound.max.x ||  
+				object->bound.max.y >= object->node->bound.max.y ||  
+				object->bound.max.z >= object->node->bound.max.z ||  
+				object->bound.min.x <= object->node->bound.min.x ||  
+				object->bound.min.y <= object->node->bound.min.y ||  
+				object->bound.min.z <= object->node->bound.min.z)
+			{
+				removeChild(object);
+				addChild(object);
+			}
+		}
+		else 
+		{
+			throw runtime_error("Error transforming child: Target has a NULL node pointer.");
+		}
+	}
+
 	bool OcTree::findNode(Vector4 *objMax, Vector4 *objMin, Vector4 *nodeMax, Vector4 *nodeMin, int *id, Vector4 *max, Vector4 *min)
 	{
 		float size = nodeMax->x - nodeMin->x;
@@ -105,132 +270,5 @@ namespace nest
 			*min = minBBR;
 		}
 		return false;
-	}
-
-	OcTree::OcTree(float size, int depth)
-	{
-		this->depth = depth;
-		Vector4 halfsize = Vector4(size / 2, size / 2, size / 2, 1.0f);
-		root = new OcNode(this, NULL, 0, 0);
-		root->bound.max = halfsize;
-		root->bound.min = -halfsize;
-	}
-
-	OcTree::~OcTree()
-	{
-		if(root != NULL) delete root;
-	}
-
-	void OcTree::addChild(Mesh *object)
-	{
-		OcNode *current = root;
-		if(Geomath::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
-		{
-			int id;
-			Vector4 max, min;
-			OcNode *node0;
-			while(true)
-			{
-				if(findNode(&object->bound.max, &object->bound.min, &current->bound.max, &current->bound.min, &id, &max, &min))
-				{
-					object->node = current;
-					current->objects.push_back(object);
-					break;
-				}
-
-				node0 = current->childs[id];
-				if(node0 == NULL) 
-				{
-					node0 = new OcNode(this, current, id, current->depth + 1);
-					node0->bound.max = max;
-					node0->bound.min = min;
-					current->childs[id] = node0;
-
-					if(node0->parent->objects.size() == 1 && 
-						!findNode(&node0->parent->objects[0]->bound.max, &node0->parent->objects[0]->bound.min, &current->bound.max, &current->bound.min, &id, &max, &min))
-					{
-						OcNode *node1 = current->childs[id];
-						if(node1 == NULL)
-						{
-							node1 = new OcNode(this, current, id, current->depth + 1);
-							node1->bound.max = max;
-							node1->bound.min = min;
-							current->childs[id] = node1;
-						}
-						Mesh *Mesh0 = static_cast<Mesh*>(node0->parent->objects.back());
-						node0->parent->objects.pop_back();
-						Mesh0->node = node1;
-						node1->objects.push_back(Mesh0);
-					}
-
-					object->node = node0;
-					node0->objects.push_back(object);
-					break;
-				}
-				if(node0->depth + 1 < depth) 
-				{
-					current = node0;
-					continue;
-				}
-				object->node = node0;
-				node0->objects.push_back(object);
-				break;
-			}
-		}
-		else
-			throw runtime_error("Error adding child: Target's transform out of range.");
-	}
-
-	void OcTree::removeChild(Mesh *object)
-	{
-		if(object->node)
-		{
-			bool flag = false;
-			vector<Mesh*>::iterator i;
-			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
-			{
-				if(*i == object) 
-				{
-					object->node->objects.erase(i);
-					if(object->node->objects.size() == 0)
-					{
-						if(object->node->parent)
-						{
-							object->node->parent->childs[object->node->id] = NULL;
-							delete object->node;
-						}
-					}
-					object->node = NULL;
-					flag = true;
-					break;
-				}
-			}
-			if(!flag) throw runtime_error("Error removing child: Can't locate child.");
-		}
-		else 
-		{
-			throw runtime_error("Error removing child: Target has a NULL node pointer.");
-		}
-	}
-
-	void OcTree::transformChild(Mesh *object)
-	{
-		if(object->node)
-		{
-			if(object->bound.max.x >= object->node->bound.max.x ||  
-				object->bound.max.y >= object->node->bound.max.y ||  
-				object->bound.max.z >= object->node->bound.max.z ||  
-				object->bound.min.x <= object->node->bound.min.x ||  
-				object->bound.min.y <= object->node->bound.min.y ||  
-				object->bound.min.z <= object->node->bound.min.z)
-			{
-				removeChild(object);
-				addChild(object);
-			}
-		}
-		else 
-		{
-			throw runtime_error("Error transforming child: Target has a NULL node pointer.");
-		}
 	}
 }

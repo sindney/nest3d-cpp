@@ -17,7 +17,7 @@ namespace nest
 		 *	@param invertViewMatrix Camera's invert view matrix.
 		 *	@param projectionMatrix Camera's projection matrix.
 		 */
-		virtual void calculate(int id, Mesh *mesh, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix) = 0;
+		virtual void draw(int id, Mesh *mesh, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix) = 0;
 
 	};
 }

@@ -31,12 +31,6 @@ namespace nest
 		 *	Update Container3d's transform by localMatrix.
 		 */
 		void recompose();
-
-		/**
-		 *	Reload dispatch function to broadcast event to child objects.
-		 *	@param depthFirst Traverse the container with depth first order.
-		 */
-		virtual void dispatch(const std::string *event, bool depthFirst);
 	};
 }
 

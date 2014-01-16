@@ -2,14 +2,15 @@
 #include <iterator>
 #include <typeinfo>
 
+#include "Container3d.h"
 #include "ContainerRender.h"
 #include "MeshRender.h"
 
 namespace nest
 {
 	using namespace std;
-
-	void ContainerRender::calculate(int id, vector<Mesh*> *result0, vector<Mesh*> *result1, vector<Mesh*> *result2)
+	
+	void ContainerRender::draw(Camera3d *camera, int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2)
 	{
 		bool mark0 = result0 != NULL;
 		bool mark1 = result1 != NULL;
@@ -43,11 +44,11 @@ namespace nest
 							{
 								if(!mesh->alphaTest)
 								{
-									mesh->render->calculate(id, mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
-									if(mark0) result0->push_back(mesh);
+									mesh->render->draw(id, mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
 									numMeshes++;
 									numTris += mesh->numTris();
 									numVts += mesh->numVts();
+									if(mark0) result0->push_back(mesh);
 								}
 								else if(mark1)
 								{

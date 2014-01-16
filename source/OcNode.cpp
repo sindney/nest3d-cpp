@@ -1,11 +1,9 @@
 #include "OcNode.h"
-#include "OcTree.h"
 
 namespace nest
 {
-	OcNode::OcNode(OcTree *belonging, OcNode *parent, int id, int depth)
+	OcNode::OcNode(OcNode *parent, int id, int depth)
 	{
-		this->belonging = belonging;
 		this->parent = parent;
 		this->id = id;
 		this->depth = depth;
@@ -32,6 +30,8 @@ namespace nest
 			object = objects.back();
 			objects.pop_back();
 			object->node = NULL;
+			object->tree = NULL;
+			if(object->parent == NULL) delete object;
 		}
 	}
 }

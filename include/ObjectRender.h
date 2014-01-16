@@ -12,24 +12,12 @@ namespace nest
 	{
 	public:
 
-		Camera3d *camera;
-
 		int numMeshes, numTris, numVts;
-
-		/**
-		 *	@param camera View camera,
-		 */
-		ObjectRender(Camera3d *camera)
-		 : camera(camera), numMeshes(0), numTris(0), numVts(0) {}
-
-		virtual ~ObjectRender()
-		{
-			if(camera != NULL) delete camera;
-		}
 
 		/**
 		 *	Test the visibility of all root's child and call their render function.
 		 *	
+		 *	@param camera View camera.
 		 *	@param id Identifier to id renders' behavior for different RenderTargets.
 		 *	@param result0 Stores those meshes with alphaTest off and passed specific culling function.
 		 *	@param result1 Stores those meshes with alphaTest on and passed specific culling function.
@@ -38,7 +26,7 @@ namespace nest
 		 *	@see MeshRender
 		 *	@see RenderTarget
 		 */
-		virtual void calculate(int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2) = 0;
+		virtual void draw(Camera3d *camera, int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2) = 0;
 
 	};
 }
