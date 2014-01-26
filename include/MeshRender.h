@@ -1,24 +1,58 @@
 #ifndef N3D_MESHRENDER_H
 #define N3D_MESHRENDER_H
 
-#include <iterator>
-
-#include "Mesh.h"
-
 namespace nest
 {
+	class Joint;
+
+	class Matrix4;
+
+	class Mesh;
+
+	class MeshNode;
+
 	class MeshRender
 	{
 	public:
 
 		/**
-		 *	@param id You may need different render behavior for different RenderTargets, this int identifies those RenderTargets for you.
-		 *	@param mesh Mesh to draw.
+		 *	Use this to id shader index in mesh's shader vector.
+		 */
+		int flag;
+
+		int numMeshes, numTris, numVts;
+
+		MeshRender() : flag(0), numMeshes(0), numTris(0), numVts(0) {}
+
+		virtual ~MeshRender() 
+		{
+			invertViewMatrix = NULL;
+			projectionMatrix = NULL;
+			worldMatrix = NULL;
+			combinedMatrix = NULL;
+		}
+
+		/**
+		 *	@param node MeshNode to draw.
 		 *	@param invertViewMatrix Camera's invert view matrix.
 		 *	@param projectionMatrix Camera's projection matrix.
 		 */
-		virtual void draw(int id, Mesh *mesh, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix) = 0;
+		virtual void draw(MeshNode *node, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix);
 
+	protected:
+
+		Matrix4 *invertViewMatrix, *projectionMatrix, *worldMatrix, *combinedMatrix;
+
+		/**
+		 *	Draw mesh with skinInfo.
+		 *	@see SkinInfo
+		 */
+		virtual void draw(Joint *joint);
+
+		/**
+		 *	Draw static mesh.
+		 */
+		virtual void draw(Mesh *mesh);
 	};
 }
 

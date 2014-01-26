@@ -15,23 +15,24 @@ namespace nest
 
 		AABB bound;
 
-		GLfloat *vertexData, *uvData, *normalData, *tangentData;
+		GLfloat *vertexData, *uvData, *normalData, *tangentData, *indicesData, *weightsData;
 
 		GLuint *indexData;
 
-		GLuint vertexBuffer, uvBuffer, normalBuffer, tangentBuffer;
+		GLuint vertexBuffer, uvBuffer, normalBuffer, tangentBuffer, indicesBuffer, weightsBuffer;
 
 		GLuint indexBuffer;
 
-		GLuint numVts, numTris;
+		GLuint numVts, numTris, jointPerVertex;
 
 		GLuint attributeArray;
 
 		/**
 		 *	When you change the lenght of vertexData.
-		 *	<p>You should make sure that it's uv/normal/tangent are in the right size or just delete and NULL them.</p>
+		 *	<p>You should make sure that it's uv/normal/tangent/indices/weights are in the right size or just delete and NULL them.</p>
+		 *	@param flag Indicates whether vertexData array like vertexData, uvData etc should be delocated in geometries delocation.
 		 */
-		Geometry();
+		Geometry(bool flag = true);
 
 		~Geometry();
 
@@ -44,6 +45,16 @@ namespace nest
 		 *	Calculate tangent data for corresponding Geometrydata.
 		 */
 		static void calculateTangent(Geometry &geom);
+
+		/**
+		 *	Configure vertex data buffers.
+		 *	@param software Skin rendering technique flag.
+		 */
+		static void configure(Geometry &geom, bool software = true);
+
+	private:
+
+		bool flag;
 	};
 }
 

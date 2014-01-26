@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Mesh.h"
+#include "MeshNode.h"
 
 namespace nest
 {
@@ -22,7 +22,7 @@ namespace nest
 		OcTree(float size, int depth);
 
 		/**
-		 *	Note that OcTree's delocation won't delete Meshes attached to OcNodes.
+		 *	If any mesh attached to octree is not attached to any container, then it'll be deleted during octree's delocation.
 		 */
 		~OcTree();
 
@@ -34,17 +34,17 @@ namespace nest
 		/**
 		 *	Make sure mesh belongs to no tree.
 		 */
-		void addChild(Mesh *object);
+		void addChild(MeshNode *object);
 
 		/**
 		 *	Make sure mesh belongs to this tree.
 		 */
-		void removeChild(Mesh *object);
+		void removeChild(MeshNode *object);
 
 		/**
 		 *	Call this when your mesh's transform changes. Make sure mesh belongs to this tree.
 		 */
-		void transformChild(Mesh *object);
+		void transformChild(MeshNode *object);
 
 	private:
 

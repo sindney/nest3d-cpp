@@ -24,7 +24,7 @@ namespace nest
 			childs.pop_back();
 			if(child != NULL) delete child;
 		}
-		Mesh *object;
+		MeshNode *object;
 		while(objects.size() != 0)
 		{
 			object = objects.back();

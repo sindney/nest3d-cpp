@@ -34,6 +34,10 @@ namespace nest
 
 	const GLchar Shader::VERTEX_TANGENT[] = "vertex_tangent";
 
+	const GLchar Shader::VERTEX_INDICES[] = "vertex_indices";
+
+	const GLchar Shader::VERTEX_WEIGHTS[] = "vertex_weights";
+
 	const GLchar Shader::FRAGMENT_COLOR[] = "fragment_color";
 
 	const GLchar Shader::PROJECTION_MATRIX[] = "projection_matrix";

@@ -35,7 +35,7 @@ namespace nest
 		 *	
 		 *	@param p Point in view space.
 		 */
-		bool classifyPoint(const Vector4 &p);
+		virtual bool classifyPoint(const Vector4 &p);
 
 		/**
 		 *	Test if taget bounding sphere is in frustum.
@@ -43,14 +43,14 @@ namespace nest
 		 *	@param center Bounding sphere's center in view space.
 		 *	@param radius Bounding sphere's radius in view space.
 		 */
-		bool classifyBSphere(const Vector4 &center, float radius);
+		virtual bool classifyBSphere(const Vector4 &center, float radius);
 
 		/**
 		 *	Test if taget axis aligned bounding box is in frustum.
 		 *	
 		 *	@param bound Axis aligned bounding box in view space.
 		 */
-		bool classifyAABB(const AABB &bound);
+		virtual bool classifyAABB(const AABB &bound);
 
 	};
 }

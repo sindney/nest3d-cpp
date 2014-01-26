@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "AABB.h"
-#include "Mesh.h"
+#include "MeshNode.h"
 
 namespace nest
 {
@@ -14,7 +14,7 @@ namespace nest
 
 		AABB bound;
 
-		std::vector<Mesh*> objects;
+		std::vector<MeshNode*> objects;
 
 		std::vector<OcNode*> childs;
 

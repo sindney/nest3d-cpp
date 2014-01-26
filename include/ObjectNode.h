@@ -1,5 +1,5 @@
-#ifndef N3D_OBJECT3D_H
-#define N3D_OBJECT3D_H
+#ifndef N3D_SCENENODE_H
+#define N3D_SCENENODE_H
 
 #include <string>
 
@@ -7,7 +7,7 @@
 
 namespace nest
 {
-	class Object3d
+	class ObjectNode
 	{
 	public:
 
@@ -21,17 +21,17 @@ namespace nest
 
 		Matrix4 invertWorldMatrix;
 
-		Object3d *parent;
+		ObjectNode *parent;
 
-		Object3d() : parent(NULL) {}
+		ObjectNode() : parent(NULL) {}
 
-		virtual ~Object3d()
+		virtual ~ObjectNode()
 		{
 			parent = NULL;
 		}
 
 		/**
-		 *	Update Object3d's transform by localMatrix.
+		 *	Update ObjectNode's transform by localMatrix.
 		 */
 		virtual void recompose()
 		{

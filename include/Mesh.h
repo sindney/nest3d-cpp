@@ -1,56 +1,49 @@
 #ifndef N3D_MESH_H
 #define N3D_MESH_H
 
-#include "Object3d.h"
+#include <vector>
+
+#include "Geometry.h"
+#include "Shader.h"
+#include "SkinInfo.h"
 
 namespace nest
 {
-	class OcNode;
-
-	class OcTree;
-
-	class MeshRender;
-	
-	/**
-	 *	You'd rewrite recompose function when you extend this class.
-	 *	Object3d::recompose(); // Update transfoem matriices.
-	 *	bound = worldMatrix * geometry->bound; // Translate Bounding box.
-	 *	tree->transformChild(this); // Translate node in octree.
-	 */
-	class Mesh : public Object3d 
+	class Mesh
 	{
 	public:
-
-		bool alphaTest;
-
-		float alphaKey;
-
-		bool cliping;
-
-		bool visible;
 
 		bool faceCulling;
 
 		GLenum face;
 
-		OcNode *node;
+		Geometry *geometry;
 
-		OcTree *tree;
+		SkinInfo *skin;
 
 		/**
-		 *	You take care of this pointer's deletion.
+		 *	When MeshRender draws any MeshNode.
+		 *	<p>He'd find correct shader for specific RenderTarget in this vector by render's int flag.</p>
+		 *	
+		 *	@see MeshRender
 		 */
-		MeshRender *render;
+		std::vector<Shader*> shaders;
 
-		AABB bound;
+		Mesh(Geometry *geometry, SkinInfo *skin)
+		 : geometry(geometry), skin(skin), faceCulling(true), face(GL_BACK) {}
 
-		Mesh(MeshRender *render);
-
-		~Mesh();
-
-		virtual int numVts() = 0;
-
-		virtual int numTris() = 0;
+		virtual ~Mesh()
+		{
+			if(geometry != NULL) delete geometry;
+			if(skin != NULL) delete skin;
+			Shader *shader = NULL;
+			while(shaders.size() != 0)
+			{
+				shader = shaders.back();
+				shaders.pop_back();
+				delete shader;
+			}
+		}
 	};
 }
 

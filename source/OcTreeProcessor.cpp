@@ -2,25 +2,25 @@
 #include <iterator>
 #include <typeinfo>
 
+#include "Mesh.h"
+#include "MeshNode.h"
 #include "MeshRender.h"
 #include "OcNode.h"
 #include "OcTree.h"
-#include "OcTreeRender.h"
+#include "OcTreeProcessor.h"
 
 namespace nest
 {
 	using namespace std;
 	
-	void OcTreeRender::draw(Camera3d *camera, int id, std::vector<Mesh*> *result0, std::vector<Mesh*> *result1, std::vector<Mesh*> *result2) 
+	void OcTreeProcessor::calculate(CameraNode *camera, bool flag, std::vector<MeshNode*> *result0, std::vector<MeshNode*> *result1, std::vector<MeshNode*> *result2) 
 	{
 		bool mark0 = result0 != NULL;
 		bool mark1 = result1 != NULL;
 		bool mark2 = result2 != NULL;
 
-		numMeshes = numTris = numVts = 0;
-
-		vector<Mesh*>::iterator i;
-		Mesh *mesh;
+		vector<MeshNode*>::iterator i;
+		MeshNode *meshNode;
 		AABB bound;
 
 		vector<OcNode*> nodes;
@@ -42,30 +42,27 @@ namespace nest
 				{
 					for(i = node0->objects.begin(); i != node0->objects.end(); i++)
 					{
-						mesh = *i;
-						if(mesh->visible)
+						meshNode = *i;
+						if(meshNode->visible)
 						{
-							if(!mesh->cliping || camera->culling->classifyAABB(camera->invertWorldMatrix * mesh->bound))
+							if(!meshNode->cliping || camera->culling->classifyAABB(camera->invertWorldMatrix * meshNode->bound))
 							{
-								if(!mesh->alphaTest)
+								if(!meshNode->alphaTest)
 								{
-									mesh->render->draw(id, mesh, &camera->invertWorldMatrix, &camera->projectionMatrix);
-									numMeshes++;
-									numTris += mesh->numTris();
-									numVts += mesh->numVts();
-									if(mark0) result0->push_back(mesh);
+									if(flag) render->draw(meshNode, &camera->invertWorldMatrix, &camera->projectionMatrix);
+									if(mark0) result0->push_back(meshNode);
 								}
 								else if(mark1)
 								{
-									mesh->alphaKey = mesh->worldMatrix.raw[12] * mesh->worldMatrix.raw[12] + 
-													mesh->worldMatrix.raw[13] * mesh->worldMatrix.raw[13] + 
-													mesh->worldMatrix.raw[14] * mesh->worldMatrix.raw[14];
-									result1->push_back(mesh);
+									meshNode->alphaKey = meshNode->worldMatrix.raw[12] * meshNode->worldMatrix.raw[12] + 
+													meshNode->worldMatrix.raw[13] * meshNode->worldMatrix.raw[13] + 
+													meshNode->worldMatrix.raw[14] * meshNode->worldMatrix.raw[14];
+									result1->push_back(meshNode);
 								}
 							}
 							else if(mark2)
 							{
-								result2->push_back(mesh);
+								result2->push_back(meshNode);
 							}
 						}
 					}

@@ -446,6 +446,10 @@ namespace nest
 
 		static const GLchar VERTEX_TANGENT[];
 
+		static const GLchar VERTEX_INDICES[];
+
+		static const GLchar VERTEX_WEIGHTS[];
+
 		static const GLchar FRAGMENT_COLOR[];
 
 		static const GLchar PROJECTION_MATRIX[];

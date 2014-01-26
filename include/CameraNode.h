@@ -1,12 +1,12 @@
-#ifndef N3D_CAMERA3D_H
-#define N3D_CAMERA3D_H
+#ifndef N3D_CAMERANODE_H
+#define N3D_CAMERANODE_H
 
-#include "Object3d.h"
+#include "ObjectNode.h"
 #include "ObjectCulling.h"
 
 namespace nest
 {
-	class Camera3d : public Object3d
+	class CameraNode : public ObjectNode
 	{
 	public:
 
@@ -17,9 +17,9 @@ namespace nest
 		/**
 		 *	@param culling Camera's culling part.
 		 */
-		Camera3d(ObjectCulling *culling) : culling(culling) {}
+		CameraNode(ObjectCulling *culling) : culling(culling) {}
 
-		~Camera3d()
+		virtual ~CameraNode()
 		{
 			if(culling != NULL) delete culling;
 		}

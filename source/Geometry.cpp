@@ -4,20 +4,26 @@
 
 namespace nest
 {
-	Geometry::Geometry()
+	Geometry::Geometry(bool flag)
 	{
+		this->flag = flag;
 		vertexData = NULL;
 		uvData = NULL;
 		normalData = NULL;
 		tangentData = NULL;
+		indicesData = NULL;
+		weightsData = NULL;
 		indexData = NULL;
 		vertexBuffer = 0;
 		uvBuffer = 0;
 		normalBuffer = 0;
 		tangentBuffer = 0;
+		indicesBuffer = 0;
+		weightsBuffer = 0;
 		indexBuffer = 0;
 		numVts = 0;
 		numTris = 0;
+		jointPerVertex = 0;
 		attributeArray = 0;
 	}
 
@@ -27,13 +33,20 @@ namespace nest
 		if(uvBuffer != 0) glDeleteBuffers(1, &uvBuffer);
 		if(normalBuffer != 0) glDeleteBuffers(1, &normalBuffer);
 		if(tangentBuffer != 0) glDeleteBuffers(1, &tangentBuffer);
+		if(indicesBuffer != 0) glDeleteBuffers(1, &indicesBuffer);
+		if(weightsBuffer != 0) glDeleteBuffers(1, &weightsBuffer);
 		if(indexBuffer != 0) glDeleteBuffers(1, &indexBuffer);
 		if(attributeArray != 0) glDeleteVertexArrays(1, &attributeArray);
-		if(vertexData != NULL) delete [] vertexData;
-		if(uvData != NULL) delete [] uvData;
-		if(normalData != NULL) delete [] normalData;
-		if(tangentData != NULL) delete [] tangentData;
-		if(indexData != NULL) delete [] indexData;
+		if(flag)
+		{
+			if(vertexData != NULL) delete [] vertexData;
+			if(uvData != NULL) delete [] uvData;
+			if(normalData != NULL) delete [] normalData;
+			if(tangentData != NULL) delete [] tangentData;
+			if(indicesData != NULL) delete [] indicesData;
+			if(weightsData != NULL) delete [] weightsData;
+			if(indexData != NULL) delete [] indexData;
+		}
 	}
 
 	void Geometry::calculateNormal(Geometry &geom)
@@ -172,5 +185,10 @@ namespace nest
 			geom.tangentData[j + 1] *= u1;
 			geom.tangentData[j + 2] *= u1;
 		}
+	}
+
+	void Geometry::configure(Geometry &geom, bool software) 
+	{
+
 	}
 }

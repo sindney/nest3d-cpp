@@ -27,7 +27,7 @@ namespace nest
 		return depth;
 	}
 
-	void OcTree::addChild(Mesh *object)
+	void OcTree::addChild(MeshNode *object)
 	{
 		if(object->node == NULL && object->tree == NULL)
 		{
@@ -80,7 +80,7 @@ namespace nest
 								current->childs[id] = node1;
 							}
 							// then we push that old mesh to node1.
-							Mesh *mesh0 = static_cast<Mesh*>(node0->parent->objects.back());
+							MeshNode *mesh0 = static_cast<MeshNode*>(node0->parent->objects.back());
 							node0->parent->objects.pop_back();
 							mesh0->node = node1;
 							node1->objects.push_back(mesh0);
@@ -115,12 +115,12 @@ namespace nest
 			throw runtime_error("Error adding child: Target has a tree pointer, remove it from that tree first.");
 	}
 
-	void OcTree::removeChild(Mesh *object)
+	void OcTree::removeChild(MeshNode *object)
 	{
 		if(object->node != NULL && object->tree != NULL)
 		{
 			bool flag = false;
-			vector<Mesh*>::iterator i;
+			vector<MeshNode*>::iterator i;
 			// loop through node's objects vector to find target mesh.
 			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
 			{
@@ -152,7 +152,7 @@ namespace nest
 		}
 	}
 
-	void OcTree::transformChild(Mesh *object)
+	void OcTree::transformChild(MeshNode *object)
 	{
 		if(object->node != NULL && object->tree != NULL)
 		{
