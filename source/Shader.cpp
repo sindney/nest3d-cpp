@@ -40,6 +40,8 @@ namespace nest
 
 	const GLchar Shader::FRAGMENT_COLOR[] = "fragment_color";
 
+	const GLchar Shader::SKELETON[] = "skeleton";
+
 	const GLchar Shader::PROJECTION_MATRIX[] = "projection_matrix";
 
 	const GLchar Shader::VIEW_MATRIX[] = "view_matrix";

@@ -29,7 +29,6 @@ namespace nest
 			invertViewMatrix = NULL;
 			projectionMatrix = NULL;
 			worldMatrix = NULL;
-			combinedMatrix = NULL;
 		}
 
 		/**
@@ -41,7 +40,7 @@ namespace nest
 
 	protected:
 
-		Matrix4 *invertViewMatrix, *projectionMatrix, *worldMatrix, *combinedMatrix;
+		Matrix4 *invertViewMatrix, *projectionMatrix, *worldMatrix;
 
 		/**
 		 *	Draw mesh with skinInfo.
@@ -52,7 +51,7 @@ namespace nest
 		/**
 		 *	Draw static mesh.
 		 */
-		virtual void draw(Mesh *mesh);
+		virtual void draw(Mesh *mesh, Matrix4 *combinedMatrix = NULL);
 	};
 }
 
