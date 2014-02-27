@@ -4,6 +4,45 @@
 
 namespace nest
 {
+	void Matrix4::perspectiveFov(Matrix4 &a, GLfloat fov, GLfloat ratio, GLfloat near, GLfloat far)
+	{
+		GLfloat ys = 1.0f / tan(fov / 2.0f);
+		GLfloat xs = ys / ratio;
+		int i;
+		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
+		a.raw[0] = ys;
+		a.raw[5] = xs;
+		a.raw[10] = (far + near) / (near - far);
+		a.raw[11] = -1;
+		a.raw[14] = 2 * far * near / (near - far);
+	}
+
+	void Matrix4::perspectiveOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
+	{
+		int i;
+		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
+		a.raw[0] = 2 * near / (right - left);
+		a.raw[5] = 2 * near / (top - bottom);
+		a.raw[8] = (right + left) / (right - left);
+		a.raw[9] = (top + bottom) / (top - bottom);
+		a.raw[10] = (far + near) / (near - far);
+		a.raw[11] = -1;
+		a.raw[14] = 2 * far * near / (near - far);
+	}
+
+	void Matrix4::orthoOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
+	{
+		int i;
+		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
+		a.raw[0] = 2 / (right - left);
+		a.raw[5] = 2 / (top - bottom);
+		a.raw[10] = -2 / (far - near);
+		a.raw[12] = (right + left) / (left - right);
+		a.raw[13] = (top + bottom) / (bottom - top);
+		a.raw[14] = (far + near) / (near - far);
+		a.raw[15] = 1;
+	}
+
 	void Matrix4::identity()
 	{
 		raw[0] = 1.0f; raw[4] = 0.0f; raw[8] = 0.0f; raw[12] = 0.0f;
@@ -37,8 +76,7 @@ namespace nest
 		raw[9] = az * axis.y - axis.x * s;
 		raw[10] = az * axis.z + c;
 	}
-
-	// Y, X, Z, YAW, PITCH, ROLL
+	
 	void Matrix4::rotate(const Vector4 &angles)
 	{
 		GLfloat sa = sin(angles.x);
@@ -115,48 +153,9 @@ namespace nest
 		return result;
 	}
 
-	Matrix4 Matrix4::clone()
+	Matrix4 Matrix4::clone() const
 	{
 		return Matrix4(this->raw);
-	}
-
-	void Matrix4::perspectiveFov(Matrix4 &a, GLfloat fov, GLfloat ratio, GLfloat near, GLfloat far)
-	{
-		GLfloat ys = 1.0f / tan(fov / 2.0f);
-		GLfloat xs = ys / ratio;
-		int i;
-		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
-		a.raw[0] = ys;
-		a.raw[5] = xs;
-		a.raw[10] = (far + near) / (near - far);
-		a.raw[11] = -1;
-		a.raw[14] = 2 * far * near / (near - far);
-	}
-
-	void Matrix4::perspectiveOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
-	{
-		int i;
-		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
-		a.raw[0] = 2 * near / (right - left);
-		a.raw[5] = 2 * near / (top - bottom);
-		a.raw[8] = (right + left) / (right - left);
-		a.raw[9] = (top + bottom) / (top - bottom);
-		a.raw[10] = (far + near) / (near - far);
-		a.raw[11] = -1;
-		a.raw[14] = 2 * far * near / (near - far);
-	}
-
-	void Matrix4::orthoOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far)
-	{
-		int i;
-		for(i = 0; i < 16; i++) a.raw[i] = 0.0f;
-		a.raw[0] = 2 / (right - left);
-		a.raw[5] = 2 / (top - bottom);
-		a.raw[10] = -2 / (far - near);
-		a.raw[12] = (right + left) / (left - right);
-		a.raw[13] = (top + bottom) / (bottom - top);
-		a.raw[14] = (far + near) / (near - far);
-		a.raw[15] = 1;
 	}
 
 	AABB operator * (const Matrix4 &m, const AABB &b)

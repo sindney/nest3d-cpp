@@ -11,6 +11,29 @@ namespace nest
 	{
 	public:
 
+		static Vector4 crossProduct(const Vector4 &a, const Vector4 &b)
+		{
+			return Vector4(
+				a.y * b.z - a.z * b.y, 
+				a.z * b.x - a.x * b.z, 
+				a.x * b.y - a.y * b.x, 
+				1.0f
+			);
+		}
+
+		static GLfloat distance(const Vector4 &a, const Vector4 &b)
+		{
+			GLfloat dx = a.x - b.x;
+			GLfloat dy = a.y - b.y;
+			GLfloat dz = a.z - b.z;
+			return sqrt(dx * dx + dy * dy + dz * dz);
+		}
+
+		static GLfloat magnet(const Vector4 &a)
+		{
+			return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+		}
+
 		GLfloat x, y, z, w;
 	
 		Vector4() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
@@ -115,36 +138,11 @@ namespace nest
 		{
 			return x * a.x + y * a.y + z * a.z;
 		}
-
-		static const Vector4 X_AXIS, Y_AXIS, Z_AXIS, ZERO;
 	};
 
 	inline Vector4 operator * (GLfloat a, const Vector4 &b)
 	{
 		return Vector4(a * b.x, a * b.y, a * b.z, 1.0f);
-	}
-
-	inline Vector4 crossProduct(const Vector4 &a, const Vector4 &b)
-	{
-		return Vector4(
-			a.y * b.z - a.z * b.y, 
-			a.z * b.x - a.x * b.z, 
-			a.x * b.y - a.y * b.x, 
-			1.0f
-		);
-	}
-
-	inline GLfloat distance(const Vector4 &a, const Vector4 &b)
-	{
-		GLfloat dx = a.x - b.x;
-		GLfloat dy = a.y - b.y;
-		GLfloat dz = a.z - b.z;
-		return sqrt(dx * dx + dy * dy + dz * dz);
-	}
-
-	inline GLfloat magnet(const Vector4 &a)
-	{
-		return sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 	}
 }
 

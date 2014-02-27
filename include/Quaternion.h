@@ -8,6 +8,14 @@ namespace nest
 	class Quaternion
 	{
 	public:
+
+		static GLfloat dotProduct(const Quaternion &a, const Quaternion &b);
+
+		static Quaternion slerp(const Quaternion &a, const Quaternion &b, GLfloat t);
+
+		static Quaternion conjugate(const Quaternion &a);
+
+		static Quaternion pow(const Quaternion &a, GLfloat exp);
 		
 		GLfloat x, y, z, w;
 		
@@ -33,14 +41,6 @@ namespace nest
 		
 		Quaternion &operator *= (const Quaternion &a);
 	};
-
-	GLfloat dotProduct(const Quaternion &a, const Quaternion &b);
-
-	Quaternion slerp(const Quaternion &a, const Quaternion &b, GLfloat t);
-
-	Quaternion conjugate(const Quaternion &a);
-
-	Quaternion pow(const Quaternion &a, GLfloat exp);
 }
 
 #endif

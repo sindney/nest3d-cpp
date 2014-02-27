@@ -41,7 +41,10 @@ namespace nest
 		
 		void rotate(const Vector4 &axis, GLfloat theta);
 		
-		void rotate(const Vector4 &fovs);
+		/**
+		 *	Y, X, Z, YAW, PITCH, ROLL
+		 */
+		void rotate(const Vector4 &angles);
 
 		void rotate(const Quaternion &a);
 		
@@ -49,7 +52,7 @@ namespace nest
 		
 		Matrix4 inverse();
 
-		Matrix4 clone();
+		Matrix4 clone() const;
 	};
 
 	AABB operator * (const Matrix4 &m, const AABB &b);

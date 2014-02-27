@@ -30,31 +30,26 @@ namespace nest
 		/**
 		 *	When you change the lenght of vertexData.
 		 *	<p>You should make sure that it's uv/normal/tangent/indices/weights are in the right size or just delete and NULL them.</p>
-		 *	@param flag Indicates whether vertexData array like vertexData, uvData etc should be delocated in geometries delocation.
 		 */
-		Geometry(bool flag = true);
+		Geometry();
 
 		~Geometry();
 
 		/**
+		 *	Configure data buffers.
+		 *	@param software Skin rendering technique flag.
+		 */
+		virtual void configure(bool software = true);
+
+		/**
 		 *	Calculate normal data for corresponding Geometrydata.
 		 */
-		static void calculateNormal(Geometry &geom);
+		static void calculateNormal(Geometry *geom);
 
 		/**
 		 *	Calculate tangent data for corresponding Geometrydata.
 		 */
-		static void calculateTangent(Geometry &geom);
-
-		/**
-		 *	Configure vertex data buffers.
-		 *	@param software Skin rendering technique flag.
-		 */
-		static void configure(Geometry &geom, bool software = true);
-
-	private:
-
-		bool flag;
+		static void calculateTangent(Geometry *geom);
 	};
 }
 

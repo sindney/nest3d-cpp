@@ -51,7 +51,7 @@ namespace nest
 
 	void Geomath::createPlane(Vector4 &p, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3)
 	{
-		p = crossProduct(v2 - v1, v3 - v1);
+		p = Vector4::crossProduct(v2 - v1, v3 - v1);
 		p.normalize();
 		p.w = - (p.x * v1.x + p.y * v1.y + p.z * v1.z);
 	}
@@ -184,11 +184,11 @@ namespace nest
 	{
 		Vector4 e1 = p1 - p0;
 		Vector4 e2 = p2 - p0;
-		Vector4 p = crossProduct(delta, e2);
+		Vector4 p = Vector4::crossProduct(delta, e2);
 		float det = e1 * p;
 		if(det < 0.0001f) return false;
 		Vector4 t0 = orgion - p0;
-		Vector4 q = crossProduct(t0, e1);
+		Vector4 q = Vector4::crossProduct(t0, e1);
 		float ivt = 1.0f / det;
 		*t = e2 * q;
 		*t *= ivt;
