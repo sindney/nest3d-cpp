@@ -4,11 +4,28 @@
 #include <vector>
 
 #include "Geometry.h"
+#include "Joint.h"
 #include "Shader.h"
-#include "SkinInfo.h"
 
 namespace nest
 {
+	class SkinInfo
+	{
+	public:
+
+		std::vector<Joint*> joints;
+
+		Joint *root;
+
+		SkinInfo() : root(NULL) {}
+
+		virtual ~SkinInfo()
+		{
+			joints.clear();
+			if(root != NULL) delete root;
+		}
+	};
+
 	class Mesh
 	{
 	public:

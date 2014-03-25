@@ -20,9 +20,9 @@ namespace nest
 		 */
 		int flag;
 
-		int numMeshes, numTris, numVts;
+		int numDraws, numTris, numVts;
 
-		MeshRender() : flag(0), numMeshes(0), numTris(0), numVts(0) {}
+		MeshRender() : flag(0), numDraws(0), numTris(0), numVts(0) {}
 
 		virtual ~MeshRender() 
 		{

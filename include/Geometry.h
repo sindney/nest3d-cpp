@@ -7,6 +7,16 @@
 
 namespace nest
 {
+	enum GeomParams
+	{
+		GEOM_VERTEX 	= 1 << 0, 
+		GEOM_UV			= 1 << 2, 
+		GEOM_NORMAL		= 1 << 3, 
+		GEOM_TANGENT	= 1 << 4, 
+		GEOM_INDICES	= 1 << 5, 
+		GEOM_WEIGHTS	= 1 << 6
+	};
+
 	class Geometry
 	{
 	public:
@@ -15,7 +25,9 @@ namespace nest
 
 		AABB bound;
 
-		GLfloat *vertexData, *uvData, *normalData, *tangentData, *indicesData, *weightsData;
+		GLfloat *vertexData, *uvData, *normalData, *tangentData, *weightsData;
+
+		GLuint *indicesData;
 
 		GLuint *indexData;
 
@@ -37,9 +49,9 @@ namespace nest
 
 		/**
 		 *	Configure data buffers.
-		 *	@param software Skin rendering technique flag.
+		 *	@param params Flags to id which of the data buffers should be uploaded to gl.
 		 */
-		virtual void configure(bool software = true);
+		virtual void configure(int params);
 
 		/**
 		 *	Calculate normal data for corresponding Geometrydata.

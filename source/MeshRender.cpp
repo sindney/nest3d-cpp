@@ -48,7 +48,7 @@ namespace nest
 		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::PROJECTION_MATRIX), 1, false, projectionMatrix->raw);
 		// skin info
 		SkinInfo *skin = mesh->skin;
-		if(skin != NULL && !skin->software)
+		if(skin != NULL)
 		{
 			// draw skined mesh with hardware
 			int i, j = 0, k = skin->joints.size();
@@ -78,7 +78,7 @@ namespace nest
 		glBindVertexArray(0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		// update counter
-		numMeshes++;
+		numDraws++;
 		numTris += mesh->geometry->numTris;
 		numVts += mesh->geometry->numVts;
 	}
