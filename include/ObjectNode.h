@@ -13,6 +13,16 @@ namespace nest
 
 		std::string name;
 
+		/**
+		 *	Matrix for rotation & position info in local space.
+		 */
+		Matrix4 rtMatrix;
+
+		/**
+		 *	Matrix for scale info in local space.
+		 */
+		Matrix4 sMatrix;
+
 		Matrix4 localMatrix;
 
 		Matrix4 invertLocalMatrix;
@@ -23,7 +33,10 @@ namespace nest
 
 		ObjectNode *parent;
 
-		ObjectNode() : parent(NULL) {}
+		ObjectNode() : parent(NULL) 
+		{
+			sMatrix.scale(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		}
 
 		virtual ~ObjectNode()
 		{
@@ -35,6 +48,7 @@ namespace nest
 		 */
 		virtual void recompose()
 		{
+			localMatrix = rtMatrix * sMatrix;
 			invertLocalMatrix = localMatrix.inverse();
 			worldMatrix = localMatrix;
 			if(parent != NULL) worldMatrix = parent->worldMatrix * worldMatrix;

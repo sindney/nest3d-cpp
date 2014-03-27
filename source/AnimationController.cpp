@@ -38,7 +38,7 @@ namespace nest
 		vector<KeyFrame*>::iterator j;
 		KeyFrame *first = NULL, *second = NULL;
 
-		float current = 0, ratio = 0;
+		float current = 0.0f, ratio = 0.0f, size = 0.0f;
 
 		for(i = tracks.begin(); i != tracks.end(); i++)
 		{
@@ -48,12 +48,13 @@ namespace nest
 			{
 				// time in track's local space.
 				current = (time - track->position) * set->ticksPerSecond * track->speed;
+				size = set->keyFrames.back()->t;
 				// advance iterator if time has passed the end of a no-loop track.
-				if(!track->set->loop && time < track->position + set->keyFrames.back()->t / set->ticksPerSecond / track->speed) continue;
+				if(!track->set->loop && time < track->position + size / set->ticksPerSecond / track->speed) continue;
 				// else traverse the animationset's keyframes.
+				while(current > size) current -= size;
 				for(j = set->keyFrames.begin(); j != set->keyFrames.end(); j++)
 				{
-					// TODO: test if it's correct
 					first = *j++;
 					second = *j;
 					if(first->t <= current && second->t >= current)
