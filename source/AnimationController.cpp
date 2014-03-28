@@ -50,11 +50,14 @@ namespace nest
 				current = (time - track->position) * set->ticksPerSecond * track->speed;
 				size = set->keyFrames.back()->t;
 				// advance iterator if time has passed the end of a no-loop track.
-				if(!track->set->loop && time < track->position + size / set->ticksPerSecond / track->speed) continue;
-				// else traverse the animationset's keyframes.
+				if(!track->set->loop && current > size) continue;
+				// calculate the right time.
 				while(current > size) current -= size;
-				for(j = set->keyFrames.begin(); j != set->keyFrames.end(); j++)
+				// traverse the animationset's keyframes.
+				j = set->keyFrames.begin();
+				while(true)
 				{
+					if(j == set->keyFrames.end()) break;
 					first = *j++;
 					second = *j;
 					if(first->t <= current && second->t >= current)
