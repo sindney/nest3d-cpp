@@ -38,6 +38,16 @@ namespace nest
 		vector<KeyFrame*>::iterator j;
 		KeyFrame *first = NULL, *second = NULL;
 
+		vector<AnimationSet*>::iterator k;
+		for(k = sets.begin(); k != sets.end(); k++)
+		{
+			set = static_cast<AnimationSet*>(*k);
+			set->target->identity();
+		}
+
+		Matrix4 matrix;
+		Quaternion q0, q1, q2;
+
 		float current = 0.0f, ratio = 0.0f, size = 0.0f;
 
 		for(i = tracks.begin(); i != tracks.end(); i++)
@@ -62,10 +72,13 @@ namespace nest
 					second = *j;
 					if(first->t <= current && second->t >= current)
 					{
-						ratio = track->weight * (current - first->t) / (second->t - first->t);
-						Quaternion q0(first->x, first->y, first->z, first->w);
-						Quaternion q1(second->x, second->y, second->z, second->w);
-						set->target->rotate(Quaternion::slerp(q0, q1, ratio));
+						ratio = (current - first->t) / (second->t - first->t);
+						q0.x = first->x; q0.y = first->y; q0.z = first->z; q0.w = first->w;
+						q1.x = second->x; q1.y = second->y; q1.z = second->z; q1.w = second->w;
+						q0 = Quaternion::slerp(q2, q0, track->weight);
+						q1 = Quaternion::slerp(q2, q1, track->weight);
+						matrix.rotate(Quaternion::slerp(q0, q1, ratio));
+						*set->target *= matrix;
 						break;
 					}
 				}
