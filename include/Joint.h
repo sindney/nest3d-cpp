@@ -43,7 +43,7 @@ namespace nest
 
 		~Joint();
 
-		static void UpdateJoints(Joint *joint, Matrix4 *parent);
+		static void updateJoints(Joint *joint, Matrix4 *parent);
 	};
 }
 

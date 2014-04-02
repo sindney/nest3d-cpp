@@ -31,7 +31,7 @@ namespace nest
 
 		std::vector<KeyFrame*> keyFrames;
 
-		AnimationSet(std::string &name, Matrix4 *target, float ticksPerSecond, bool loop)
+		AnimationSet(std::string name, Matrix4 *target, float ticksPerSecond, bool loop)
 		 : name(name), target(target), ticksPerSecond(ticksPerSecond), loop(loop) {}
 
 		virtual ~AnimationSet()

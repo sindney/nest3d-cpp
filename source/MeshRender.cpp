@@ -52,7 +52,7 @@ namespace nest
 		{
 			// draw skined mesh with hardware
 			int i, j = 0, k = skin->joints.size();
-			GLfloat *matrices = new GLfloat[k];
+			GLfloat *matrices = new GLfloat[k * 16];
 			GLfloat *matrix = NULL;
 			for(i = 0; i < k; i++)
 			{
