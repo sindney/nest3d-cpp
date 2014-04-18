@@ -35,51 +35,148 @@ namespace nest
 		AnimationTrack *track = NULL;
 		AnimationSet *set = NULL;
 
-		vector<KeyFrame*>::iterator j;
-		KeyFrame *first = NULL, *second = NULL;
+		vector<AnimationChannel*>::iterator j;
+		AnimationChannel *channel = NULL;
 
-		vector<AnimationSet*>::iterator k;
-		for(k = sets.begin(); k != sets.end(); k++)
+		vector<QuatKeyFrame>::iterator k;
+		QuatKeyFrame *quatFirst = NULL, *quatSecond = NULL;
+
+		std::vector<Vec3KeyFrame>::iterator l;
+		Vec3KeyFrame *vec3First = NULL, *vec3Second = NULL;
+
+		// identity all sets' channels' target matrices
+		vector<AnimationSet*>::iterator m;
+		for(m = sets.begin(); m != sets.end(); m++)
 		{
-			set = static_cast<AnimationSet*>(*k);
-			set->target->identity();
+			set = static_cast<AnimationSet*>(*m);
+			for(j = set->channels.begin(); j != set->channels.end(); j++)
+			{
+				channel = static_cast<AnimationChannel*>(*j);
+				channel->target->identity();
+			}
 		}
 
 		Matrix4 matrix;
 		Quaternion q0, q1, q2;
+		Vector4 v0, v1;
 
-		float current = 0.0f, ratio = 0.0f, size = 0.0f;
+		float current = 0.0f, ratio = 0.0f, size = 0.0f, weight = 0.0f;
 
 		for(i = tracks.begin(); i != tracks.end(); i++)
 		{
 			track = static_cast<AnimationTrack*>(*i);
 			set = track->set;
+			weight = track->weight;
 			if(track->enabled && time >= track->position)
 			{
 				// time in track's local space.
 				current = (time - track->position) * set->ticksPerSecond * track->speed;
-				size = set->keyFrames.back()->t;
+				size = set->duration;
 				// advance iterator if time has passed the end of a no-loop track.
 				if(!track->set->loop && current > size) continue;
 				// calculate the right time.
 				while(current > size) current -= size;
-				// traverse the animationset's keyframes.
-				j = set->keyFrames.begin();
-				while(true)
+				// traverse the animationset.
+				for(j = set->channels.begin(); j != set->channels.end(); j++)
 				{
-					if(j == set->keyFrames.end()) break;
-					first = *j++;
-					second = *j;
-					if(first->t <= current && second->t >= current)
+					channel = static_cast<AnimationChannel*>(*j);
+					// position keyframes
+					if(channel->positionKeys.size() == 1)
 					{
-						ratio = (current - first->t) / (second->t - first->t);
-						q0.x = first->x; q0.y = first->y; q0.z = first->z; q0.w = first->w;
-						q1.x = second->x; q1.y = second->y; q1.z = second->z; q1.w = second->w;
-						q0 = Quaternion::slerp(q2, q0, track->weight);
-						q1 = Quaternion::slerp(q2, q1, track->weight);
-						matrix.rotate(Quaternion::slerp(q0, q1, ratio));
-						*set->target *= matrix;
-						break;
+						vec3First = &channel->positionKeys[0];
+						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
+						v0 *= weight;
+						matrix.identity();
+						matrix.translate(v0);
+						*channel->target *= matrix;
+					}
+					else 
+					{
+						l = channel->positionKeys.begin();
+						while(true)
+						{
+							if(l == channel->positionKeys.end()) break;
+							vec3First = &*l++;
+							vec3Second = &*l;
+							if(vec3First-> t <= current && vec3Second->t >= current)
+							{
+								ratio = (current - vec3First->t) / (vec3Second->t - vec3First->t);
+								v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
+								v1.x = vec3Second->x; v1.y = vec3Second->y; v1.z = vec3Second->z;
+								v0 *= weight;
+								v1 *= weight;
+								v0 = v0 + (v1 - v0) * ratio;
+								matrix.identity();
+								matrix.translate(v0);
+								*channel->target *= matrix;
+								break;
+							}
+						}
+					}
+					// rotation keyframes
+					if(channel->rotationKeys.size() == 1)
+					{
+						quatFirst = &channel->rotationKeys[0];
+						q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
+						q0 = Quaternion::slerp(q2, q0, weight);
+						matrix.identity();
+						matrix.rotate(q0);
+						*channel->target *= matrix;
+					}
+					else 
+					{
+						k = channel->rotationKeys.begin();
+						while(true)
+						{
+							if(k == channel->rotationKeys.end()) break;
+							quatFirst = &*k++;
+							quatSecond = &*k;
+							if(quatFirst->t <= current && quatSecond->t >= current)
+							{
+								ratio = (current - quatFirst->t) / (quatSecond->t - quatFirst->t);
+								q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
+								q1.x = quatSecond->x; q1.y = quatSecond->y; q1.z = quatSecond->z; q1.w = quatSecond->w;
+								q0 = Quaternion::slerp(q2, q0, weight);
+								q1 = Quaternion::slerp(q2, q1, weight);
+								matrix.identity();
+								matrix.rotate(Quaternion::slerp(q0, q1, ratio));
+								*channel->target *= matrix;
+								break;
+							}
+						}
+					}
+					// scaling keyframes
+					if(channel->scalingKeys.size() == 1)
+					{
+						vec3First = &channel->scalingKeys[0];
+						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
+						v0 *= weight;
+						matrix.identity();
+						matrix.scale(v0);
+						*channel->target *= matrix;
+					}
+					else 
+					{
+						l = channel->scalingKeys.begin();
+						while(true)
+						{
+							if(l == channel->scalingKeys.end()) break;
+							vec3First = &*l++;
+							vec3Second = &*l;
+							if(vec3First-> t <= current && vec3Second->t >= current)
+							{
+								ratio = (current - vec3First->t) / (vec3Second->t - vec3First->t);
+								v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
+								v1.x = vec3Second->x; v1.y = vec3Second->y; v1.z = vec3Second->z;
+								v0 = v0 * weight;
+								v1 = v1 * weight;
+								v0 = v0 + (v1 - v0) * ratio;
+								matrix.identity();
+								matrix.scale(v0);
+								*channel->target *= matrix;
+								break;
+							}
+						}
 					}
 				}
 			}

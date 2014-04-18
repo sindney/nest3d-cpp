@@ -82,7 +82,7 @@ namespace nest
 			glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 			glBufferData(GL_ARRAY_BUFFER, numVts * 3 * sizeof(GLfloat), normalData, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_TRUE, 0, 0);
+			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		// tangent
 		if(tangentBuffer != 0) glDeleteBuffers(1, &tangentBuffer);
@@ -93,7 +93,7 @@ namespace nest
 			glBindBuffer(GL_ARRAY_BUFFER, tangentBuffer);
 			glBufferData(GL_ARRAY_BUFFER, numVts * 3 * sizeof(GLfloat), tangentData, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_TRUE, 0, 0);
+			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		// joint indices
 		if(indicesBuffer != 0) glDeleteBuffers(1, &indicesBuffer);
@@ -104,7 +104,7 @@ namespace nest
 			glBindBuffer(GL_ARRAY_BUFFER, indicesBuffer);
 			glBufferData(GL_ARRAY_BUFFER, numVts * jointPerVertex * sizeof(GLuint), indicesData, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, jointPerVertex, GL_INT, GL_TRUE, 0, 0);
+			glVertexAttribIPointer(count++, jointPerVertex, GL_UNSIGNED_INT, 0, 0);
 		}
 		// joint weights
 		if(weightsBuffer != 0) glDeleteBuffers(1, &weightsBuffer);
@@ -113,9 +113,9 @@ namespace nest
 		{
 			glGenBuffers(1, &weightsBuffer);
 			glBindBuffer(GL_ARRAY_BUFFER, weightsBuffer);
-			glBufferData(GL_ARRAY_BUFFER, numVts * (jointPerVertex - 1) * sizeof(GLfloat), weightsData, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, numVts * jointPerVertex * sizeof(GLfloat), weightsData, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, jointPerVertex - 1, GL_FLOAT, GL_TRUE, 0, 0);
+			glVertexAttribPointer(count++, jointPerVertex, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		if(indexBuffer != 0) glDeleteBuffers(1, &indexBuffer);
 		indexBuffer = 0;

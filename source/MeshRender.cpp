@@ -22,7 +22,7 @@ namespace nest
 	void MeshRender::draw(Joint *joint)
 	{
 		if(joint->mesh != NULL)
-			draw(joint->mesh, joint->mesh->skin != NULL ? NULL : &joint->combinedMatrix);
+			draw(joint->mesh, joint->mesh->skin != NULL : NULL : &joint->combinedMatrix);
 		if(joint->sibling != NULL)
 			draw(joint->sibling);
 		if(joint->firstChild != NULL)

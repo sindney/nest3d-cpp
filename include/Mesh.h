@@ -1,6 +1,7 @@
 #ifndef N3D_MESH_H
 #define N3D_MESH_H
 
+#include <string>
 #include <vector>
 
 #include "Geometry.h"
@@ -29,6 +30,8 @@ namespace nest
 	class Mesh
 	{
 	public:
+
+		std::string name;
 
 		bool faceCulling;
 

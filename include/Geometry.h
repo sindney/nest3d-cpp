@@ -27,9 +27,7 @@ namespace nest
 
 		GLfloat *vertexData, *uvData, *normalData, *tangentData, *weightsData;
 
-		GLuint *indicesData;
-
-		GLuint *indexData;
+		GLuint *indicesData, *indexData;
 
 		GLuint vertexBuffer, uvBuffer, normalBuffer, tangentBuffer, indicesBuffer, weightsBuffer;
 

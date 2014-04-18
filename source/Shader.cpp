@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include "Geometry.h"
 
 namespace nest
 {
@@ -58,7 +59,7 @@ namespace nest
 
 	const GLchar Shader::TEXTURE_NORMAL[] = "texture_normal";
 
-	void Shader::configure(Shader *shader, const char *vertex, const char *fragment)
+	void Shader::configure(Shader *shader, int params, const char *vertex, const char *fragment)
 	{
 		if(shader->program != 0)
 		{
@@ -77,6 +78,13 @@ namespace nest
 		shader->program = glCreateProgram();
 		glAttachShader(shader->program, shader->vertexShader);
 		glAttachShader(shader->program, shader->fragmentShader);
+		int count = 0;
+		if(params & GEOM_VERTEX) glBindAttribLocation(shader->program, count++, Shader::VERTEX_POSITION);
+		if(params & GEOM_UV) glBindAttribLocation(shader->program, count++, Shader::VERTEX_UV);
+		if(params & GEOM_NORMAL) glBindAttribLocation(shader->program, count++, Shader::VERTEX_NORMAL);
+		if(params & GEOM_TANGENT) glBindAttribLocation(shader->program, count++, Shader::VERTEX_TANGENT);
+		if(params & GEOM_INDICES) glBindAttribLocation(shader->program, count++, Shader::VERTEX_INDICES);
+		if(params & GEOM_WEIGHTS) glBindAttribLocation(shader->program, count++, Shader::VERTEX_WEIGHTS);
 		glBindFragDataLocation(shader->program, 0, Shader::FRAGMENT_COLOR);
 		glLinkProgram(shader->program);
 	}

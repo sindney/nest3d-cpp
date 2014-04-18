@@ -1,5 +1,4 @@
 #include "Joint.h"
-#include "Mesh.h"
 
 namespace nest
 {

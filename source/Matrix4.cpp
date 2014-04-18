@@ -106,7 +106,7 @@ namespace nest
 		
 		raw[0] = 1.0f - yy * a.y - zz * a.z;
 		raw[1] = xx * a.y + ww * a.z;
-		raw[2] = xx * a.z - ww * a.x;
+		raw[2] = xx * a.z - ww * a.y;
 		raw[4] = xx * a.y - ww * a.z;
 		raw[5] = 1.0f - xx * a.x - zz * a.z;
 		raw[6] = yy * a.z + ww * a.x;
@@ -210,21 +210,21 @@ namespace nest
 	{
 		Matrix4 result;
 		
-		result.raw[0] = a.raw[0] * b.raw[0] + a.raw[1] * b.raw[4] + a.raw[2] * b.raw[8];
-		result.raw[1] = a.raw[0] * b.raw[1] + a.raw[1] * b.raw[5] + a.raw[2] * b.raw[9];
-		result.raw[2] = a.raw[0] * b.raw[2] + a.raw[1] * b.raw[6] + a.raw[2] * b.raw[10];
+		result.raw[0] = a.raw[0] * b.raw[0] + a.raw[4] * b.raw[1] + a.raw[8] * b.raw[2];
+		result.raw[1] = a.raw[1] * b.raw[0] + a.raw[5] * b.raw[1] + a.raw[9] * b.raw[2];
+		result.raw[2] = a.raw[2] * b.raw[0] + a.raw[6] * b.raw[1] + a.raw[10] * b.raw[2];
 		result.raw[3] = 0.0f;
-		result.raw[4] = a.raw[4] * b.raw[0] + a.raw[5] * b.raw[4] + a.raw[6] * b.raw[8];
-		result.raw[5] = a.raw[4] * b.raw[1] + a.raw[5] * b.raw[5] + a.raw[6] * b.raw[9];
-		result.raw[6] = a.raw[4] * b.raw[2] + a.raw[5] * b.raw[6] + a.raw[6] * b.raw[10];
+		result.raw[4] = a.raw[0] * b.raw[4] + a.raw[4] * b.raw[5] + a.raw[8] * b.raw[6];
+		result.raw[5] = a.raw[1] * b.raw[4] + a.raw[5] * b.raw[5] + a.raw[9] * b.raw[6];
+		result.raw[6] = a.raw[2] * b.raw[4] + a.raw[6] * b.raw[5] + a.raw[10] * b.raw[6];
 		result.raw[7] = 0.0f;
-		result.raw[8] = a.raw[8] * b.raw[0] + a.raw[9] * b.raw[4] + a.raw[10] * b.raw[8];
-		result.raw[9] = a.raw[8] * b.raw[1] + a.raw[9] * b.raw[5] + a.raw[10] * b.raw[9];
-		result.raw[10] = a.raw[8] * b.raw[2] + a.raw[9] * b.raw[6] + a.raw[10] * b.raw[10];
+		result.raw[8] = a.raw[0] * b.raw[8] + a.raw[4] * b.raw[9] + a.raw[8] * b.raw[10];
+		result.raw[9] = a.raw[1] * b.raw[8] + a.raw[5] * b.raw[9] + a.raw[9] * b.raw[10];
+		result.raw[10] = a.raw[2] * b.raw[8] + a.raw[6] * b.raw[9] + a.raw[10] * b.raw[10];
 		result.raw[11] = 0.0f;
-		result.raw[12] = a.raw[12] * b.raw[0] + a.raw[13] * b.raw[4] + a.raw[14] * b.raw[8] + b.raw[12];
-		result.raw[13] = a.raw[12] * b.raw[1] + a.raw[13] * b.raw[5] + a.raw[14] * b.raw[9] + b.raw[13];
-		result.raw[14] = a.raw[12] * b.raw[2] + a.raw[13] * b.raw[6] + a.raw[14] * b.raw[10] + b.raw[14];
+		result.raw[12] = a.raw[0] * b.raw[12] + a.raw[4] * b.raw[13] + a.raw[8] * b.raw[14] + a.raw[12];
+		result.raw[13] = a.raw[1] * b.raw[12] + a.raw[5] * b.raw[13] + a.raw[9] * b.raw[14] + a.raw[13];
+		result.raw[14] = a.raw[2] * b.raw[12] + a.raw[6] * b.raw[13] + a.raw[10] * b.raw[14] + a.raw[14];
 		result.raw[15] = 1.0f;
 		
 		return result;

@@ -12,7 +12,28 @@ namespace nest
 	{
 		float t, x, y, z, w;
 
-	} KeyFrame;
+	} QuatKeyFrame;
+
+	typedef struct
+	{
+		float t, x, y, z;
+
+	} Vec3KeyFrame;
+
+	typedef struct
+	{
+		std::string name;
+
+		/**
+		 *	Target Matrix that this channel controls.
+		 */
+		Matrix4 *target;
+
+		std::vector<QuatKeyFrame> rotationKeys;
+
+		std::vector<Vec3KeyFrame> positionKeys, scalingKeys;
+
+	} AnimationChannel;
 
 	class AnimationSet
 	{
@@ -20,30 +41,24 @@ namespace nest
 
 		std::string name;
 
-		/**
-		 *	Target Matrix that this AnimationSet controls.
-		 */
-		Matrix4 *target;
-
-		float ticksPerSecond;
+		float ticksPerSecond, duration;
 		
 		bool loop;
 
-		std::vector<KeyFrame*> keyFrames;
+		std::vector<AnimationChannel*> channels;
 
-		AnimationSet(std::string name, Matrix4 *target, float ticksPerSecond, bool loop)
-		 : name(name), target(target), ticksPerSecond(ticksPerSecond), loop(loop) {}
+		AnimationSet(std::string name, float ticksPerSecond, float duration, bool loop)
+		 : name(name), ticksPerSecond(ticksPerSecond), duration(duration), loop(loop) {}
 
 		virtual ~AnimationSet()
 		{
-			KeyFrame *keyFrame = NULL;
-			while(keyFrames.size() != 0)
+			AnimationChannel *channel = NULL;
+			while(channels.size() != 0)
 			{
-				keyFrame = keyFrames.back();
-				keyFrames.pop_back();
-				delete keyFrame;
+				channel = channels.back();
+				channels.pop_back();
+				delete channel;
 			}
-			target = NULL;
 		}
 	};
 }

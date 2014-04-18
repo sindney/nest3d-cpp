@@ -470,7 +470,10 @@ namespace nest
 
 		static const GLchar TEXTURE_NORMAL[];
 
-		static void configure(Shader *shader, const char *vertex, const char *fragment);
+		/**
+		 *	@param params see Geometry.configure(int)
+		 */
+		static void configure(Shader *shader, int params, const char *vertex, const char *fragment);
 	};
 }
 

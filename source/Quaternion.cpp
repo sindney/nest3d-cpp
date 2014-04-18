@@ -10,38 +10,37 @@ namespace nest
 	}
 
 	Quaternion Quaternion::slerp(const Quaternion &a, const Quaternion &b, GLfloat t)
-	{
-		Quaternion result;
-		
-		GLfloat cos = dotProduct(a, b);
-		if (cos == 0.0f) {
-			result.x = a.x;
-			result.y = a.y;
-			result.z = a.z;
-			result.w = a.w;
-			return result;
+	{	
+		GLfloat cosom = dotProduct(a, b);
+		Quaternion end = b;
+		if (cosom < 0.0f) {
+			cosom = -cosom;
+			end.x = -end.x;
+			end.y = -end.y;
+			end.z = -end.z;
+			end.w = -end.w;
 		}
 		
 		GLfloat k0, k1;
-		if (cos > .9999f) {
+		if(cosom > 0.9999f)
+		{
 			k0 = 1.0f - t;
 			k1 = t;
-		} 
-		else 
+		}
+		else
 		{
-			GLfloat a = sqrt(1.0f - cos * cos);
-			GLfloat b = atan2(a, cos);
-			GLfloat c = 1.0f / a;
-			k0 = sin((1.0f - t) * b) * c;
-			k1 = sin(t * b) * c;
+			GLfloat omega = acos(cosom);
+			GLfloat sinom = sin(omega);
+			k0 = sin((1.0f - t) * omega) / sinom;
+			k1 = sin(t * omega) / sinom;
 		}
 		
-		result.w = k0 * a.w + k1 * b.w;
-		result.x = k0 * a.x + k1 * b.x;
-		result.y = k0 * a.y + k1 * b.y;
-		result.z = k0 * a.z + k1 * b.z;
+		end.x = k0 * a.x + k1 * end.x;
+		end.y = k0 * a.y + k1 * end.y;
+		end.z = k0 * a.z + k1 * end.z;
+		end.w = k0 * a.w + k1 * end.w;
 		
-		return result;
+		return end;
 	}
 
 	Quaternion Quaternion::conjugate(const Quaternion &a)
@@ -51,6 +50,8 @@ namespace nest
 		result.x = -a.x;
 		result.y = -a.y;
 		result.z = -a.z;
+
+		return result;
 	}
 
 	Quaternion Quaternion::pow(const Quaternion &a, GLfloat exp)
