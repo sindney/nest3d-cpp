@@ -61,6 +61,7 @@ namespace nest
 		Vector4 v0, v1;
 
 		float current = 0.0f, ratio = 0.0f, size = 0.0f, weight = 0.0f;
+		bool flag;
 
 		for(i = tracks.begin(); i != tracks.end(); i++)
 		{
@@ -72,8 +73,8 @@ namespace nest
 				// time in track's local space.
 				current = (time - track->position) * set->ticksPerSecond * track->speed;
 				size = set->duration;
-				// advance iterator if time has passed the end of a no-loop track.
-				if(!track->set->loop && current > size) continue;
+				// mark flag if time has passed the end of a no-loop track.
+				flag = !track->set->loop && current > size;
 				// calculate the right time.
 				while(current > size) current -= size;
 				// traverse the animationset.
@@ -81,9 +82,9 @@ namespace nest
 				{
 					channel = static_cast<AnimationChannel*>(*j);
 					// position keyframes
-					if(channel->positionKeys.size() == 1)
+					if(channel->positionKeys.size() == 1 || flag)
 					{
-						vec3First = &channel->positionKeys[0];
+						vec3First = &channel->positionKeys[channel->positionKeys.size() - 1];
 						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
 						v0 *= weight;
 						matrix.identity();
@@ -114,9 +115,9 @@ namespace nest
 						}
 					}
 					// rotation keyframes
-					if(channel->rotationKeys.size() == 1)
+					if(channel->rotationKeys.size() == 1 || flag)
 					{
-						quatFirst = &channel->rotationKeys[0];
+						quatFirst = &channel->rotationKeys[channel->rotationKeys.size() - 1];
 						q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
 						q0 = Quaternion::slerp(q2, q0, weight);
 						matrix.identity();
@@ -146,9 +147,9 @@ namespace nest
 						}
 					}
 					// scaling keyframes
-					if(channel->scalingKeys.size() == 1)
+					if(channel->scalingKeys.size() == 1 || flag)
 					{
-						vec3First = &channel->scalingKeys[0];
+						vec3First = &channel->scalingKeys[channel->scalingKeys.size() - 1];
 						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
 						v0 *= weight;
 						matrix.identity();

@@ -3,14 +3,16 @@
 NEST_INCLUDE = include
 NEST_SOURCE = source
 NEST_LIB = lib
+ASSIMP_INCLUDE = Assimp/include
+ASSIMP_LIB = Assimp/lib
 GLEW_INCLUDE = GLEW/include
 GLEW_LIB = GLEW/lib
 OPENGL_LIB = /System/Library/Frameworks/OpenGL.framework/Libraries
 
 all: 
-	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(GLEW_INCLUDE)
+	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(ASSIMP_INCLUDE) -I$(GLEW_INCLUDE)
 	ar rvs $(NEST_LIB)/libnest.a *.o
 	g++ -dynamiclib -install_name @executable_path/libnest.dylib \
-		-framework OpenGL -L$(OPENGL_LIB) -L$(GLEW_LIB) -lGLEW *.o \
+		-framework OpenGL -L$(OPENGL_LIB) -L$(ASSIMP_LIB) -lASSIMP -L$(GLEW_LIB) -lGLEW *.o \
 		-o $(NEST_LIB)/libnest.dylib
 	-rm *.o

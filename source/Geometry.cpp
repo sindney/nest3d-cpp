@@ -113,9 +113,9 @@ namespace nest
 		{
 			glGenBuffers(1, &weightsBuffer);
 			glBindBuffer(GL_ARRAY_BUFFER, weightsBuffer);
-			glBufferData(GL_ARRAY_BUFFER, numVts * jointPerVertex * sizeof(GLfloat), weightsData, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, numVts * (jointPerVertex - 1) * sizeof(GLfloat), weightsData, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, jointPerVertex, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(count++, jointPerVertex - 1, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		if(indexBuffer != 0) glDeleteBuffers(1, &indexBuffer);
 		indexBuffer = 0;

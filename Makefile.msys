@@ -3,12 +3,14 @@
 NEST_INCLUDE = include
 NEST_SOURCE = source
 NEST_LIB = lib
+ASSIMP_INCLUDE = Assimp/include
+ASSIMP_LIB = Assimp/lib
 GLEW_INCLUDE = GLEW/include
 GLEW_LIB = GLEW/lib
 
 all: 
-	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(GLEW_INCLUDE)
+	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(ASSIMP_INCLUDE) -I$(GLEW_INCLUDE)
 	ar rvs $(NEST_LIB)/libnest.a *.o
 	g++ -o $(NEST_LIB)/libnest.dll *.o \
-		-L$(GLEW_LIB) -lGLEW32 -lOpenGL32 -m32 -shared
+		-L$(ASSIMP_LIB) -L$(GLEW_LIB) -lASSIMP -lGLEW32 -lOpenGL32 -m32 -shared
 	-rm *.o

@@ -33,7 +33,12 @@ namespace nest
 
 		GLuint indexBuffer;
 
-		GLuint numVts, numTris, jointPerVertex;
+		GLuint numVts, numTris;
+
+		/**
+		 *	0 - 4
+		 */
+		GLuint jointPerVertex;
 
 		GLuint attributeArray;
 
