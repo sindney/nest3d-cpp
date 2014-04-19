@@ -283,7 +283,7 @@ namespace nest
 
 			aiNode *node0 = NULL, *node1 = NULL;
 
-			bool firstChild, flag = false;
+			bool firstChild, flag = root == meshNode;
 
 			while(nodes.size() > 0)
 			{
@@ -295,7 +295,9 @@ namespace nest
 				for(i = 0; i < node0->mNumChildren; i++)
 				{
 					node1 = node0->mChildren[i];
-					// we check if node0's first level childs is necessary for the skeleton.
+					// if root node is meshNode's parent.
+					// then we check if it's first level childs is necessary for the skeleton.
+					// so we can skip some useless branches.
 					if(!flag)
 					{
 						it = joints.find(node1->mName.C_Str());
