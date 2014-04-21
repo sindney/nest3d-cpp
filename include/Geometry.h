@@ -55,16 +55,6 @@ namespace nest
 		 *	@param params Flags to id which of the data buffers should be uploaded to gl.
 		 */
 		virtual void configure(int params);
-
-		/**
-		 *	Calculate normal data for corresponding Geometrydata.
-		 */
-		static void calculateNormal(Geometry *geom);
-
-		/**
-		 *	Calculate tangent data for corresponding Geometrydata.
-		 */
-		static void calculateTangent(Geometry *geom);
 	};
 }
 
