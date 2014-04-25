@@ -60,14 +60,13 @@ namespace nest
 		Quaternion q0, q1, q2;
 		Vector4 v0, v1;
 
-		float current = 0.0f, ratio = 0.0f, size = 0.0f, weight = 0.0f;
+		float current = 0.0f, ratio = 0.0f, size = 0.0f;
 		bool flag;
 
 		for(i = tracks.begin(); i != tracks.end(); i++)
 		{
 			track = static_cast<AnimationTrack*>(*i);
 			set = track->set;
-			weight = track->weight;
 			if(track->enabled && time >= track->position)
 			{
 				// time in track's local space.
@@ -86,7 +85,6 @@ namespace nest
 					{
 						vec3First = &channel->positionKeys[channel->positionKeys.size() - 1];
 						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
-						v0 *= weight;
 						matrix.identity();
 						matrix.translate(v0);
 						*channel->target *= matrix;
@@ -104,8 +102,6 @@ namespace nest
 								ratio = (current - vec3First->t) / (vec3Second->t - vec3First->t);
 								v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
 								v1.x = vec3Second->x; v1.y = vec3Second->y; v1.z = vec3Second->z;
-								v0 *= weight;
-								v1 *= weight;
 								v0 = v0 + (v1 - v0) * ratio;
 								matrix.identity();
 								matrix.translate(v0);
@@ -119,7 +115,6 @@ namespace nest
 					{
 						quatFirst = &channel->rotationKeys[channel->rotationKeys.size() - 1];
 						q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
-						q0 = Quaternion::slerp(q2, q0, weight);
 						matrix.identity();
 						matrix.rotate(q0);
 						*channel->target *= matrix;
@@ -137,8 +132,6 @@ namespace nest
 								ratio = (current - quatFirst->t) / (quatSecond->t - quatFirst->t);
 								q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
 								q1.x = quatSecond->x; q1.y = quatSecond->y; q1.z = quatSecond->z; q1.w = quatSecond->w;
-								q0 = Quaternion::slerp(q2, q0, weight);
-								q1 = Quaternion::slerp(q2, q1, weight);
 								matrix.identity();
 								matrix.rotate(Quaternion::slerp(q0, q1, ratio));
 								*channel->target *= matrix;
@@ -151,7 +144,6 @@ namespace nest
 					{
 						vec3First = &channel->scalingKeys[channel->scalingKeys.size() - 1];
 						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
-						v0 *= weight;
 						matrix.identity();
 						matrix.scale(v0);
 						*channel->target *= matrix;
@@ -169,8 +161,6 @@ namespace nest
 								ratio = (current - vec3First->t) / (vec3Second->t - vec3First->t);
 								v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
 								v1.x = vec3Second->x; v1.y = vec3Second->y; v1.z = vec3Second->z;
-								v0 = v0 * weight;
-								v1 = v1 * weight;
 								v0 = v0 + (v1 - v0) * ratio;
 								matrix.identity();
 								matrix.scale(v0);

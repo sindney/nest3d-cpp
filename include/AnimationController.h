@@ -9,6 +9,9 @@ namespace nest
 
 	class AnimationTrack;
 
+	/**
+	 *	Doesn't support animation blending currentlly.
+	 */
 	class AnimationController
 	{
 	public:

@@ -13,12 +13,12 @@ namespace nest
 
 		float position;
 
-		float weight, speed;
+		float speed;
 
 		AnimationSet *set;
 
-		AnimationTrack(AnimationSet *set, bool enabled, float position, float weight, float speed)
-		 : enabled(enabled), position(position), weight(weight), speed(speed), set(set) {}
+		AnimationTrack(AnimationSet *set, bool enabled, float position, float speed)
+		 : enabled(enabled), position(position), speed(speed), set(set) {}
 
 		virtual ~AnimationTrack()
 		{
