@@ -42,7 +42,10 @@ namespace nest
 
 		virtual ~MeshNode();
 
-		virtual void recompose();
+		/**
+		 *	Update MeshNode's bounds and it's position in octree if it's attached to one.
+		 */
+		virtual void update();
 	};
 }
 

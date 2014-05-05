@@ -13,10 +13,8 @@ namespace nest
 		mesh = NULL;
 	}
 
-	void MeshNode::recompose()
+	void MeshNode::update()
 	{
-		// Update transform matriices.
-		ObjectNode::recompose();
 		// Translate Bounding box from mesh space to world space.
 		bound = worldMatrix * mesh->geometry->bound;
 		// Translate node in octree.

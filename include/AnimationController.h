@@ -26,7 +26,16 @@ namespace nest
 
 		virtual ~AnimationController();
 
+		/**
+		 *	Use this to setup child's new and old PRS value.
+		 */
 		virtual void advanceTime(float delta);
+
+		/**
+		 *	Use this to calculate child's interpolated localMatirx.
+		 *	<p>Call Joint::updateJoints(joint, parent) to update the joint tree.</p>
+		 */
+		virtual void display(float dt);
 	};
 }
 

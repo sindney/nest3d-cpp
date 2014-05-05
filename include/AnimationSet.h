@@ -24,9 +24,12 @@ namespace nest
 	{
 		std::string name;
 
-		/**
-		 *	Target Matrix that this channel controls.
-		 */
+		Vector4 *oldP, *newP;
+
+		Quaternion *oldR, *newR;
+
+		Vector4 *oldS, *newS;
+
 		Matrix4 *target;
 
 		std::vector<QuatKeyFrame> rotationKeys;

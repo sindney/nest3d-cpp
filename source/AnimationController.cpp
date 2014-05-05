@@ -44,7 +44,6 @@ namespace nest
 		std::vector<Vec3KeyFrame>::iterator l;
 		Vec3KeyFrame *vec3First = NULL, *vec3Second = NULL;
 
-		// identity all sets' channels' target matrices
 		vector<AnimationSet*>::iterator m;
 		for(m = sets.begin(); m != sets.end(); m++)
 		{
@@ -53,6 +52,9 @@ namespace nest
 			{
 				channel = static_cast<AnimationChannel*>(*j);
 				channel->target->identity();
+				*channel->oldP = *channel->newP;
+				*channel->oldR = *channel->newR;
+				*channel->oldS = *channel->newS;
 			}
 		}
 
@@ -85,9 +87,7 @@ namespace nest
 					{
 						vec3First = &channel->positionKeys[channel->positionKeys.size() - 1];
 						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
-						matrix.identity();
-						matrix.translate(v0);
-						*channel->target *= matrix;
+						*channel->newP = v0;
 					}
 					else 
 					{
@@ -103,9 +103,7 @@ namespace nest
 								v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
 								v1.x = vec3Second->x; v1.y = vec3Second->y; v1.z = vec3Second->z;
 								v0 = v0 + (v1 - v0) * ratio;
-								matrix.identity();
-								matrix.translate(v0);
-								*channel->target *= matrix;
+								*channel->newP = v0;
 								break;
 							}
 						}
@@ -115,9 +113,7 @@ namespace nest
 					{
 						quatFirst = &channel->rotationKeys[channel->rotationKeys.size() - 1];
 						q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
-						matrix.identity();
-						matrix.rotate(q0);
-						*channel->target *= matrix;
+						*channel->newR = q0;
 					}
 					else 
 					{
@@ -132,9 +128,7 @@ namespace nest
 								ratio = (current - quatFirst->t) / (quatSecond->t - quatFirst->t);
 								q0.x = quatFirst->x; q0.y = quatFirst->y; q0.z = quatFirst->z; q0.w = quatFirst->w;
 								q1.x = quatSecond->x; q1.y = quatSecond->y; q1.z = quatSecond->z; q1.w = quatSecond->w;
-								matrix.identity();
-								matrix.rotate(Quaternion::slerp(q0, q1, ratio));
-								*channel->target *= matrix;
+								*channel->newR = Quaternion::slerp(q0, q1, ratio);
 								break;
 							}
 						}
@@ -144,9 +138,7 @@ namespace nest
 					{
 						vec3First = &channel->scalingKeys[channel->scalingKeys.size() - 1];
 						v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
-						matrix.identity();
-						matrix.scale(v0);
-						*channel->target *= matrix;
+						*channel->newS = v0;
 					}
 					else 
 					{
@@ -162,14 +154,42 @@ namespace nest
 								v0.x = vec3First->x; v0.y = vec3First->y; v0.z = vec3First->z;
 								v1.x = vec3Second->x; v1.y = vec3Second->y; v1.z = vec3Second->z;
 								v0 = v0 + (v1 - v0) * ratio;
-								matrix.identity();
-								matrix.scale(v0);
-								*channel->target *= matrix;
+								*channel->newS = v0;
 								break;
 							}
 						}
 					}
 				}
+			}
+		}
+	}
+
+	void AnimationController::display(float dt)
+	{
+		using namespace std;
+
+		vector<AnimationSet*>::iterator i;
+		AnimationSet *set = NULL;
+
+		vector<AnimationChannel*>::iterator j;
+		AnimationChannel *channel = NULL;
+
+		Matrix4 rtMatrix, sMatrix;
+
+		for(i = sets.begin(); i != sets.end(); i++)
+		{
+			set = static_cast<AnimationSet*>(*i);
+			for(j = set->channels.begin(); j != set->channels.end(); j++)
+			{
+				channel = static_cast<AnimationChannel*>(*j);
+				// store rotation and position info in rtMatrix.
+				rtMatrix.identity();
+				rtMatrix.rotate(Quaternion::slerp(*channel->oldR, *channel->newR, dt));
+				rtMatrix.translate(*channel->oldP + (*channel->newP - *channel->oldP) * dt);
+				// store scaling info in sMatrix.
+				sMatrix.identity();
+				sMatrix.scale(*channel->oldS + (*channel->newS - *channel->oldS) * dt);
+				*channel->target = rtMatrix * sMatrix;
 			}
 		}
 	}

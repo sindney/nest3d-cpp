@@ -78,13 +78,13 @@ namespace nest
 		if(!flag) throw runtime_error("Error removing child: Can't locate child pointer in target container.");
 	}
 
-	void ContainerNode::recompose()
+	void ContainerNode::recompose(float dt)
 	{
-		ObjectNode::recompose();
+		ObjectNode::recompose(dt);
 		vector<ObjectNode*>::iterator i;
 		for(i = objects.begin(); i != objects.end(); i++)
 		{
-			(*i)->recompose();
+			(*i)->recompose(dt);
 		}
 	}
 }

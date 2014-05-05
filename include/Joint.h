@@ -15,6 +15,12 @@ namespace nest
 
 		std::string name;
 
+		Vector4 oldP, newP;
+
+		Quaternion oldR, newR;
+
+		Vector4 oldS, newS;
+
 		/**
 		 *	Local transform matrix. Store bone's transform info.
 		 */
@@ -43,6 +49,9 @@ namespace nest
 
 		~Joint();
 
+		/**
+		 *	Update joint tree's matrices.
+		 */
 		static void updateJoints(Joint *joint, Matrix4 *parent);
 	};
 }

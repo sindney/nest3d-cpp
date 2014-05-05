@@ -49,7 +49,16 @@ namespace nest
 			channel = anim->channels[i];
 			joint = findJointFromRoot(aiString(channel->name), mesh->skin->root);
 			if(joint != NULL) 
+			{
+				// bind joint's RTS value.
+				channel->oldP = &joint->oldP;
+				channel->oldR = &joint->oldR;
+				channel->oldS = &joint->oldS;
+				channel->newP = &joint->newP;
+				channel->newR = &joint->newR;
+				channel->newS = &joint->newS;
 				channel->target = &joint->localMatrix;
+			}
 		}
 	}
 

@@ -20,17 +20,22 @@ namespace nest
 
 		virtual ~ContainerNode();
 
+		/**
+		 *	If target child is MeshNode.
+		 *	<p>You'd call MeshNode's update function to update mesh's bounds and ocTree info.</p>
+		 */
 		void addChild(ObjectNode *object);
 
 		/**
-		 *	Remove child from partition tree first, then from it's container.
+		 *	If target child is MeshNode.
+		 *	<p>You'd call MeshNode's update function to update mesh's bounds and ocTree info.</p>
 		 */
 		void removeChild(ObjectNode *object);
 
 		/**
 		 *	Update ContainerNode's transform by localMatrix.
 		 */
-		virtual void recompose();
+		virtual void recompose(float dt = 1.0f);
 	};
 }
 
