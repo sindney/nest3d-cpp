@@ -14,7 +14,7 @@ namespace nest
 		std::string name;
 
 		/**
-		 *	If it's true, rtMatrix&sMatrix is interpolated from PRS value when recompose is called.
+		 *	If it's true, localMatrix is interpolated from PRS value when recompose is called.
 		 */
 		bool usePRS;
 
@@ -23,8 +23,6 @@ namespace nest
 		Quaternion oldR, newR;
 
 		Vector4 oldS, newS;
-
-		Matrix4 rtMatrix, sMatrix;
 
 		Matrix4 localMatrix;
 
@@ -39,7 +37,6 @@ namespace nest
 		ObjectNode() : parent(NULL), usePRS(false)
 		{
 			oldS.x = oldS.y = oldS.z = newS.x = newS.y = newS.z = 1.0f;
-			sMatrix.scale(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 
 		virtual ~ObjectNode()
@@ -53,18 +50,18 @@ namespace nest
 		 */
 		virtual void recompose(float dt = 0.0f)
 		{
+			// calculate local matrix.
 			if(usePRS)
 			{
-				// store rotation and position info in rtMatrix.
-				rtMatrix.identity();
-				rtMatrix.rotate(Quaternion::slerp(oldR, newR, dt));
-				rtMatrix.translate(oldP + (newP - oldP) * dt);
-				// store scaling info in sMatrix.
-				sMatrix.identity();
+				// append rotation and position info.
+				localMatrix.identity();
+				localMatrix.rotate(Quaternion::slerp(oldR, newR, dt));
+				localMatrix.translate(oldP + (newP - oldP) * dt);
+				// append scaling info.
+				Matrix4 sMatrix;
 				sMatrix.scale(oldS + (newS - oldS) * dt);
+				localMatrix *= sMatrix;
 			}
-			// calculate local matrix.
-			localMatrix = rtMatrix * sMatrix;
 			invertLocalMatrix = localMatrix.inverse();
 			worldMatrix = localMatrix;
 			if(parent != NULL) worldMatrix = parent->worldMatrix * worldMatrix;

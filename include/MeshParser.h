@@ -12,7 +12,9 @@ namespace nest
 {
 	using namespace std;
 
-	class AnimationSet;
+	class AnimationClip;
+
+	class AnimationRig;
 
 	class Joint;
 
@@ -20,11 +22,17 @@ namespace nest
 
 	class Matrix4;
 
+	/**
+	 *	If you get vector of animation clips from this parser.
+	 *	<p>Then you'd create AnimRig and bind it to mesh's joint tree to control the mesh's joints.</p>
+	 *	<p>So you can use AnimPlayer to play AnimClips, the result is represented as a pose vector.</p>
+	 *	<p>You can also blend poses together to generate the final rig.</p>
+	 */
 	class MeshParser
 	{
 	public:
 
-		vector<AnimationSet*> animations;
+		vector<AnimationClip*> animations;
 
 		vector<Mesh*> meshes;
 
@@ -60,19 +68,15 @@ namespace nest
 		 */
 		bool parse(const string &file, unsigned int flags);
 
-		void bindAniamtionForMesh(AnimationSet *anim, Mesh *mesh);
-
 	private:
 
 		void readAnimation(const aiScene *scene, const aiAnimation *anim);
 
 		void readMesh(const aiScene *scene, const aiMesh *meshNode);
 
-		Joint *findJointFromRoot(aiString name, Joint *root);
-
 		Joint *findJointFromVector(aiString name, vector<Joint*> &joints);
 
-		void *copyMatrix(aiMatrix4x4 *from, Matrix4 *to);
+		void copyMatrix(aiMatrix4x4 *from, Matrix4 *to);
 	};
 }
 

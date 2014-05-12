@@ -1,5 +1,5 @@
-#ifndef N3D_ANIMATIONSET_H
-#define N3D_ANIMATIONSET_H
+#ifndef N3D_ANIMATIONCLIP_H
+#define N3D_ANIMATIONCLIP_H
 
 #include <string>
 #include <vector>
@@ -20,17 +20,19 @@ namespace nest
 
 	} Vec3KeyFrame;
 
-	typedef struct
+	typedef struct 
 	{
 		std::string name;
 
-		Vector4 *oldP, *newP;
+		Vector4 position, scaling;
 
-		Quaternion *oldR, *newR;
+		Quaternion rotation;
 
-		Vector4 *oldS, *newS;
+	} PoseData;
 
-		Matrix4 *target;
+	typedef struct
+	{
+		std::string name;
 
 		std::vector<QuatKeyFrame> rotationKeys;
 
@@ -38,22 +40,22 @@ namespace nest
 
 	} AnimationChannel;
 
-	class AnimationSet
+	class AnimationClip
 	{
 	public:
 
 		std::string name;
 
-		float ticksPerSecond, duration;
-		
-		bool loop;
-
 		std::vector<AnimationChannel*> channels;
 
-		AnimationSet(std::string name, float ticksPerSecond, float duration, bool loop)
+		float ticksPerSecond, duration;
+
+		bool loop;
+
+		AnimationClip(std::string name, float ticksPerSecond, float duration, bool loop)
 		 : name(name), ticksPerSecond(ticksPerSecond), duration(duration), loop(loop) {}
 
-		virtual ~AnimationSet()
+		virtual ~AnimationClip()
 		{
 			AnimationChannel *channel = NULL;
 			while(channels.size() != 0)

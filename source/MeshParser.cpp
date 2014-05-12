@@ -2,7 +2,7 @@
 #include <stack>
 
 #include "MeshParser.h"
-#include "AnimationSet.h"
+#include "AnimationRig.h"
 #include "Mesh.h"
 
 namespace nest
@@ -39,32 +39,9 @@ namespace nest
 		return true;
 	}
 
-	void MeshParser::bindAniamtionForMesh(AnimationSet *anim, Mesh *mesh)
-	{
-		int i, j = anim->channels.size();
-		AnimationChannel *channel = NULL;
-		Joint *joint = NULL;
-		for(i = 0; i < j; i++)
-		{
-			channel = anim->channels[i];
-			joint = findJointFromRoot(aiString(channel->name), mesh->skin->root);
-			if(joint != NULL) 
-			{
-				// bind joint's RTS value.
-				channel->oldP = &joint->oldP;
-				channel->oldR = &joint->oldR;
-				channel->oldS = &joint->oldS;
-				channel->newP = &joint->newP;
-				channel->newR = &joint->newR;
-				channel->newS = &joint->newS;
-				channel->target = &joint->localMatrix;
-			}
-		}
-	}
-
 	void MeshParser::readAnimation(const aiScene *scene, const aiAnimation *anim)
 	{
-		AnimationSet *animSet = new AnimationSet(
+		AnimationClip *animSet = new AnimationClip(
 			anim->mName.C_Str(), 
 			anim->mTicksPerSecond == 0 ? 25 : anim->mTicksPerSecond, 
 			anim->mDuration, 
@@ -343,33 +320,6 @@ namespace nest
 		}
 	}
 
-	Joint *MeshParser::findJointFromRoot(aiString name, Joint *root)
-	{
-		if(aiString(root->name) == name)
-			return root;
-
-		Joint *joint0 = root, *joint1 = NULL;
-		stack<Joint*> joints;
-		joints.push(joint0);
-
-		while(joints.size() > 0)
-		{
-			joint0 = joints.top();
-			joints.pop();
-			joint1 = joint0->firstChild;
-			while(joint1 != NULL)
-			{
-				if(aiString(joint1->name) == name)
-					return joint1;
-				if(joint1->firstChild != NULL)
-					joints.push(joint1);
-				joint1 = joint1->sibling;
-			}
-		}
-
-		return NULL;
-	}
-
 	Joint *MeshParser::findJointFromVector(aiString name, vector<Joint*> &joints)
 	{
 		int i, j = joints.size();
@@ -385,7 +335,7 @@ namespace nest
 		return NULL;
 	}
 
-	void *MeshParser::copyMatrix(aiMatrix4x4 *from, Matrix4 *to)
+	void MeshParser::copyMatrix(aiMatrix4x4 *from, Matrix4 *to)
 	{
 		to->raw[0] = from->a1;	to->raw[4] = from->a2;	to->raw[8] = from->a3;	to->raw[12] = from->a4;
 		to->raw[1] = from->b1;	to->raw[5] = from->b2;	to->raw[9] = from->b3;	to->raw[13] = from->b4;

@@ -53,6 +53,8 @@ namespace nest
 		 *	Update joint tree's matrices.
 		 */
 		static void updateJoints(Joint *joint, Matrix4 *parent);
+
+		static Joint *findFromRoot(std::string name, Joint *root);
 	};
 }
 
