@@ -87,4 +87,42 @@ namespace nest
 			(*i)->recompose(dt);
 		}
 	}
+
+	void ContainerNode::dispatch(const Event *event, bool depthFirst)
+	{
+		vector<ObjectNode*>::iterator i;
+		ObjectNode *object0 = NULL;
+		if(depthFirst)
+		{
+			for(i = objects.begin(); i != objects.end(); i++)
+			{
+				object0 = *i;
+				object0->dispatch(event);
+				if(typeid(**i) == typeid(ContainerNode))
+					static_cast<ContainerNode*>(object0)->dispatch(event, depthFirst);
+			}
+		}
+		else 
+		{
+			vector<ContainerNode*> containers;
+			ContainerNode *current = this;
+			while(true)
+			{
+				for(i = current->objects.begin(); i != current->objects.end(); i++)
+				{
+					object0 = *i;
+					object0->dispatch(event);
+					if(typeid(**i) == typeid(ContainerNode))
+						containers.push_back(static_cast<ContainerNode*>(object0));
+				}
+				if(containers.size() != 0)
+				{
+					current = containers.back();
+					containers.pop_back();
+					continue;
+				}
+				break;
+			}
+		}
+	}
 }

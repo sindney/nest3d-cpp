@@ -3,11 +3,12 @@
 
 #include <string>
 
+#include "EventDispatcher.h"
 #include "Matrix4.h"
 
 namespace nest
 {
-	class ObjectNode
+	class ObjectNode : public EventDispatcher
 	{
 	public:
 

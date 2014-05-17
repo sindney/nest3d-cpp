@@ -2,10 +2,24 @@
 #define N3D_ANIMATIONPLAYER_H
 
 #include "AnimationClip.h"
+#include "EventDispatcher.h"
 
 namespace nest
 {
-	class AnimationPlayer
+	class AnimationEvent : public Event
+	{
+	public:
+
+		/**
+		 *	Time in player's space.
+		 *	<p>For exp: time = player->time * clip->ticesPerSecond * player->speed</p>
+		 */
+		float time;
+
+		AnimationEvent(float time) : time(time), Event("AnimationEvent") {}
+	};
+
+	class AnimationPlayer : public EventDispatcher
 	{
 	public:
 
@@ -21,6 +35,7 @@ namespace nest
 		/**
 		 *	Advance time to calculate new pose.
 		 *	<p>You'd setupPoseData() first, then advanceTime.</p>
+		 *	<p>Plus, this triggers AnimationEvent.</p>
 		 */
 		void advanceTime(float dt);
 	};

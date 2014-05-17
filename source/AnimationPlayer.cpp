@@ -31,6 +31,9 @@ namespace nest
 		{
 			// calculate the right time.
 			while(current > size) current -= size;
+			// trigger events
+			AnimationEvent event(current);
+			dispatch(&event);
 			// traverse the clip.
 			for(i = 0; i < j; i++)
 			{
