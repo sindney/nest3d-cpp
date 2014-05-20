@@ -20,6 +20,10 @@ namespace nest
 
 		virtual ~EventActor() {}
 
+		/**
+		 *	@param event Target event to respond.
+		 *	@param dispatcher The EventDispatcher that triggers target event.
+		 */
 		virtual void respond(const Event *event, EventDispatcher *dispatcher) = 0;
 	};
 }

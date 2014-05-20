@@ -3,7 +3,7 @@ Nest3D-CPP
 
 A light weight opengl 3d engine project in c++ for study purpose.
 
-Current version: 1.4.0 beta
+Current version: 1.4.0
 
 Special thanks to: Opengl, Glew, Glfw, Assimp.
 

@@ -54,6 +54,9 @@ namespace nest
 		 */
 		static void updateJoints(Joint *joint, Matrix4 *parent);
 
+		/**
+		 *	Search target joint from root by it's name.
+		 */
 		static Joint *findFromRoot(std::string name, Joint *root);
 	};
 }

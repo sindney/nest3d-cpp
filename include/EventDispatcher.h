@@ -19,6 +19,9 @@ namespace nest
 
 	class EventActor;
 
+	/**
+	 *	Extend this to create ur own events.
+	 */
 	class Event
 	{
 	public:
@@ -38,6 +41,9 @@ namespace nest
 
 		virtual ~EventDispatcher();
 		
+		/**
+		 *	Broadcast event, events are ided by their names.
+		 */
 		virtual void dispatch(const Event *event);
 
 		void addEventActor(const string &event, EventActor *actor);
