@@ -43,6 +43,55 @@ namespace nest
 		a.raw[15] = 1;
 	}
 
+	void Matrix4::axisAngleToEuler(const Vector4 &axis, GLfloat angle, Vector4 &euler)
+	{
+		GLfloat PI = 3.1415926f;
+		GLfloat s = sin(angle);
+		GLfloat c = cos(angle);
+		GLfloat t = 1 - c;
+		if((axis.x * axis.y * t + axis.z * s) > 0.998f) 
+		{ 
+			// north pole singularity detected
+			euler.x = 2 * atan2(axis.x * sin(angle / 2), cos(angle / 2));
+			euler.y = PI / 2;
+			euler.z = 0;
+		}
+		else if((axis.x * axis.y * t + axis.z * s) < -0.998f) 
+		{
+			// south pole singularity detected
+			euler.x = -2 * atan2(axis.x * sin(angle / 2), cos(angle / 2)); 
+			euler.y = -PI / 2;
+			euler.z = 0;
+		}
+		else
+		{
+			euler.x = atan2(
+				axis.y * s - axis.x * axis.z * t, 
+				1 - (axis.y * axis.y + axis.z * axis.z) * t
+			);
+			euler.y = asin(axis.x * axis.y * t + axis.z * s);
+			euler.z = atan2(
+				axis.x * s - axis.y * axis.z * t, 
+				1 - (axis.x * axis.x + axis.z * axis.z) * t
+			);
+		}
+	}
+
+	void Matrix4::eulerToAxisAngle(const Vector4 &euler, Vector4 &axis, GLfloat &angle)
+	{
+		GLfloat c1 = cos(euler.x / 2);
+		GLfloat s1 = sin(euler.x / 2);
+		GLfloat c2 = cos(euler.y / 2);
+		GLfloat s2 = sin(euler.y / 2);
+		GLfloat c3 = cos(euler.z / 2);
+		GLfloat s3 = sin(euler.z / 2);
+		axis.x = c1 * c2 * s3 + s1 * s2 * c3;
+		axis.y = s1 * c2 * c3 + c1 * s2 * s3;
+		axis.z = c1 * s2 * c3 - s1 * c2 * s3;
+		angle = 2 * acos(c1 * c2 * c3 - s1 * s2 * s3);
+		axis.normalize();
+	}
+
 	void Matrix4::identity()
 	{
 		raw[0] = 1.0f; raw[4] = 0.0f; raw[8] = 0.0f; raw[12] = 0.0f;
@@ -79,12 +128,12 @@ namespace nest
 	
 	void Matrix4::rotate(const Vector4 &angles)
 	{
-		GLfloat sa = sin(angles.x);
-		GLfloat ca = cos(angles.x);
-		GLfloat sb = sin(angles.y);
-		GLfloat cb = cos(angles.y);
-		GLfloat sc = sin(angles.z);
-		GLfloat cc = cos(angles.z);
+		GLfloat sa = sin(angles.z);
+		GLfloat ca = cos(angles.z);
+		GLfloat sb = sin(angles.x);
+		GLfloat cb = cos(angles.x);
+		GLfloat sc = sin(angles.y);
+		GLfloat cc = cos(angles.y);
 
 		raw[0] = cb * cc + sb * sa * sc;
 		raw[1] = ca * sc;

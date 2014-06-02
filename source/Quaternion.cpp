@@ -81,6 +81,20 @@ namespace nest
 		z = axis.z * st2;
 	}
 
+	void Quaternion::rotate(const Vector4 &angles)
+	{
+		GLfloat c1 = cos(angles.x / 2);
+		GLfloat s1 = sin(angles.x / 2);
+		GLfloat c2 = cos(angles.y / 2);
+		GLfloat s2 = sin(angles.y / 2);
+		GLfloat c3 = cos(angles.z / 2);
+		GLfloat s3 = sin(angles.z / 2);
+		w = c1 * c2 * c3 - s1 * s2 * s3;
+		x = s1 * s2 * c3 + c1 * c2 * s3;
+		y = s1 * c2 * c3 + c1 * s2 * s3;
+		z = c1 * s2 * c3 - s1 * c2 * s3;
+	}
+
 	void Quaternion::normalize()
 	{
 		GLfloat mag = (GLfloat)sqrt(x * x + y * y + z * z + w * w);
@@ -98,25 +112,23 @@ namespace nest
 		}
 	}
 
-	Vector4 Quaternion::getRotation()
+	void Quaternion::getRotation(Vector4 &axis, GLfloat &theta)
 	{
-		Vector4 result;
-		result.w = acos(w) * 2.0f;
+		theta = acos(w) * 2.0f;
 		
 		GLfloat a = 1.0f - w * w;
 		if(a <= 0.0f)
 		{
-			result.x = 1.0f;
-			result.y = result.z = 0.0f;
-			return result;
+			axis.x = 1.0f;
+			axis.y = axis.z = 0.0f;
 		}
-		
-		GLfloat b = 1.0f / sqrt(a);
-		result.x = x * b;
-		result.y = y * b;
-		result.z = z * b;
-		
-		return result;
+		else
+		{
+			GLfloat b = 1.0f / sqrt(a);
+			axis.x = x * b;
+			axis.y = y * b;
+			axis.z = z * b;
+		}
 	}
 
 	Quaternion Quaternion::operator * (const Quaternion &a) const 

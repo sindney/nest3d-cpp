@@ -32,10 +32,15 @@ namespace nest
 		}
 		
 		void rotate(const Vector4 &axis, GLfloat theta);
+
+		/**
+		 *	YAW, PITCH, ROLL
+		 */
+		void rotate(const Vector4 &angles);
 		
 		void normalize();
 		
-		Vector4 getRotation();
+		void getRotation(Vector4 &axis, GLfloat &theta);
 		
 		Quaternion operator * (const Quaternion &a) const;
 		
