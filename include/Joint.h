@@ -43,16 +43,17 @@ namespace nest
 
 		Mesh *mesh;
 
-		Joint *firstChild, *sibling;
+		Joint *firstChild, *sibling, *parent;
 
-		Joint(std::string name, Mesh *mesh) : name(name), mesh(mesh), firstChild(NULL), sibling(NULL) {}
+		Joint(std::string name, Mesh *mesh)
+		 : name(name), mesh(mesh), firstChild(NULL), sibling(NULL), parent(NULL) {}
 
 		~Joint();
 
 		/**
 		 *	Update joint tree's matrices.
 		 */
-		static void updateJoints(Joint *joint, Matrix4 *parent);
+		static void updateJoints(Joint *joint, Matrix4 *matrix);
 
 		/**
 		 *	Search target joint from root by it's name.

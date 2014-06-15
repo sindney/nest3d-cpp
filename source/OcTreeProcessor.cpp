@@ -45,7 +45,7 @@ namespace nest
 						meshNode = *i;
 						if(meshNode->visible)
 						{
-							if(!meshNode->cliping || camera->culling->classifyAABB(camera->invertWorldMatrix * meshNode->bound))
+							if(!meshNode->cliping || current || camera->culling->classifyAABB(camera->invertWorldMatrix * meshNode->bound))
 							{
 								if(!meshNode->alphaTest)
 								{

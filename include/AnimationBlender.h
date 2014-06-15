@@ -17,22 +17,34 @@ namespace nest
 		/**
 		 *	p0 + p1; q0 * q1;
 		 */
-		static void addBlender(vector<PoseData> &result, vector<PoseData> &p0, vector<PoseData> &p1);
+		static void addBlender(
+			vector<PoseData> &result, vector<PoseData> &p0, vector<PoseData> &p1, 
+			bool position = true, bool rotation = true, bool scaling = true
+		);
 
 		/**
 		 *	p0 - p1; q0 * -q1;
 		 */
-		static void subtractBlender(vector<PoseData> &result, vector<PoseData> &p0, vector<PoseData> &p1);
+		static void subtractBlender(
+			vector<PoseData> &result, vector<PoseData> &p0, vector<PoseData> &p1, 
+			bool position = true, bool rotation = true, bool scaling = true
+		);
 
 		/**
 		 *	p0 * s; slerp(0001, q0, s);
 		 */
-		static void scaleBlender(vector<PoseData> &result, vector<PoseData> &p0, float scale);
+		static void scaleBlender(
+			vector<PoseData> &result, vector<PoseData> &p0, float scale, 
+			bool position = true, bool rotation = true, bool scaling = true
+		);
 
 		/**
 		 *	p0 + (p1 - p0) * t; slerp(q0, q1, t);
 		 */
-		static void crossDissolveBlender(vector<PoseData> &result, vector<PoseData> &p0, vector<PoseData> &p1, float dt);
+		static void crossDissolveBlender(
+			vector<PoseData> &result, vector<PoseData> &p0, vector<PoseData> &p1, float dt, 
+			bool position = true, bool rotation = true, bool scaling = true
+		);
 
 		/**
 		 *	Say result poses store the full body pose data.
@@ -40,7 +52,10 @@ namespace nest
 		 *	
 		 *	@param table The map to look up during blending process.
 		 */
-		static void combineBlender(vector<PoseData> &result, vector<PoseData> &p0, map<string, int> &table);
+		static void combineBlender(
+			vector<PoseData> &result, vector<PoseData> &p0, map<string, int> &table, 
+			bool position = true, bool rotation = true, bool scaling = true
+		);
 
 		/**
 		 *	Init a map to store pose name, index data.

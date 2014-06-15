@@ -10,28 +10,12 @@ namespace nest
 
 	ContainerNode::~ContainerNode()
 	{
-		vector<ContainerNode*> containers;
-		ContainerNode *current = this;
 		ObjectNode *object0 = NULL;
-		while(true)
+		while(objects.size() != 0)
 		{
-			while(current->objects.size() != 0)
-			{
-				object0 = current->objects.back();
-				current->objects.pop_back();
-				if(typeid(*object0) == typeid(ContainerNode))
-					containers.push_back(static_cast<ContainerNode*>(object0));
-				else 
-					delete object0;
-			}
-			if(current != this) delete current;
-			if(containers.size() != 0)
-			{
-				current = containers.back();
-				containers.pop_back();
-				continue;
-			}
-			break;
+			object0 = objects.back();
+			objects.pop_back();
+			delete object0;
 		}
 	}
 

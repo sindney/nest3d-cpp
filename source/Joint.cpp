@@ -13,12 +13,12 @@ namespace nest
 		if(firstChild != NULL) delete firstChild;
 	}
 
-	void Joint::updateJoints(Joint *joint, Matrix4 *parent)
+	void Joint::updateJoints(Joint *joint, Matrix4 *matrix)
 	{
-		joint->combinedMatrix = parent != NULL ? (*parent) * joint->localMatrix : joint->localMatrix;
+		joint->combinedMatrix = matrix != NULL ? (*matrix) * joint->localMatrix : joint->localMatrix;
 		joint->finalMatrix = joint->combinedMatrix * joint->offsetMatrix;
 		if(joint->sibling != NULL) 
-			updateJoints(joint->sibling, parent);
+			updateJoints(joint->sibling, matrix);
 		if(joint->firstChild != NULL) 
 			updateJoints(joint->firstChild, &joint->combinedMatrix);
 	}

@@ -43,7 +43,8 @@ namespace nest
 		virtual ~MeshNode();
 
 		/**
-		 *	Update MeshNode's bounds and it's position in octree if it's attached to one.
+		 *	Update MeshNode's bounds first.
+		 *	<p>Then update it's position in octree if it's attached to one.</p>
 		 */
 		virtual void update();
 	};

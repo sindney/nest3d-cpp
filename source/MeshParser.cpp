@@ -294,6 +294,7 @@ namespace nest
 					}
 					joint1 = findJointFromVector(node1->mName, mesh->skin->joints);
 					if(joint1 == NULL) joint1 = new Joint(node1->mName.C_Str(), NULL);
+					joint1->parent = joint0;
 					copyMatrix(&node1->mTransformation, &joint1->localMatrix);
 					if(!firstChild)
 					{
