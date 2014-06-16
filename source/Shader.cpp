@@ -43,6 +43,8 @@ namespace nest
 
 	const GLchar Shader::SKELETON[] = "skeleton";
 
+	const GLchar Shader::COMBINED_MATRIX[] = "combined_matrix";
+
 	const GLchar Shader::PROJECTION_MATRIX[] = "projection_matrix";
 
 	const GLchar Shader::VIEW_MATRIX[] = "view_matrix";

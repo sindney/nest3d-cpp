@@ -454,6 +454,8 @@ namespace nest
 
 		static const GLchar SKELETON[];
 
+		static const GLchar COMBINED_MATRIX[];
+
 		static const GLchar PROJECTION_MATRIX[];
 
 		static const GLchar VIEW_MATRIX[];

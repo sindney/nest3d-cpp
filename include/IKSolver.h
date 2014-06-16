@@ -34,8 +34,8 @@ namespace nest
 	/**
 	 *	Tips: fill joints vector first.
 	 *	<p>Call createIKChain() to fill ikJoints vector.</p>
-	 *	<p>Call initializeIKChain() to init IKJoints' matrix by joints'.
-	 *	<p>Call calculateIKChain(target) to reach target position using joint chain.</p>
+	 *	<p>Call initializeIKChain() to init IKJoints' matrix by joints'.</p>
+	 *	<p>Call calculateIKChain() to reach target position using joint chain.</p>
 	 *	<p>The PoseData vector stores rotation info for animation blending.</p>
 	 *	<p>You can also call applyResult() to apply IK result to joint chain directly.</p>
 	 */

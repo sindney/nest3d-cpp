@@ -22,7 +22,7 @@ namespace nest
 	void MeshRender::draw(Joint *joint)
 	{
 		if(joint->mesh != NULL)
-			draw(joint->mesh, joint->mesh->skin != NULL ? NULL : &joint->combinedMatrix);
+			draw(joint->mesh, &joint->combinedMatrix);
 		if(joint->sibling != NULL)
 			draw(joint->sibling);
 		if(joint->firstChild != NULL)
@@ -40,10 +40,9 @@ namespace nest
 		// link shaders
 		Shader *shader = mesh->shaders[flag];
 		glUseProgram(shader->program);
-		if(combinedMatrix == NULL)
-			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::WORLD_MATRIX), 1, false, worldMatrix->raw);
-		else
-			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::WORLD_MATRIX), 1, false, ((*worldMatrix) * (*combinedMatrix)).raw);
+		if(combinedMatrix != NULL) 
+			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::COMBINED_MATRIX), 1, false, combinedMatrix->raw);
+		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::WORLD_MATRIX), 1, false, worldMatrix->raw);
 		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::INVERT_VIEW_MATRIX), 1, false, invertViewMatrix->raw);
 		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::PROJECTION_MATRIX), 1, false, projectionMatrix->raw);
 		// skin info
