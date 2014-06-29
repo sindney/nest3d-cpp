@@ -43,23 +43,23 @@ namespace nest
 		a.raw[15] = 1;
 	}
 
-	void Matrix4::axisAngleToEuler(const Vector4 &axis, GLfloat angle, Vector4 &euler)
+	void Matrix4::axisRadianToEuler(const Vector4 &axis, GLfloat radian, Vector4 &euler)
 	{
 		GLfloat PI = 3.1415926f;
-		GLfloat s = sin(angle);
-		GLfloat c = cos(angle);
+		GLfloat s = sin(radian);
+		GLfloat c = cos(radian);
 		GLfloat t = 1 - c;
 		if((axis.x * axis.y * t + axis.z * s) > 0.998f) 
 		{ 
 			// north pole singularity detected
-			euler.x = 2 * atan2(axis.x * sin(angle / 2), cos(angle / 2));
+			euler.x = 2 * atan2(axis.x * sin(radian / 2), cos(radian / 2));
 			euler.y = PI / 2;
 			euler.z = 0;
 		}
 		else if((axis.x * axis.y * t + axis.z * s) < -0.998f) 
 		{
 			// south pole singularity detected
-			euler.x = -2 * atan2(axis.x * sin(angle / 2), cos(angle / 2)); 
+			euler.x = -2 * atan2(axis.x * sin(radian / 2), cos(radian / 2)); 
 			euler.y = -PI / 2;
 			euler.z = 0;
 		}
@@ -77,7 +77,7 @@ namespace nest
 		}
 	}
 
-	void Matrix4::eulerToAxisAngle(const Vector4 &euler, Vector4 &axis, GLfloat &angle)
+	void Matrix4::eulerToAxisRadian(const Vector4 &euler, Vector4 &axis, GLfloat &radian)
 	{
 		GLfloat c1 = cos(euler.x / 2);
 		GLfloat s1 = sin(euler.x / 2);
@@ -88,7 +88,7 @@ namespace nest
 		axis.x = c1 * c2 * s3 + s1 * s2 * c3;
 		axis.y = s1 * c2 * c3 + c1 * s2 * s3;
 		axis.z = c1 * s2 * c3 - s1 * c2 * s3;
-		angle = 2 * acos(c1 * c2 * c3 - s1 * s2 * s3);
+		radian = 2 * acos(c1 * c2 * c3 - s1 * s2 * s3);
 		axis.normalize();
 	}
 
@@ -105,10 +105,10 @@ namespace nest
 		raw[12] = a.x; raw[13] = a.y; raw[14] = a.z;
 	}
 
-	void Matrix4::rotate(const Vector4 &axis, GLfloat theta)
+	void Matrix4::rotate(const Vector4 &axis, GLfloat radian)
 	{
-		GLfloat s = sin(theta);
-		GLfloat c = cos(theta);
+		GLfloat s = sin(radian);
+		GLfloat c = cos(radian);
 		
 		GLfloat a = 1.0f - c;
 		GLfloat ax = a * axis.x;
@@ -126,14 +126,14 @@ namespace nest
 		raw[10] = az * axis.z + c;
 	}
 	
-	void Matrix4::rotate(const Vector4 &angles)
+	void Matrix4::rotate(const Vector4 &euler)
 	{
-		GLfloat sa = sin(angles.z);
-		GLfloat ca = cos(angles.z);
-		GLfloat sb = sin(angles.x);
-		GLfloat cb = cos(angles.x);
-		GLfloat sc = sin(angles.y);
-		GLfloat cc = cos(angles.y);
+		GLfloat sa = sin(euler.z);
+		GLfloat ca = cos(euler.z);
+		GLfloat sb = sin(euler.x);
+		GLfloat cb = cos(euler.x);
+		GLfloat sc = sin(euler.y);
+		GLfloat cc = cos(euler.y);
 
 		raw[0] = cb * cc + sb * sa * sc;
 		raw[1] = ca * sc;

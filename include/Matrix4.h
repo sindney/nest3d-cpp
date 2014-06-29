@@ -17,14 +17,14 @@ namespace nest
 		static void orthoOffCenter(Matrix4 &a, GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
 		
 		/**
-		 *	Translate axis & angle rotation to euler angle (yaw pitch roll).
+		 *	Translate axis & radian rotation to euler radian (yaw pitch roll).
 		 */
-		static void axisAngleToEuler(const Vector4 &axis, GLfloat angle, Vector4 &euler);
+		static void axisRadianToEuler(const Vector4 &axis, GLfloat radian, Vector4 &euler);
 
 		/**
-		 *	Translate euler angle (yaw pitch roll) rotation to axis & angle.
+		 *	Translate euler radian (yaw pitch roll) rotation to axis & radian.
 		 */
-		static void eulerToAxisAngle(const Vector4 &euler, Vector4 &axis, GLfloat &angle);
+		static void eulerToAxisRadian(const Vector4 &euler, Vector4 &axis, GLfloat &radian);
 
 		GLfloat raw[16];
 
@@ -49,12 +49,12 @@ namespace nest
 		
 		void translate(const Vector4 &a);
 		
-		void rotate(const Vector4 &axis, GLfloat theta);
+		void rotate(const Vector4 &axis, GLfloat radian);
 		
 		/**
 		 *	YAW, PITCH, ROLL (y axis, x axis, z axis)
 		 */
-		void rotate(const Vector4 &angles);
+		void rotate(const Vector4 &euler);
 
 		void rotate(const Quaternion &a);
 		

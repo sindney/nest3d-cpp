@@ -16,40 +16,76 @@ namespace nest
 	void IKSolver::createIKChain()
 	{
 		int i, j = joints.size();
-		float PI2 = 2 * 3.1415926f;
+		float PI = 3.1415926f;
 		ikJoints.resize(j);
 		result.resize(j);
 
-		IKJoint *joint0 = NULL;
+		IKJoint *ikJoint = NULL;
+		Joint *joint = NULL;
 		PoseData *pose = NULL;
 
 		for(i = 0; i < j; i++)
 		{
-			joint0 = &ikJoints[i];
+			ikJoint = &ikJoints[i];
+			joint = joints[i];
 			pose = &result[i];
+			pose->name = joint->name;
 			pose->position.zero();
 			pose->rotation.identity();
 			pose->scaling.zero();
-			joint0->rotation = &pose->rotation;
-			joint0->yaw = joint0->pitch = joint0->roll = true;
-			joint0->maxYaw = joint0->maxPitch = joint0->maxRoll = PI2;
-			joint0->minYaw = joint0->minPitch = joint0->minRoll = 0.0f;
+			ikJoint->rotation = &pose->rotation;
+			ikJoint->maxYaw = ikJoint->maxPitch = ikJoint->maxRoll = PI;
+			ikJoint->minYaw = ikJoint->minPitch = ikJoint->minRoll = -PI;
 		}
 	}
 
 	void IKSolver::initializeIKChain()
 	{
-		int i, j = joints.size();
+		int i, j = ikJoints.size();
 
-		IKJoint *joint0 = NULL;
-		Joint *joint1 = NULL;
+		IKJoint *ikJoint = NULL;
 
 		for(i = 0; i < j; i++)
 		{
-			joint0 = &ikJoints[i];
-			joint1 = joints[i];
-			joint0->localMatrix = joint1->localMatrix;
-			joint0->combinedMatrix = joint1->combinedMatrix;
+			ikJoint = &ikJoints[i];
+			ikJoint->localMatrix.identity();
+			ikJoint->localMatrix.translate(ikJoint->initPosition);
+			ikJoint->localMatrix.rotate(ikJoint->initRotation);
+			*ikJoint->rotation = ikJoint->initRotation;
+		}
+
+		updateIKChain(0);
+	}
+
+	void IKSolver::updateIKChain(int index)
+	{
+		int size = ikJoints.size();
+		if(index >= 0 && index < size)
+		{
+			IKJoint *ikJoint = NULL;
+			Matrix4 *mat4 = NULL;
+			if(index == 0)
+			{
+				Joint *joint = joints[0]->parent;
+				if(joint != NULL)
+					mat4 = &joint->combinedMatrix;
+			}
+			else 
+			{
+				ikJoint = &ikJoints[index - 1];
+				mat4 = &ikJoint->combinedMatrix;
+			}
+			int i = index;
+			while(i < size)
+			{
+				ikJoint = &ikJoints[i];
+				if(mat4 == NULL)
+					ikJoint->combinedMatrix = ikJoint->localMatrix;
+				else 
+					ikJoint->combinedMatrix = *mat4 * ikJoint->localMatrix;
+				mat4 = &ikJoint->combinedMatrix;
+				i++;
+			}
 		}
 	}
 
@@ -64,7 +100,7 @@ namespace nest
 		if(size < 2) return false;
 
 		float PI2 = 2 * 3.1415926f;
-		float angle;
+		float radian;
 		int tries = maxTries;
 
 		int i = size - 2;
@@ -72,6 +108,7 @@ namespace nest
 
 		int j;
 		IKJoint *j0 = NULL, *j1 = NULL;
+		Joint *parentJoint = NULL;
 
 		while(tries > 0)
 		{
@@ -91,74 +128,42 @@ namespace nest
 				v0.normalize();
 				v1.normalize();
 
-				angle = v0 * v1;
-				if(angle < 0.99999f)
+				radian = v0 * v1;
+				if(radian < 0.99999f)
 				{
-					angle = acos(angle);
 					axis = Vector4::crossProduct(v0, v1);
-					Matrix4::axisAngleToEuler(axis, angle, euler);
-					// limit DOF values.
-					// clamp them to 0 - 360 range first.
-					// then clamp them to min - max range.
-					if(curJoint->yaw)
-					{
-						while(euler.x > PI2)
-							euler.x -= PI2;
-						while(euler.x < 0.0f)
-							euler.x += PI2;
-						if(euler.x > curJoint->maxYaw)
-							euler.x = curJoint->maxYaw;
-						else if(euler.x < curJoint->minYaw)
-							euler.x = curJoint->minYaw;
-					}
-					else 
-						euler.x = 0.0f;
-					if(curJoint->pitch)
-					{
-						while(euler.y > PI2)
-							euler.y -= PI2;
-						while(euler.y < 0.0f)
-							euler.y += PI2;
-						if(euler.y > curJoint->maxPitch)
-							euler.y = curJoint->maxPitch;
-						else if(euler.y < curJoint->minPitch)
-							euler.y = curJoint->minPitch;
-					}
-					else 
-						euler.y = 0.0f;
-					if(curJoint->roll)
-					{
-						while(euler.z > PI2)
-							euler.z -= PI2;
-						while(euler.z < 0.0f)
-							euler.z += PI2;
-						if(euler.z > curJoint->maxPitch)
-							euler.z = curJoint->maxPitch;
-						else if(euler.z < curJoint->minPitch)
-							euler.z = curJoint->minPitch;
-					}
-					else 
-						euler.z = 0.0f;
-					// store rotation info to matrix.
-					mat4.identity();
-					mat4.rotate(euler);
-					quat.rotate(euler);
-					*curJoint->rotation = (tries == maxTries ? quat : quat * *curJoint->rotation);
-					curJoint->localMatrix *= mat4;
-					curJoint->combinedMatrix *= mat4;
+					radian = acos(radian);
+					quat.rotate(axis, radian);
+					*curJoint->rotation = quat * *curJoint->rotation;
+					// Quaternion to euler
+					Quaternion::quatToAxisRadian(*curJoint->rotation, axis, radian);
+					Matrix4::axisRadianToEuler(axis, radian, euler);
+					// limit rotation DOF.
+					if(euler.x > curJoint->maxYaw)
+						euler.x = curJoint->maxYaw;
+					else if(euler.x < curJoint->minYaw)
+						euler.x = curJoint->minYaw;
+					if(euler.y > curJoint->maxPitch)
+						euler.y = curJoint->maxPitch;
+					else if(euler.y < curJoint->minPitch)
+						euler.y = curJoint->minPitch;
+					if(euler.z > curJoint->maxPitch)
+						euler.z = curJoint->maxPitch;
+					else if(euler.z < curJoint->minPitch)
+						euler.z = curJoint->minPitch;
+					// Euler to quaternion
+					curJoint->rotation->rotate(euler);
+					curJoint->localMatrix.identity();
+					curJoint->localMatrix.translate(curJoint->initPosition);
+					curJoint->localMatrix.rotate(euler);
 					// update joint chain
-					j = i;
-					j0 = &ikJoints[j++];
-					while(j < size)
-					{
-						j1 = &ikJoints[j];
-						j1->combinedMatrix = j0->combinedMatrix * j1->localMatrix;
-						j0 = j1;
-						j++;
-					}
+					updateIKChain(i);
 				}
-				if(--i < 0) i = size - 2;
-				tries--;
+				if(--i < 0) 
+				{
+					i = size - 2;
+					tries--;
+				}
 			}
 			else 
 				// target reached, we then finish the process.
@@ -172,19 +177,19 @@ namespace nest
 	{
 		int i, j = joints.size();
 
-		IKJoint *joint0 = NULL;
-		Joint *joint1 = NULL;
+		IKJoint *ikJoint = NULL;
+		Joint *joint = NULL;
 
 		for(i = 0; i < j; i++)
 		{
-			joint0 = &ikJoints[i];
-			joint1 = joints[i];
-			joint1->localMatrix = joint0->localMatrix;
+			ikJoint = &ikJoints[i];
+			joint = joints[i];
+			joint->localMatrix = ikJoint->localMatrix;
 		}
-		joint1 = joints[0];
+		joint = joints[0];
 		Joint::updateJoints(
-			joint1, 
-			joint1->parent != NULL ? &joint1->parent->combinedMatrix : NULL
+			joint, 
+			joint->parent != NULL ? &joint->parent->combinedMatrix : NULL
 		);
 	}
 }

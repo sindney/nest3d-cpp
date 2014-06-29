@@ -70,10 +70,29 @@ namespace nest
 		
 		return result;
 	}
-	
-	void Quaternion::rotate(const Vector4 &axis, GLfloat theta)
+
+	void Quaternion::quatToAxisRadian(Quaternion &quat, Vector4 &axis, GLfloat &radian)
 	{
-		GLfloat t2 = theta * .5f;
+		radian = acos(quat.w) * 2.0f;
+		
+		GLfloat a = 1.0f - quat.w * quat.w;
+		if(a <= 0.0f)
+		{
+			axis.x = 1.0f;
+			axis.y = axis.z = 0.0f;
+		}
+		else
+		{
+			GLfloat b = 1.0f / sqrt(a);
+			axis.x = quat.x * b;
+			axis.y = quat.y * b;
+			axis.z = quat.z * b;
+		}
+	}
+	
+	void Quaternion::rotate(const Vector4 &axis, GLfloat radian)
+	{
+		GLfloat t2 = radian * .5f;
 		GLfloat st2 = sin(t2);
 		w = cos(t2);
 		x = axis.x * st2;
@@ -81,14 +100,14 @@ namespace nest
 		z = axis.z * st2;
 	}
 
-	void Quaternion::rotate(const Vector4 &angles)
+	void Quaternion::rotate(const Vector4 &euler)
 	{
-		GLfloat c1 = cos(angles.x / 2);
-		GLfloat s1 = sin(angles.x / 2);
-		GLfloat c2 = cos(angles.y / 2);
-		GLfloat s2 = sin(angles.y / 2);
-		GLfloat c3 = cos(angles.z / 2);
-		GLfloat s3 = sin(angles.z / 2);
+		GLfloat c1 = cos(euler.x / 2);
+		GLfloat s1 = sin(euler.x / 2);
+		GLfloat c2 = cos(euler.y / 2);
+		GLfloat s2 = sin(euler.y / 2);
+		GLfloat c3 = cos(euler.z / 2);
+		GLfloat s3 = sin(euler.z / 2);
 		w = c1 * c2 * c3 - s1 * s2 * s3;
 		x = s1 * s2 * c3 + c1 * c2 * s3;
 		y = s1 * c2 * c3 + c1 * s2 * s3;
@@ -109,25 +128,6 @@ namespace nest
 		else 
 		{
 			identity();
-		}
-	}
-
-	void Quaternion::getRotation(Vector4 &axis, GLfloat &theta)
-	{
-		theta = acos(w) * 2.0f;
-		
-		GLfloat a = 1.0f - w * w;
-		if(a <= 0.0f)
-		{
-			axis.x = 1.0f;
-			axis.y = axis.z = 0.0f;
-		}
-		else
-		{
-			GLfloat b = 1.0f / sqrt(a);
-			axis.x = x * b;
-			axis.y = y * b;
-			axis.z = z * b;
 		}
 	}
 

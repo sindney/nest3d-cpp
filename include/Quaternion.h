@@ -16,6 +16,11 @@ namespace nest
 		static Quaternion conjugate(const Quaternion &a);
 
 		static Quaternion pow(const Quaternion &a, GLfloat exp);
+
+		/**
+		 *	Translate quaternion rotation to axis radian rotation.
+		 */
+		static void quatToAxisRadian(Quaternion &quat, Vector4 &axis, GLfloat &radian);
 		
 		GLfloat x, y, z, w;
 		
@@ -31,16 +36,14 @@ namespace nest
 			w = 1.0f;
 		}
 		
-		void rotate(const Vector4 &axis, GLfloat theta);
+		void rotate(const Vector4 &axis, GLfloat radian);
 
 		/**
-		 *	YAW, PITCH, ROLL
+		 *	YAW, PITCH, ROLL (y axis, x axis, z axis)
 		 */
-		void rotate(const Vector4 &angles);
+		void rotate(const Vector4 &euler);
 		
 		void normalize();
-		
-		void getRotation(Vector4 &axis, GLfloat &theta);
 		
 		Quaternion operator * (const Quaternion &a) const;
 		

@@ -15,9 +15,14 @@ namespace nest
 		Quaternion *rotation;
 
 		/**
-		 *	Flags for ik calculation.
+		 *	The rotation's zero point.
 		 */
-		bool yaw, pitch, roll;
+		Quaternion initRotation;
+
+		/**
+		 *	The position's zero point.
+		 */
+		Vector4 initPosition;
 
 		/**
 		 *	Control params for ik calculation.
@@ -33,8 +38,8 @@ namespace nest
 
 	/**
 	 *	Tips: fill joints vector first.
-	 *	<p>Call createIKChain() to fill ikJoints vector.</p>
-	 *	<p>Call initializeIKChain() to init IKJoints' matrix by joints'.</p>
+	 *	<p>Call createIKChain() to fill IKJoint && PoseData vector.</p>
+	 *	<p>Call initializeIKChain() to init IKJoints' matrix by it's initial transforms.</p>
 	 *	<p>Call calculateIKChain() to reach target position using joint chain.</p>
 	 *	<p>The PoseData vector stores rotation info for animation blending.</p>
 	 *	<p>You can also call applyResult() to apply IK result to joint chain directly.</p>
@@ -54,14 +59,13 @@ namespace nest
 		int maxTries;
 
 		/**
-		 *	First, we fill this vector with target joint chain.
+		 *	We would fill this vector with target joint chain.
 		 */
 		std::vector<Joint*> joints;
 
 		/**
-		 *	Then, we call IKSolver.createIKChain() to create IKJoint vector.
-		 *	<p>We can also adjust IKJoints' rotation limitions.</p>
-		 *	<p>After those we call IKSolver.calculateIKChain() to reach target position with our joint chain.</p>
+		 *	We store IKJoint chain here.
+		 *	<p>You'd adjust IKJoint's DOF limitions and initial transforms.</p>
 		 */
 		std::vector<IKJoint> ikJoints;
 
@@ -81,9 +85,14 @@ namespace nest
 		void createIKChain();
 
 		/**
-		 *	Initialize IKJoint chain's matrices by joints vector.
+		 *	Initialize IKJoint chain's matrices by their initial transforms.
 		 */
 		void initializeIKChain();
+
+		/**
+		 *	Update the IKJoint chain's transform from index.
+		 */
+		void updateIKChain(int index);
 
 		/**
 		 *	Reach target position using our joint chain.
