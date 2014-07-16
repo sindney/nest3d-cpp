@@ -132,6 +132,7 @@ namespace nest
 				if(radian < 0.99999f)
 				{
 					axis = Vector4::crossProduct(v0, v1);
+					axis.normalize();
 					radian = acos(radian);
 					quat.rotate(axis, radian);
 					*curJoint->rotation = quat * *curJoint->rotation;

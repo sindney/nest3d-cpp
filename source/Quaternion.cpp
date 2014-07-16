@@ -135,9 +135,9 @@ namespace nest
 	{
 		Quaternion result;
 		result.w = w * a.w - x * a.x - y * a.y - z * a.z;
-		result.x = w * a.x + x * a.w + z * a.y - y * a.z;
-		result.y = w * a.y + y * a.w + x * a.z - z * a.x;
-		result.z = w * a.z + z * a.w + y * a.x - x * a.y;
+		result.x = w * a.x + x * a.w + y * a.z - z * a.y;
+		result.y = w * a.y - x * a.z + y * a.w + z * a.x;
+		result.z = w * a.z + x * a.y - y * a.x + z * a.w;
 		return result;
 	}
 
