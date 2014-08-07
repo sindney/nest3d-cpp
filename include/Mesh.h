@@ -1,8 +1,8 @@
 #ifndef N3D_MESH_H
 #define N3D_MESH_H
 
-#include <string>
-#include <vector>
+#include <iterator>
+#include <map>
 
 #include "Geometry.h"
 #include "Joint.h"
@@ -43,11 +43,12 @@ namespace nest
 
 		/**
 		 *	When MeshRender draws any MeshNode.
-		 *	<p>He'd find correct shader for specific RenderTarget in this vector by render's int flag.</p>
+		 *	<p>He'd find correct shader for specific RenderTarget in this map.</p>
 		 *	
+		 *	@see Geometry
 		 *	@see MeshRender
 		 */
-		std::vector<Shader*> shaders;
+		std::map<string, Shader*> shaderMap;
 
 		Mesh(Geometry *geometry, SkinInfo *skin)
 		 : geometry(geometry), skin(skin), faceCulling(true), face(GL_BACK) {}
@@ -56,13 +57,9 @@ namespace nest
 		{
 			if(geometry != NULL) delete geometry;
 			if(skin != NULL) delete skin;
-			Shader *shader = NULL;
-			while(shaders.size() != 0)
-			{
-				shader = shaders.back();
-				shaders.pop_back();
-				delete shader;
-			}
+			std::map<string, Shader*>::iterator it;
+			for(it = shaderMap.begin(); it != shaderMap.end(); ++it)
+				delete it->second;
 		}
 	};
 }

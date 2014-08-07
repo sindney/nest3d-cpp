@@ -40,21 +40,32 @@ namespace nest
 		 */
 		GLuint jointPerVertex;
 
-		GLuint attributeArray;
-
 		/**
 		 *	When you change the lenght of vertexData.
 		 *	<p>You should make sure that it's uv/normal/tangent/indices/weights are in the right size or just delete and NULL them.</p>
 		 */
 		Geometry();
 
-		~Geometry();
+		virtual ~Geometry();
 
 		/**
-		 *	Configure data buffers.
-		 *	@param params Flags to id which of the data buffers should be uploaded to gl.
+		 *	Generate GeomBufferData object to store VAO for different render behaviour.
+		 *	<p>Call configure(params) first, then use this func.</p>
+		 *	
+		 *	@param params Flags to id which of the data buffers should be attached to VAO.
+		 *	
+		 *	@see GeomParams
+		 *	@see RenderData
 		 */
-		virtual void configure(int params);
+		void bindVBOtoVAO(GLuint vao, int params);
+
+		/**
+		 *	Generate VBOs.
+		 *	@param params Flags to id which of the data buffers should be generated.
+		 *	
+		 *	@see GeomParams
+		 */
+		void createVBOs(int params);
 	};
 }
 

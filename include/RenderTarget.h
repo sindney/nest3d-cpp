@@ -1,6 +1,7 @@
 #ifndef N3D_RENDERTARGET_H
 #define N3D_RENDERTARGET_H
 
+#include <string>
 #include <vector>
 
 #include "GL/glew.h"
@@ -8,7 +9,7 @@
 namespace nest
 {
 	/**
-	 *	When we draw a RenderTarget, we pass it's id to MeshRender's calculate function to have different render behavior.
+	 *	When we draw a RenderTarget, we pass it's flag to MeshRender's calculate function to have different render behavior.
 	 *	@see MeshRender
 	 */
 	class RenderTarget
@@ -23,11 +24,11 @@ namespace nest
 
 		GLsizei width, height;
 
-		int id;
+		std::string flag;
 
-		RenderTarget(int id, GLint x, GLint y, GLint width, GLint height, GLuint frameBuffer = 0)
+		RenderTarget(std::string flag, GLint x, GLint y, GLint width, GLint height, GLuint frameBuffer = 0)
 		{
-			this->id = id;
+			this->flag = flag;
 			this->x = x;
 			this->y = y;
 			this->width = width;

@@ -37,48 +37,66 @@ namespace nest
 			glCullFace(mesh->face);
 		}
 		else glDisable(GL_CULL_FACE);
-		// link shaders
-		Shader *shader = mesh->shaders[flag];
-		glUseProgram(shader->program);
-		if(combinedMatrix != NULL) 
-			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::COMBINED_MATRIX), 1, false, combinedMatrix->raw);
-		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::WORLD_MATRIX), 1, false, worldMatrix->raw);
-		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::INVERT_VIEW_MATRIX), 1, false, invertViewMatrix->raw);
-		glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::PROJECTION_MATRIX), 1, false, projectionMatrix->raw);
-		// skin info
-		SkinInfo *skin = mesh->skin;
-		if(skin != NULL)
+		// find shader
+		map<string, Shader*>::iterator it;
+		it = mesh->shaderMap.find(flag);
+		if(it != mesh->shaderMap.end())
 		{
-			// draw skined mesh with hardware
-			int i, j = 0, k = skin->joints.size();
-			GLfloat *matrices = new GLfloat[k * 16];
-			GLfloat *matrix = NULL;
-			for(i = 0; i < k; i++)
+			Shader *shader = static_cast<Shader*>(it->second);
+			// link shader
+			glUseProgram(shader->program);
+			if(combinedMatrix != NULL) 
+				glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::COMBINED_MATRIX), 1, false, combinedMatrix->raw);
+			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::WORLD_MATRIX), 1, false, worldMatrix->raw);
+			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::INVERT_VIEW_MATRIX), 1, false, invertViewMatrix->raw);
+			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::PROJECTION_MATRIX), 1, false, projectionMatrix->raw);
+			// link shader textures
+			int tSize = shader->textures.size();
+			while(tSize > 0)
 			{
-				matrix = &skin->joints[i]->finalMatrix.raw[0];
-				std::copy(matrix, matrix + 16, matrices + j);
-				j += 16;
+				int id = 0, gl_id = GL_TEXTURE0;
+				glActiveTexture(gl_id);
+				glBindTexture(GL_TEXTURE_2D, shader->textures[id]);
+				glUniform1i(glGetUniformLocation(shader->program, shader->textureNames[id].c_str()), id);
+				tSize--;
+				id++;
+				gl_id++;
 			}
-			// upload joint array's finalMatrices
-			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::SKELETON), k, false, matrices);
-			delete matrices;
+			// skin info
+			SkinInfo *skin = mesh->skin;
+			if(skin != NULL)
+			{
+				// draw skined mesh with hardware
+				int i, j = 0, k = skin->joints.size();
+				GLfloat *matrices = new GLfloat[k * 16];
+				GLfloat *matrix = NULL;
+				for(i = 0; i < k; i++)
+				{
+					matrix = &skin->joints[i]->finalMatrix.raw[0];
+					std::copy(matrix, matrix + 16, matrices + j);
+					j += 16;
+				}
+				// upload joint array's finalMatrices
+				glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::SKELETON), k, false, matrices);
+				delete matrices;
+			}
+			// upload shaderparts
+			std::vector<ShaderPart*>::iterator part;
+			for(part = shader->parts.begin(); part != shader->parts.end(); part++)
+				(*part)->upload();
+			// link vao
+			glBindVertexArray(shader->vao);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->geometry->indexBuffer);
+			// draw mesh
+			glDrawElements(GL_TRIANGLES, mesh->geometry->numTris * 3, GL_UNSIGNED_INT, 0);
+			// unlink data
+			glUseProgram(0);
+			glBindVertexArray(0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			// update counter
+			numDraws++;
+			numTris += mesh->geometry->numTris;
+			numVts += mesh->geometry->numVts;
 		}
-		// upload shaderparts
-		std::vector<ShaderPart*>::iterator part;
-		for(part = shader->parts.begin(); part != shader->parts.end(); part++)
-			(*part)->upload();
-		// link geometry buffers
-		glBindVertexArray(mesh->geometry->attributeArray);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->geometry->indexBuffer);
-		// draw mesh
-		glDrawElements(GL_TRIANGLES, mesh->geometry->numTris * 3, GL_UNSIGNED_INT, 0);
-		// unlink data
-		glUseProgram(0);
-		glBindVertexArray(0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		// update counter
-		numDraws++;
-		numTris += mesh->geometry->numTris;
-		numVts += mesh->geometry->numVts;
 	}
 }

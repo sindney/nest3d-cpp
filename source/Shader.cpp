@@ -11,12 +11,17 @@ namespace nest
 			glDetachShader(program, fragmentShader);
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
-			glDeleteShader(program);
+			glDeleteProgram(program);
 		}
-		if(textures.size() > 0)
+		if(vao != 0)
+			glDeleteVertexArrays(1, &vao);
+		int size = textures.size();
+		if(size > 0)
 		{
-			glDeleteTextures(textures.size(), &textures[0]);
-			textures.clear();
+			int i;
+			for(i = 0; i < size; i++)
+				if(textureParams[i])
+					glDeleteTextures(1, &textures[i]);
 		}
 		ShaderPart *part;
 		while(parts.size() != 0)
@@ -25,6 +30,13 @@ namespace nest
 			parts.pop_back();
 			delete part;
 		}
+	}
+
+	void Shader::linkTexture(GLuint texture, string name, bool autoDelete)
+	{
+		textures.push_back(texture);
+		textureNames.push_back(name);
+		textureParams.push_back(autoDelete);
 	}
 
 	const GLchar Shader::VERTEX_POSITION[] = "vertex_position";
@@ -39,7 +51,7 @@ namespace nest
 
 	const GLchar Shader::VERTEX_WEIGHTS[] = "vertex_weights";
 
-	const GLchar Shader::FRAGMENT_COLOR[] = "fragment_color";
+	const GLchar Shader::FRAGMENT_OUTPUT[] = "fragment_output";
 
 	const GLchar Shader::SKELETON[] = "skeleton";
 
@@ -55,12 +67,6 @@ namespace nest
 
 	const GLchar Shader::INVERT_WORLD_MATRIX[] = "invert_world_matrix";
 
-	const GLchar Shader::TEXTURE_DIFFUSE[] = "texture_diffuse";
-
-	const GLchar Shader::TEXTURE_SPECULAR[] = "texture_specular";
-
-	const GLchar Shader::TEXTURE_NORMAL[] = "texture_normal";
-
 	void Shader::configure(Shader *shader, int params, const char *vertex, const char *fragment)
 	{
 		if(shader->program != 0)
@@ -69,7 +75,7 @@ namespace nest
 			glDetachShader(shader->program, shader->fragmentShader);
 			glDeleteShader(shader->vertexShader);
 			glDeleteShader(shader->fragmentShader);
-			glDeleteShader(shader->program);
+			glDeleteProgram(shader->program);
 		}
 		shader->vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(shader->vertexShader, 1, &vertex, NULL);
@@ -87,7 +93,7 @@ namespace nest
 		if(params & GEOM_TANGENT) glBindAttribLocation(shader->program, count++, Shader::VERTEX_TANGENT);
 		if(params & GEOM_INDICES) glBindAttribLocation(shader->program, count++, Shader::VERTEX_INDICES);
 		if(params & GEOM_WEIGHTS) glBindAttribLocation(shader->program, count++, Shader::VERTEX_WEIGHTS);
-		glBindFragDataLocation(shader->program, 0, Shader::FRAGMENT_COLOR);
+		glBindFragDataLocation(shader->program, 0, Shader::FRAGMENT_OUTPUT);
 		glLinkProgram(shader->program);
 	}
 }

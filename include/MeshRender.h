@@ -1,6 +1,8 @@
 #ifndef N3D_MESHRENDER_H
 #define N3D_MESHRENDER_H
 
+#include <string>
+
 namespace nest
 {
 	class Joint;
@@ -16,13 +18,13 @@ namespace nest
 	public:
 
 		/**
-		 *	Use this to id shader index in mesh's shader vector.
+		 *	Use this to select shader in mesh's shader map.
 		 */
-		int flag;
+		std::string flag;
 
 		int numDraws, numTris, numVts;
 
-		MeshRender() : flag(0), numDraws(0), numTris(0), numVts(0) {}
+		MeshRender() : numDraws(0), numTris(0), numVts(0) {}
 
 		virtual ~MeshRender() 
 		{

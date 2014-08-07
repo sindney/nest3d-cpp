@@ -1,12 +1,15 @@
 #ifndef N3D_SHADER_H
 #define N3D_SHADER_H
 
+#include <string>
 #include <vector>
 
 #include "GL/glew.h"
 
 namespace nest
 {
+	using namespace std;
+
 	class ShaderPart
 	{
 	public:
@@ -430,13 +433,42 @@ namespace nest
 
 		GLuint program, vertexShader, fragmentShader;
 
-		std::vector<GLuint> textures;
+		/**
+		 *	VertexArrayBuffer object. Use Geometry.bindVBOtoVAO() to bind vbos to it.
+		 *	<p>You'd call createVAO() first.</p>
+		 *	@see Geometry
+		 */
+		GLuint vao;
 
-		std::vector<ShaderPart*> parts;
+		/**
+		 *	Stores texture's'd here.
+		 */
+		vector<GLuint> textures;
+
+		/**
+		 *	Stores texture's name here.
+		 */
+		vector<string> textureNames;
+
+		/**
+		 *	Stores texture's delocation flag.
+		 */
+		vector<bool> textureParams;
+
+		vector<ShaderPart*> parts;
 
 		Shader() : program(0), vertexShader(0), fragmentShader(0) {}
 
 		~Shader();
+
+		void linkTexture(GLuint texture, string name, bool autoDelete);
+
+		void createVAO()
+		{
+			if(vao != 0)
+				glDeleteVertexArrays(1, &vao);
+			glGenVertexArrays(1, &vao);
+		}
 
 		static const GLchar VERTEX_POSITION[];
 
@@ -450,7 +482,7 @@ namespace nest
 
 		static const GLchar VERTEX_WEIGHTS[];
 
-		static const GLchar FRAGMENT_COLOR[];
+		static const GLchar FRAGMENT_OUTPUT[];
 
 		static const GLchar SKELETON[];
 
@@ -465,12 +497,6 @@ namespace nest
 		static const GLchar WORLD_MATRIX[];
 
 		static const GLchar INVERT_WORLD_MATRIX[];
-
-		static const GLchar TEXTURE_DIFFUSE[];
-
-		static const GLchar TEXTURE_SPECULAR[];
-
-		static const GLchar TEXTURE_NORMAL[];
 
 		/**
 		 *	@param params see Geometry.configure(int)
