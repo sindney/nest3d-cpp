@@ -29,7 +29,7 @@ namespace nest
 		{
 			if(current->visible)
 			{
-				for(i = current->objects.begin(); i != current->objects.end(); i++)
+				for(i = current->objects.begin(); i != current->objects.end(); ++i)
 				{
 					if(typeid(**i) == typeid(ContainerNode))
 					{

@@ -52,9 +52,9 @@ namespace nest
 			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::PROJECTION_MATRIX), 1, false, projectionMatrix->raw);
 			// link shader textures
 			int tSize = shader->textures.size();
+			int id = 0, gl_id = GL_TEXTURE0;
 			while(tSize > 0)
 			{
-				int id = 0, gl_id = GL_TEXTURE0;
 				glActiveTexture(gl_id);
 				glBindTexture(GL_TEXTURE_2D, shader->textures[id]);
 				glUniform1i(glGetUniformLocation(shader->program, shader->textureNames[id].c_str()), id);
@@ -82,7 +82,7 @@ namespace nest
 			}
 			// upload shaderparts
 			std::vector<ShaderPart*>::iterator part;
-			for(part = shader->parts.begin(); part != shader->parts.end(); part++)
+			for(part = shader->parts.begin(); part != shader->parts.end(); ++part)
 				(*part)->upload();
 			// link vao
 			glBindVertexArray(shader->vao);

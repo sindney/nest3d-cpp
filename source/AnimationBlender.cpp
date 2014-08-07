@@ -99,7 +99,7 @@ namespace nest
 
 		PoseData *d0, *d1;
 
-		for(i = p0.begin(); i != p0.end(); i++)
+		for(i = p0.begin(); i != p0.end(); ++i)
 		{
 			d0 = static_cast<PoseData*>(&*i);
 			j = table.find(d0->name);

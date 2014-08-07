@@ -79,7 +79,7 @@ namespace nest
 		{
 			ACTOR_LIST *actors = static_cast<ACTOR_LIST*>(&i->second);
 			ACTOR_LIST::iterator j;
-			for(j = actors->begin(); j != actors->end(); j++)
+			for(j = actors->begin(); j != actors->end(); ++j)
 			{
 				if(actor == static_cast<EventActor*>(*j))
 				{

@@ -40,7 +40,7 @@ namespace nest
 				current = parent ? true : camera->culling->classifyPoint(bound.min) && camera->culling->classifyPoint(bound.max);
 				if(node0->objects.size() != 0)
 				{
-					for(i = node0->objects.begin(); i != node0->objects.end(); i++)
+					for(i = node0->objects.begin(); i != node0->objects.end(); ++i)
 					{
 						meshNode = *i;
 						if(meshNode->visible)
@@ -67,7 +67,7 @@ namespace nest
 						}
 					}
 				}
-				for(j = node0->childs.begin(); j != node0->childs.end(); j++)
+				for(j = node0->childs.begin(); j != node0->childs.end(); ++j)
 				{
 					node1 = *j;
 					if(node1 != NULL && (current || camera->culling->classifyAABB(camera->invertWorldMatrix * node1->bound)))

@@ -35,7 +35,7 @@ namespace nest
 		while(true)
 		{
 			vector<ObjectNode*>::iterator i;
-			for(i = current->objects.begin(); i != current->objects.end(); i++)
+			for(i = current->objects.begin(); i != current->objects.end(); ++i)
 			{
 				if(*i == object)
 				{
@@ -66,7 +66,7 @@ namespace nest
 	{
 		ObjectNode::recompose(dt);
 		vector<ObjectNode*>::iterator i;
-		for(i = objects.begin(); i != objects.end(); i++)
+		for(i = objects.begin(); i != objects.end(); ++i)
 		{
 			(*i)->recompose(dt);
 		}
@@ -78,7 +78,7 @@ namespace nest
 		ObjectNode *object0 = NULL;
 		if(depthFirst)
 		{
-			for(i = objects.begin(); i != objects.end(); i++)
+			for(i = objects.begin(); i != objects.end(); ++i)
 			{
 				object0 = *i;
 				object0->dispatch(event);
@@ -92,7 +92,7 @@ namespace nest
 			ContainerNode *current = this;
 			while(true)
 			{
-				for(i = current->objects.begin(); i != current->objects.end(); i++)
+				for(i = current->objects.begin(); i != current->objects.end(); ++i)
 				{
 					object0 = *i;
 					object0->dispatch(event);

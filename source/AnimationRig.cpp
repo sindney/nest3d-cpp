@@ -37,7 +37,7 @@ namespace nest
 		Vector4 v0, v1;
 		Quaternion q0, q1;
 
-		for(i = rigs.begin(); i < rigs.end(); i++)
+		for(i = rigs.begin(); i < rigs.end(); ++i)
 		{
 			rig = static_cast<RigData*>(&*i);
 			// store rotation and position info in rtMatrix.

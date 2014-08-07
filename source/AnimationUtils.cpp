@@ -1,5 +1,3 @@
-#include <iterator>
-
 #include "AnimationUtils.h"
 #include "AnimationRig.h"
 #include "Mesh.h"

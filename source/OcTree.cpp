@@ -122,7 +122,7 @@ namespace nest
 			bool flag = false;
 			vector<MeshNode*>::iterator i;
 			// loop through node's objects vector to find target mesh.
-			for(i = object->node->objects.begin(); i != object->node->objects.end(); i++)
+			for(i = object->node->objects.begin(); i != object->node->objects.end(); ++i)
 			{
 				if(*i == object) 
 				{
