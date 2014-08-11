@@ -8,6 +8,8 @@
 
 namespace nest
 {
+	using namespace std;
+	
 	OcTree::OcTree(float size, int depth)
 	{
 		this->depth = depth;

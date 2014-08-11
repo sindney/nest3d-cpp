@@ -8,8 +8,6 @@
 
 namespace nest
 {
-	using namespace std;
-
 	class ShaderPart
 	{
 	public:
@@ -443,25 +441,25 @@ namespace nest
 		/**
 		 *	Stores texture's'd here.
 		 */
-		vector<GLuint> textures;
+		std::vector<GLuint> textures;
 
 		/**
 		 *	Stores texture's name here.
 		 */
-		vector<string> textureNames;
+		std::vector<std::string> textureNames;
 
 		/**
 		 *	Stores texture's delocation flag.
 		 */
-		vector<bool> textureParams;
+		std::vector<bool> textureParams;
 
-		vector<ShaderPart*> parts;
+		std::vector<ShaderPart*> parts;
 
 		Shader() : program(0), vertexShader(0), fragmentShader(0) {}
 
 		~Shader();
 
-		void linkTexture(GLuint texture, string name, bool autoDelete);
+		void linkTexture(GLuint texture, std::string name, bool autoDelete);
 
 		void createVAO()
 		{
@@ -481,8 +479,6 @@ namespace nest
 		static const GLchar VERTEX_INDICES[];
 
 		static const GLchar VERTEX_WEIGHTS[];
-
-		static const GLchar FRAGMENT_OUTPUT[];
 
 		static const GLchar SKELETON[];
 

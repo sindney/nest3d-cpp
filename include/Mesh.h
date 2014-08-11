@@ -48,7 +48,7 @@ namespace nest
 		 *	@see Geometry
 		 *	@see MeshRender
 		 */
-		std::map<string, Shader*> shaderMap;
+		std::map<std::string, Shader*> shaderMap;
 
 		Mesh(Geometry *geometry, SkinInfo *skin)
 		 : geometry(geometry), skin(skin), faceCulling(true), face(GL_BACK) {}
@@ -57,7 +57,7 @@ namespace nest
 		{
 			if(geometry != NULL) delete geometry;
 			if(skin != NULL) delete skin;
-			std::map<string, Shader*>::iterator it;
+			std::map<std::string, Shader*>::iterator it;
 			for(it = shaderMap.begin(); it != shaderMap.end(); ++it)
 				delete it->second;
 		}

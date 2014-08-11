@@ -7,14 +7,12 @@
 
 namespace nest
 {
-	using namespace std;
-
 #ifndef ACTOR_LIST
-	#define ACTOR_LIST list<EventActor*>
+	#define ACTOR_LIST std::list<EventActor*>
 #endif
 
 #ifndef ACTOR_LIST_MAP
-	#define ACTOR_LIST_MAP map<string, ACTOR_LIST>
+	#define ACTOR_LIST_MAP std::map<std::string, ACTOR_LIST>
 #endif
 
 	class EventActor;
@@ -26,9 +24,9 @@ namespace nest
 	{
 	public:
 
-		const string name;
+		const std::string name;
 
-		Event(string name) : name(name) {}
+		Event(std::string name) : name(name) {}
 	};
 
 	class EventDispatcher
@@ -46,11 +44,11 @@ namespace nest
 		 */
 		virtual void dispatch(const Event *event);
 
-		void addEventActor(const string &event, EventActor *actor);
+		void addEventActor(const std::string &event, EventActor *actor);
 
-		bool hasEventActor(const string &event);
+		bool hasEventActor(const std::string &event);
 		
-		bool removeEventActor(const string &event, EventActor *actor);
+		bool removeEventActor(const std::string &event, EventActor *actor);
 	};
 }
 

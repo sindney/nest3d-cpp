@@ -25,22 +25,10 @@ namespace nest
 		int numDraws, numTris, numVts;
 
 		MeshRender() : numDraws(0), numTris(0), numVts(0) {}
+		
+		void draw(MeshNode *node, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix);
 
-		virtual ~MeshRender() 
-		{
-			invertViewMatrix = NULL;
-			projectionMatrix = NULL;
-			worldMatrix = NULL;
-		}
-
-		/**
-		 *	@param node MeshNode to draw.
-		 *	@param invertViewMatrix Camera's invert view matrix.
-		 *	@param projectionMatrix Camera's projection matrix.
-		 */
-		virtual void draw(MeshNode *node, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix);
-
-	protected:
+	private:
 
 		Matrix4 *invertViewMatrix, *projectionMatrix, *worldMatrix;
 
@@ -48,12 +36,12 @@ namespace nest
 		 *	Draw mesh with skinInfo.
 		 *	@see SkinInfo
 		 */
-		virtual void draw(Joint *joint);
+		void draw(Joint *joint);
 
 		/**
 		 *	Draw static mesh.
 		 */
-		virtual void draw(Mesh *mesh, Matrix4 *combinedMatrix = NULL);
+		void draw(Mesh *mesh, Matrix4 *combinedMatrix = NULL);
 	};
 }
 

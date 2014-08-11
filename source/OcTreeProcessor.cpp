@@ -10,11 +10,11 @@
 #include "OcTreeProcessor.h"
 
 namespace nest
-{	
-	void OcTreeProcessor::calculate(CameraNode *camera, bool flag, std::vector<MeshNode*> *result0, std::vector<MeshNode*> *result1, std::vector<MeshNode*> *result2) 
-	{
-		using namespace std;
-		
+{
+	using namespace std;
+
+	void OcTreeProcessor::calculate(CameraNode *camera, bool draw, vector<MeshNode*> *result0, vector<MeshNode*> *result1, vector<MeshNode*> *result2) 
+	{	
 		bool mark0 = result0 != NULL;
 		bool mark1 = result1 != NULL;
 		bool mark2 = result2 != NULL;
@@ -49,7 +49,7 @@ namespace nest
 							{
 								if(!meshNode->alphaTest)
 								{
-									if(flag) render->draw(meshNode, &camera->invertWorldMatrix, &camera->projectionMatrix);
+									if(draw) render->draw(meshNode, &camera->invertWorldMatrix, &camera->projectionMatrix);
 									if(mark0) result0->push_back(meshNode);
 								}
 								else if(mark1)

@@ -7,8 +7,6 @@
 
 namespace nest
 {
-	using namespace std;
-
 	/**
 	 *	Ray & Geometry intersection test result.
 	 *	<p>Result = Orgion + t * Delta</p>
@@ -42,7 +40,7 @@ namespace nest
 		/**
 		 *	You need to transform your ray to Geometry space(aka mesh local space) first.
 		 */
-		static bool rayGeom(vector<RayGeomResult> *results, RayGeomResult *result, bool uv, Vector4 &orgion, Vector4 &delta, Geometry &geom);
+		static bool rayGeom(std::vector<RayGeomResult> *results, RayGeomResult *result, bool uv, Vector4 &orgion, Vector4 &delta, Geometry &geom);
 	};
 }
 

@@ -3,6 +3,8 @@
 
 namespace nest
 {
+	using namespace std;
+	
 	Shader::~Shader()
 	{
 		if(program != 0)
@@ -51,8 +53,6 @@ namespace nest
 
 	const GLchar Shader::VERTEX_WEIGHTS[] = "vertex_weights";
 
-	const GLchar Shader::FRAGMENT_OUTPUT[] = "fragment_output";
-
 	const GLchar Shader::SKELETON[] = "skeleton";
 
 	const GLchar Shader::COMBINED_MATRIX[] = "combined_matrix";
@@ -93,7 +93,6 @@ namespace nest
 		if(params & GEOM_TANGENT) glBindAttribLocation(shader->program, count++, Shader::VERTEX_TANGENT);
 		if(params & GEOM_INDICES) glBindAttribLocation(shader->program, count++, Shader::VERTEX_INDICES);
 		if(params & GEOM_WEIGHTS) glBindAttribLocation(shader->program, count++, Shader::VERTEX_WEIGHTS);
-		glBindFragDataLocation(shader->program, 0, Shader::FRAGMENT_OUTPUT);
 		glLinkProgram(shader->program);
 	}
 }

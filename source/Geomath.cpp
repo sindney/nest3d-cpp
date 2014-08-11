@@ -4,6 +4,8 @@
 
 namespace nest
 {
+	using namespace std;
+	
 	bool Geomath::BSBS(Vector4 &center0, float radius0, Vector4 &center1, float radius1)
 	{
 		float x = center0.x - center1.x;

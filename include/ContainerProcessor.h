@@ -29,13 +29,7 @@ namespace nest
 		ContainerProcessor(ContainerNode *root, MeshRender *render)
 		 : root(root), render(render) {}
 
-		virtual ~ContainerProcessor()
-		{
-			root = NULL;
-			render = NULL;
-		}
-
-		virtual void calculate(CameraNode *camera, bool flag, std::vector<MeshNode*> *result0, std::vector<MeshNode*> *result1, std::vector<MeshNode*> *result2);
+		virtual void calculate(CameraNode *camera, bool draw, std::vector<MeshNode*> *result0, std::vector<MeshNode*> *result1, std::vector<MeshNode*> *result2);
 
 	};
 }

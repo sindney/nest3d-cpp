@@ -10,8 +10,6 @@
 
 namespace nest
 {
-	using namespace std;
-
 	class AnimationClip;
 
 	class AnimationRig;
@@ -32,14 +30,14 @@ namespace nest
 	{
 	public:
 
-		vector<AnimationClip*> animations;
+		std::vector<AnimationClip*> animations;
 
-		vector<Mesh*> meshes;
+		std::vector<Mesh*> meshes;
 
 		/**
 		 *	Error detail stores here.
 		 */
-		string error;
+		std::string error;
 
 		/**
 		 *	0 - 4
@@ -66,7 +64,7 @@ namespace nest
 		 *	
 		 *	@return Returns false if there's something wrong here. Check MeshParser.error for details.
 		 */
-		bool parse(const string &file, unsigned int flags);
+		bool parse(const std::string &file, unsigned int flags);
 
 	private:
 
@@ -74,7 +72,7 @@ namespace nest
 
 		void readMesh(const aiScene *scene, const aiMesh *meshNode);
 
-		Joint *findJointFromVector(aiString name, vector<Joint*> &joints);
+		Joint *findJointFromVector(aiString name, std::vector<Joint*> &joints);
 
 		void copyMatrix(aiMatrix4x4 *from, Matrix4 *to);
 	};

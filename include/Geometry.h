@@ -55,7 +55,6 @@ namespace nest
 		 *	@param params Flags to id which of the data buffers should be attached to VAO.
 		 *	
 		 *	@see GeomParams
-		 *	@see RenderData
 		 */
 		void bindVBOtoVAO(GLuint vao, int params);
 

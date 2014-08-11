@@ -8,6 +8,8 @@
 
 namespace nest
 {
+	using namespace std;
+
 	void MeshRender::draw(MeshNode *node, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix)
 	{
 		this->invertViewMatrix = invertViewMatrix;
@@ -73,7 +75,7 @@ namespace nest
 				for(i = 0; i < k; i++)
 				{
 					matrix = &skin->joints[i]->finalMatrix.raw[0];
-					std::copy(matrix, matrix + 16, matrices + j);
+					copy(matrix, matrix + 16, matrices + j);
 					j += 16;
 				}
 				// upload joint array's finalMatrices
@@ -81,7 +83,7 @@ namespace nest
 				delete matrices;
 			}
 			// upload shaderparts
-			std::vector<ShaderPart*>::iterator part;
+			vector<ShaderPart*>::iterator part;
 			for(part = shader->parts.begin(); part != shader->parts.end(); ++part)
 				(*part)->upload();
 			// link vao

@@ -149,6 +149,7 @@ namespace nest
 			glBindBuffer(GL_ARRAY_BUFFER, weightsBuffer);
 			glBufferData(GL_ARRAY_BUFFER, numVts * (jointPerVertex - 1) * sizeof(GLfloat), weightsData, GL_STATIC_DRAW);
 		}
+		// vertex indices
 		if(indexBuffer != 0) glDeleteBuffers(1, &indexBuffer);
 		indexBuffer = 0;
 		if(indexData != NULL)
