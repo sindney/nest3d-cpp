@@ -434,22 +434,20 @@ namespace nest
 		/**
 		 *	VertexArrayBuffer object. Use Geometry.bindVBOtoVAO() to bind vbos to it.
 		 *	<p>You'd call createVAO() first.</p>
+		 *	
 		 *	@see Geometry
 		 */
 		GLuint vao;
 
-		/**
-		 *	Stores texture's'd here.
-		 */
 		std::vector<GLuint> textures;
 
 		/**
-		 *	Stores texture's name here.
+		 *	Texture's name stores here.
 		 */
 		std::vector<std::string> textureNames;
 
 		/**
-		 *	Stores texture's delocation flag.
+		 *	Texture's delocation flag stores here.
 		 */
 		std::vector<bool> textureParams;
 

@@ -41,12 +41,11 @@ namespace nest
 		 : mesh(mesh), alphaTest(false), alphaKey(0.0f), node(NULL), tree(NULL), cliping(true), visible(true) {}
 
 		virtual ~MeshNode();
-
+		
 		/**
-		 *	Update MeshNode's bounds first.
-		 *	<p>Then update it's position in octree if it's attached to one.</p>
+		 *	Update matrices, bound and octree info if it's attached to one.
 		 */
-		virtual void update();
+		virtual void recompose(float dt = 0.0f);
 	};
 }
 

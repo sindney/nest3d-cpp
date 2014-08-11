@@ -21,13 +21,13 @@ namespace nest
 		virtual ~ContainerNode();
 
 		/**
-		 *	If target child is MeshNode.
+		 *	If target object is MeshNode.
 		 *	<p>You'd call MeshNode's update function to update mesh's bounds and ocTree info.</p>
 		 */
 		void addChild(ObjectNode *object);
 
 		/**
-		 *	If target child is MeshNode.
+		 *	If target object is MeshNode.
 		 *	<p>You'd call MeshNode's update function to update mesh's bounds and ocTree info.</p>
 		 */
 		void removeChild(ObjectNode *object);
@@ -39,6 +39,7 @@ namespace nest
 
 		/**
 		 *	Reload dispatch function to broadcast event to child objects.
+		 *	
 		 *	@param depthFirst Traverse the container with depth first order.
 		 */
 		virtual void dispatch(const Event *event, bool depthFirst);

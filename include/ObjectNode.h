@@ -47,6 +47,7 @@ namespace nest
 
 		/**
 		 *	Update ObjectNode's transform by localMatrix.
+		 *	
 		 *	@param dt Delta time for rendering.
 		 */
 		virtual void recompose(float dt = 0.0f)

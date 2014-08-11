@@ -5,29 +5,14 @@
 
 namespace nest
 {
-	/**
-	 *	Frustum culling approach, for camera3d class.
-	 */
 	class FrustumCulling : public ObjectCulling
 	{
 	public:
 
 		Vector4 planes[6];
 
-		/**
-		 *	@param fov Field of view.
-		 *	@param ratio Aspect ratio.
-		 *	@param near Near cliping plane.
-		 *	@param far Far cliping plane.
-		 */
 		FrustumCulling(float fov, float ratio, float near, float far);
 
-		/**
-		 *	@param fov Field of view.
-		 *	@param ratio Aspect ratio.
-		 *	@param near Near cliping plane.
-		 *	@param far Far cliping plane.
-		 */
 		void create(float fov, float ratio, float near, float far);
 
 		/**

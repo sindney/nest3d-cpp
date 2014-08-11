@@ -33,14 +33,10 @@ namespace nest
 		Matrix4 *invertViewMatrix, *projectionMatrix, *worldMatrix;
 
 		/**
-		 *	Draw mesh with skinInfo.
 		 *	@see SkinInfo
 		 */
 		void draw(Joint *joint);
-
-		/**
-		 *	Draw static mesh.
-		 */
+		
 		void draw(Mesh *mesh, Matrix4 *combinedMatrix = NULL);
 	};
 }

@@ -49,10 +49,6 @@ namespace nest
 
 		/**
 		 *	Calculate target vertex array's bounding-box.
-		 *	
-		 *	@param bound Result bounding-box.
-		 *	@param vertexData Vertex array pointer.
-		 *	@param vertexDataSize Vertex array size.
 		 */
 		static void configure(AABB &bound, const float *vertexData, const int vertexDataSize);
 

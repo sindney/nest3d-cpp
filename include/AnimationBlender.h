@@ -51,6 +51,8 @@ namespace nest
 		 *	<p>p0 stores part of it, you call combineBlender to update those parts in full body poses.</p>
 		 *	
 		 *	@param table The map to look up during blending process.
+		 *	
+		 *	@see createPoseTable
 		 */
 		static void combineBlender(
 			vector<PoseData> &result, vector<PoseData> &p0, map<string, int> &table, 

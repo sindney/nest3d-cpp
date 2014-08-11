@@ -10,6 +10,7 @@ namespace nest
 {
 	/**
 	 *	When we draw a RenderTarget, we pass it's flag to MeshRender's calculate function to have different render behavior.
+	 *	
 	 *	@see MeshRender
 	 */
 	class RenderTarget
