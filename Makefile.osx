@@ -1,18 +1,27 @@
 # mac osx
 
-NEST_INCLUDE = include
-NEST_SOURCE = source
-NEST_LIB = lib
-ASSIMP_INCLUDE = Assimp/include
-ASSIMP_LIB = Assimp/lib
-GLEW_INCLUDE = GLEW/include
-GLEW_LIB = GLEW/lib
-OPENGL_LIB = /System/Library/Frameworks/OpenGL.framework/Libraries
+OPENGL_DIR = /System/Library/Frameworks/OpenGL.framework/Libraries
+NEST_DIR = 
+ASSIMP_DIR = 
+GLEW_DIR = 
+DEST_DIR = 
 
-all: 
-	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(ASSIMP_INCLUDE) -I$(GLEW_INCLUDE)
-	ar rvs $(NEST_LIB)/libnest.a *.o
+.PHONY: all
+all:
+	g++ -c $(NEST_DIR)/source/*.cpp -I$(NEST_DIR)/include \
+		-I$(ASSIMP_DIR)/include -I$(GLEW_DIR)/include
+	ar rvs libnest.a *.o
 	g++ -dynamiclib -install_name @executable_path/libnest.dylib \
-		-framework OpenGL -L$(OPENGL_LIB) -L$(ASSIMP_LIB) -lASSIMP -L$(GLEW_LIB) -lGLEW *.o \
-		-o $(NEST_LIB)/libnest.dylib
+		-o libnest.dylib *.o \
+		-framework OpenGL -L$(OPENGL_DIR) \
+		-L$(ASSIMP_DIR)/lib -lASSIMP \
+		-L$(GLEW_DIR)/lib -lGLEW
+
+.PHONY: install
+install:
+	mv -f libnest.a $(DEST_DIR)
+	mv -f libnest.dylib $(DEST_DIR)
+
+.PHONY: clean
+clean:
 	-rm *.o

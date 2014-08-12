@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "AABB.h"
 #include "MeshNode.h"
 
 namespace nest

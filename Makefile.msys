@@ -1,16 +1,25 @@
 # msys + mingw
 
-NEST_INCLUDE = include
-NEST_SOURCE = source
-NEST_LIB = lib
-ASSIMP_INCLUDE = Assimp/include
-ASSIMP_LIB = Assimp/lib
-GLEW_INCLUDE = GLEW/include
-GLEW_LIB = GLEW/lib
+NEST_DIR = 
+ASSIMP_DIR = 
+GLEW_DIR = 
+DEST_DIR = 
 
-all: 
-	g++ -c $(NEST_SOURCE)/*.cpp -I$(NEST_INCLUDE) -I$(ASSIMP_INCLUDE) -I$(GLEW_INCLUDE)
-	ar rvs $(NEST_LIB)/libnest.a *.o
-	g++ -o $(NEST_LIB)/libnest.dll *.o \
-		-L$(ASSIMP_LIB) -L$(GLEW_LIB) -lASSIMP -lGLEW32 -lOpenGL32 -m32 -shared
-	-rm *.o
+.PHONY: all
+all:
+	g++ -c $(NEST_DIR)/source/*.cpp -I$(NEST_DIR)/include \
+		-I$(ASSIMP_DIR)/include -I$(GLEW_DIR)/include
+	ar rvs libnest.a *.o
+	g++ -o libnest.dll *.o \
+		-L$(ASSIMP_DIR)/lib -L$(GLEW_DIR)/lib \
+		-lASSIMP -lGLEW32 -lOpenGL32 -m32 -shared
+
+.PHONY: install
+install:
+	cp -rf $(NEST_DIR)/include $(DEST_DIR)
+	mv -f libnest.a $(DEST_DIR)/lib
+	mv -f libnest.dll $(DEST_DIR)/lib
+
+.PHONY: clean
+clean:
+	-rm *.o libnest.a libnest.dll

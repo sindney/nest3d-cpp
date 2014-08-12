@@ -9,7 +9,7 @@
 namespace nest
 {
 	using namespace std;
-
+	
 	class AnimationBlender
 	{
 	public:
