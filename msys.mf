@@ -1,0 +1,27 @@
+# msys + mingw
+
+NEST_DIR = 
+ASSIMP_DIR = 
+GLEW_DIR = 
+DEST_DIR = 
+
+.PHONY: all
+all:
+	g++ -c $(NEST_DIR)/source/*.cpp -I$(NEST_DIR)/include \
+		-I$(ASSIMP_DIR)/include -I$(GLEW_DIR)/include
+	ar rvs libnest.a *.o
+	g++ -o libnest.dll *.o \
+		-L$(ASSIMP_DIR)/lib -L$(GLEW_DIR)/lib \
+		-lASSIMP -lGLEW32 -lOpenGL32 -m32 -shared
+
+.PHONY: install
+install:
+	-rm -rf $(DEST_DIR)/include $(DEST_DIR)/lib
+	mkdir $(DEST_DIR)/lib
+	cp -rf $(NEST_DIR)/include $(DEST_DIR)
+	cp -f libnest.a $(DEST_DIR)/lib
+	cp -f libnest.dll $(DEST_DIR)/lib
+
+.PHONY: clean
+clean:
+	-rm *.o libnest.a libnest.dll
