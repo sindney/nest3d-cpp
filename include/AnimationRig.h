@@ -27,8 +27,6 @@ namespace nest
 
 		std::vector<RigData> rigs;
 
-		AnimationRig(std::string name) : name(name) {}
-
 		/**
 		 *	Apply animation data to rigs vector.
 		 *	<p>You'd setupRigData() first, then applyAnimation.</p>

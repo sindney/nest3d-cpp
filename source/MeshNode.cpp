@@ -13,6 +13,15 @@ namespace nest
 		mesh = NULL;
 	}
 
+	void MeshNode::displayAnimation(float dt)
+	{
+		if(mesh && mesh->skin)
+		{
+			mesh->skin->animRig.displayAnimation(dt);
+			Joint::updateJoints(mesh->skin->root, NULL);
+		}
+	}
+
 	void MeshNode::recompose(float dt)
 	{
 		ObjectNode::recompose(dt);

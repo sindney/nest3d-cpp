@@ -9,11 +9,31 @@ namespace nest
 {
 	using namespace std;
 
+	void MeshParser::delocateData()
+	{
+		AnimationClip *clip = NULL;
+		while(animClips.size() != 0)
+		{
+			clip = animClips.back();
+			animClips.pop_back();
+			delete clip;
+		}
+		Mesh *mesh = NULL;
+		while(meshes.size() != 0)
+		{
+			mesh = meshes.back();
+			meshes.pop_back();
+			delete mesh;
+		}
+	}
+
 	bool MeshParser::parse(const string &file, unsigned int flags)
 	{
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFile(file, flags);
+		animClips.clear();
+		meshes.clear();
 		error.clear();
 		
 		if(!scene)
@@ -47,7 +67,7 @@ namespace nest
 			anim->mDuration, 
 			false
 		);
-		animations.push_back(animSet);
+		animClips.push_back(animSet);
 
 		AnimationChannel *channel = NULL;
 		QuatKeyFrame quat;

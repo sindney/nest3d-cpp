@@ -4,6 +4,7 @@
 #include <iterator>
 #include <map>
 
+#include "AnimationRig.h"
 #include "Geometry.h"
 #include "Joint.h"
 #include "Shader.h"
@@ -13,6 +14,8 @@ namespace nest
 	class SkinInfo
 	{
 	public:
+
+		AnimationRig animRig;
 
 		std::vector<Joint*> joints;
 

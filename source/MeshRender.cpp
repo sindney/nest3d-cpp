@@ -3,22 +3,21 @@
 #include <vector>
 
 #include "Mesh.h"
-#include "MeshNode.h"
 #include "MeshRender.h"
 
 namespace nest
 {
 	using namespace std;
 
-	void MeshRender::draw(MeshNode *node, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix)
+	void MeshRender::draw(Mesh *mesh, Matrix4 *worldMatrix, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix)
 	{
 		this->invertViewMatrix = invertViewMatrix;
 		this->projectionMatrix = projectionMatrix;
-		this->worldMatrix = &node->worldMatrix;
-		if(node->mesh->skin)
-			draw(node->mesh->skin->root);
+		this->worldMatrix = worldMatrix;
+		if(mesh->skin)
+			draw(mesh->skin->root);
 		else
-			draw(node->mesh);
+			draw(mesh);
 	}
 
 	void MeshRender::draw(Joint *joint)
@@ -33,12 +32,6 @@ namespace nest
 
 	void MeshRender::draw(Mesh *mesh, Matrix4 *combinedMatrix)
 	{
-		if(mesh->faceCulling)
-		{
-			glEnable(GL_CULL_FACE);
-			glCullFace(mesh->face);
-		}
-		else glDisable(GL_CULL_FACE);
 		// find shader
 		map<string, Shader*>::iterator it;
 		it = mesh->shaderMap.find(flag);

@@ -11,8 +11,6 @@ namespace nest
 
 	class Mesh;
 
-	class MeshNode;
-
 	class MeshRender
 	{
 	public:
@@ -26,7 +24,16 @@ namespace nest
 
 		MeshRender() : numDraws(0), numTris(0), numVts(0) {}
 		
-		void draw(MeshNode *node, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix);
+		/**
+		 *	This sets numDraws/Tris/Vts to 0.
+		 */
+		void reset(std::string flag)
+		{
+			this->flag = flag;
+			numVts = numTris = numDraws = 0;
+		}
+		
+		void draw(Mesh *mesh, Matrix4 *worldMatrix, Matrix4 *invertViewMatrix, Matrix4 *projectionMatrix);
 
 	private:
 

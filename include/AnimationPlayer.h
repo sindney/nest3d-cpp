@@ -23,6 +23,8 @@ namespace nest
 	{
 	public:
 
+		std::string name;
+
 		float speed, time;
 
 		AnimationClip *clip;

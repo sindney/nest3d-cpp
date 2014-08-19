@@ -2,7 +2,7 @@
 #include <typeinfo>
 #include <vector>
 
-#include "Geomath.h"
+#include "GeomUtils.h"
 #include "OcTree.h"
 #include "OcNode.h"
 
@@ -36,7 +36,7 @@ namespace nest
 			// we start the search process from root node.
 			OcNode *current = root;
 			// check if mesh is collided or with-in root node.
-			if(Geomath::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
+			if(GeomUtils::AABBAABB(object->bound.max, object->bound.min, current->bound.max, current->bound.min))
 			{
 				int id;
 				Vector4 max, min;
@@ -182,35 +182,35 @@ namespace nest
 		// top top left
 		Vector4 maxTTL = *nodeMax;
 		Vector4 minTTL = *nodeMin + Vector4(halfsize, halfsize, halfsize, 1.0f);
-		bool BTTL = Geomath::AABBAABB(*objMax, *objMin, maxTTL, minTTL);
+		bool BTTL = GeomUtils::AABBAABB(*objMax, *objMin, maxTTL, minTTL);
 		// top top right
 		Vector4 maxTTR = *nodeMax - Vector4(halfsize, 0.0f, 0.0f, 1.0f);
 		Vector4 minTTR = *nodeMin + Vector4(0.0f, halfsize, halfsize, 1.0f);
-		bool BTTR = Geomath::AABBAABB(*objMax, *objMin, maxTTR, minTTR);
+		bool BTTR = GeomUtils::AABBAABB(*objMax, *objMin, maxTTR, minTTR);
 		// top bottom left
 		Vector4 maxTBL = *nodeMax - Vector4(0.0f, 0.0f, halfsize, 1.0f);
 		Vector4 minTBL = *nodeMin + Vector4(halfsize, halfsize, 0.0f, 1.0f);
-		bool BTBL = Geomath::AABBAABB(*objMax, *objMin, maxTBL, minTBL);
+		bool BTBL = GeomUtils::AABBAABB(*objMax, *objMin, maxTBL, minTBL);
 		// top bottom right
 		Vector4 maxTBR = *nodeMax - Vector4(halfsize, 0.0f, halfsize, 1.0f);
 		Vector4 minTBR = *nodeMin + Vector4(0.0f, halfsize, 0.0f, 1.0f);
-		bool BTBR = Geomath::AABBAABB(*objMax, *objMin, maxTBR, minTBR);
+		bool BTBR = GeomUtils::AABBAABB(*objMax, *objMin, maxTBR, minTBR);
 		// bottom top left
 		Vector4 maxBTL = *nodeMax - Vector4(0.0f, halfsize, 0.0f, 1.0f);
 		Vector4 minBTL = *nodeMin + Vector4(halfsize, 0.0f, halfsize, 1.0f);
-		bool BBTL = Geomath::AABBAABB(*objMax, *objMin, maxBTL, minBTL);
+		bool BBTL = GeomUtils::AABBAABB(*objMax, *objMin, maxBTL, minBTL);
 		// bottom top right
 		Vector4 maxBTR = *nodeMax - Vector4(halfsize, halfsize, 0.0f, 1.0f);
 		Vector4 minBTR = *nodeMin + Vector4(0.0f, 0.0f, halfsize, 1.0f);
-		bool BBTR = Geomath::AABBAABB(*objMax, *objMin, maxBTR, minBTR);
+		bool BBTR = GeomUtils::AABBAABB(*objMax, *objMin, maxBTR, minBTR);
 		// bottom bottom left
 		Vector4 maxBBL = *nodeMax - Vector4(0.0f, halfsize, halfsize, 1.0f);
 		Vector4 minBBL = *nodeMin + Vector4(halfsize, 0.0f, 0.0f, 1.0f);
-		bool BBBL = Geomath::AABBAABB(*objMax, *objMin, maxBBL, minBBL);
+		bool BBBL = GeomUtils::AABBAABB(*objMax, *objMin, maxBBL, minBBL);
 		// bottom bottom right
 		Vector4 maxBBR = *nodeMax - Vector4(halfsize, halfsize, halfsize, 1.0f);
 		Vector4 minBBR = *nodeMin;
-		bool BBBR = Geomath::AABBAABB(*objMax, *objMin, maxBBR, minBBR);
+		bool BBBR = GeomUtils::AABBAABB(*objMax, *objMin, maxBBR, minBBR);
 
 		if(BTTL && (BTTR || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
 			BTTR && (BTTL || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
