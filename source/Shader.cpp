@@ -1,5 +1,7 @@
-#include "Shader.h"
+#include <iterator>
+
 #include "Geometry.h"
+#include "Shader.h"
 
 namespace nest
 {
@@ -15,18 +17,19 @@ namespace nest
 			glDeleteShader(fragmentShader);
 			glDeleteProgram(program);
 		}
-		if(vao != 0)
-			glDeleteVertexArrays(1, &vao);
-		int size = textures.size();
-		if(size > 0)
+
+		if(vao != 0) glDeleteVertexArrays(1, &vao);
+
+		map<string, TextureInfo>::iterator it;
+		TextureInfo tInfo;
+		for(it = textureMap.begin(); it != textureMap.end(); ++it)
 		{
-			int i;
-			for(i = 0; i < size; i++)
-				if(textureParams[i])
-					glDeleteTextures(1, &textures[i]);
+			tInfo = it->second;
+			if(tInfo.flag) glDeleteTextures(1, &tInfo.texture);
 		}
+
 		ShaderPart *part;
-		while(parts.size() != 0)
+		while(parts.size() > 0)
 		{
 			part = parts.back();
 			parts.pop_back();
@@ -34,11 +37,30 @@ namespace nest
 		}
 	}
 
-	void Shader::linkTexture(GLuint texture, string name, bool autoDelete)
+	bool Shader::bindTexture(string name, GLuint texture, GLenum target, bool flag)
 	{
-		textures.push_back(texture);
-		textureNames.push_back(name);
-		textureParams.push_back(autoDelete);
+		TextureInfo tInfo = {texture, target, flag};
+		bindTexture(name, tInfo);
+	}
+
+	bool Shader::bindTexture(std::string name, TextureInfo tInfo)
+	{
+		pair<map<string, TextureInfo>::iterator, bool> it;
+		it = textureMap.insert(map<string, TextureInfo>::value_type(name, tInfo));
+		return it.second;
+	}
+
+	bool Shader::unbindTexture(string name, TextureInfo *tInfo)
+	{
+		map<string, TextureInfo>::iterator it;
+		it = textureMap.find(name);
+		if(it != textureMap.end())
+		{
+			if(tInfo) *tInfo = it->second;
+			textureMap.erase(it);
+			return true;
+		}
+		return false;
 	}
 
 	const GLchar Shader::VERTEX_POSITION[] = "vertex_position";

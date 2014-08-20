@@ -33,11 +33,12 @@ namespace nest
 	void MeshRender::draw(Mesh *mesh, Matrix4 *combinedMatrix)
 	{
 		// find shader
-		map<string, Shader*>::iterator it;
-		it = mesh->shaderMap.find(flag);
-		if(it != mesh->shaderMap.end())
+		map<string, ShaderInfo>::iterator it0;
+		it0 = mesh->shaderMap.find(flag);
+		if(it0 != mesh->shaderMap.end())
 		{
-			Shader *shader = static_cast<Shader*>(it->second);
+			ShaderInfo sInfo = it0->second;
+			Shader *shader = static_cast<Shader*>(sInfo.shader);
 			// link shader
 			glUseProgram(shader->program);
 			if(combinedMatrix != NULL) 
@@ -46,16 +47,17 @@ namespace nest
 			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::INVERT_VIEW_MATRIX), 1, false, invertViewMatrix->raw);
 			glUniformMatrix4fv(glGetUniformLocation(shader->program, Shader::PROJECTION_MATRIX), 1, false, projectionMatrix->raw);
 			// link shader textures
-			int tSize = shader->textures.size();
+			map<string, TextureInfo>::iterator it1;
 			int id = 0, gl_id = GL_TEXTURE0;
-			while(tSize > 0)
+			TextureInfo tInfo;
+			for(it1 = shader->textureMap.begin(); it1 != shader->textureMap.end(); ++it1)
 			{
+				tInfo = it1->second;
 				glActiveTexture(gl_id);
-				glBindTexture(GL_TEXTURE_2D, shader->textures[id]);
-				glUniform1i(glGetUniformLocation(shader->program, shader->textureNames[id].c_str()), id);
-				tSize--;
-				id++;
+				glBindTexture(tInfo.target, tInfo.texture);
+				glUniform1i(glGetUniformLocation(shader->program, it1->first.c_str()), id);
 				gl_id++;
+				id++;
 			}
 			// skin info
 			SkinInfo *skin = mesh->skin;

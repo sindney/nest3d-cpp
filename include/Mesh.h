@@ -11,6 +11,17 @@
 
 namespace nest
 {
+	typedef struct
+	{
+		Shader *shader;
+
+		/**
+		 *	Delocation flag. True for auto delete.
+		 */
+		bool flag;
+
+	} ShaderInfo;
+
 	class SkinInfo
 	{
 	public:
@@ -42,6 +53,11 @@ namespace nest
 
 		Geometry *geometry;
 
+		/**
+		 *	Delocation flag. True for auto delete.
+		 */
+		bool geomFlag;
+
 		SkinInfo *skin;
 
 		/**
@@ -51,19 +67,25 @@ namespace nest
 		 *	@see Geometry
 		 *	@see MeshRender
 		 */
-		std::map<std::string, Shader*> shaderMap;
+		std::map<std::string, ShaderInfo> shaderMap;
 
-		Mesh(Geometry *geometry, SkinInfo *skin)
-		 : geometry(geometry), skin(skin), faceCulling(true), face(GL_BACK) {}
+		Mesh(Geometry *geometry, SkinInfo *skin, bool geomFlag = true)
+		 : geometry(geometry), skin(skin), faceCulling(true), face(GL_BACK), geomFlag(geomFlag) {}
 
-		virtual ~Mesh()
-		{
-			if(geometry != NULL) delete geometry;
-			if(skin != NULL) delete skin;
-			std::map<std::string, Shader*>::iterator it;
-			for(it = shaderMap.begin(); it != shaderMap.end(); ++it)
-				delete it->second;
-		}
+		virtual ~Mesh();
+
+		/**
+		 *	Bind shader to this mesh. So we can use in in glsl.
+		 *	
+		 *	@param flag Delocation flag. True for auto delete.
+		 *	
+		 *	@return Returns false when there's a name conflict.
+		 */
+		bool bindShader(std::string name, Shader *shader, bool flag = true);
+
+		bool bindShader(std::string name, ShaderInfo sInfo);
+
+		bool unbindShader(std::string name, ShaderInfo *sInfo = NULL);
 	};
 }
 

@@ -2,7 +2,6 @@
 #include <stack>
 
 #include "MeshParser.h"
-#include "AnimationRig.h"
 #include "Mesh.h"
 
 namespace nest

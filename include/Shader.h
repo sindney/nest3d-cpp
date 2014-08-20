@@ -1,6 +1,7 @@
 #ifndef N3D_SHADER_H
 #define N3D_SHADER_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -29,13 +30,13 @@ namespace nest
 
 		GLint location;
 
-		GLfloat v0;
+		GLfloat *v0;
 
-		ShaderPart1f(GLint location, GLfloat v0) : location(location), v0(v0) {}
+		ShaderPart1f(GLint location, GLfloat *v0) : location(location), v0(v0) {}
 
 		void upload()
 		{
-			glUniform1f(location, v0);
+			glUniform1f(location, *v0);
 		}
 	};
 
@@ -45,13 +46,14 @@ namespace nest
 
 		GLint location;
 		
-		GLfloat v0, v1;
+		GLfloat *v0, *v1;
 
-		ShaderPart2f(GLint location, GLfloat v0, GLfloat v1) : location(location), v0(v0), v1(v1) {}
+		ShaderPart2f(GLint location, GLfloat *v0, GLfloat *v1)
+		 : location(location), v0(v0), v1(v1) {}
 
 		void upload()
 		{
-			glUniform2f(location, v0, v1);
+			glUniform2f(location, *v0, *v1);
 		}
 	};
 
@@ -61,13 +63,14 @@ namespace nest
 
 		GLint location;
 		
-		GLfloat v0, v1, v2;
+		GLfloat *v0, *v1, *v2;
 
-		ShaderPart3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) : location(location), v0(v0), v1(v1), v2(v2) {}
+		ShaderPart3f(GLint location, GLfloat *v0, GLfloat *v1, GLfloat *v2)
+		 : location(location), v0(v0), v1(v1), v2(v2) {}
 
 		void upload()
 		{
-			glUniform3f(location, v0, v1, v2);
+			glUniform3f(location, *v0, *v1, *v2);
 		}
 	};
 
@@ -77,13 +80,14 @@ namespace nest
 
 		GLint location;
 		
-		GLfloat v0, v1, v2, v3;
+		GLfloat *v0, *v1, *v2, *v3;
 
-		ShaderPart4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
+		ShaderPart4f(GLint location, GLfloat *v0, GLfloat *v1, GLfloat *v2, GLfloat *v3)
+		 : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
 
 		void upload()
 		{
-			glUniform4f(location, v0, v1, v2, v3);
+			glUniform4f(location, *v0, *v1, *v2, *v3);
 		}
 	};
 
@@ -95,13 +99,13 @@ namespace nest
 
 		GLint location;
 		
-		GLint v0;
+		GLint *v0;
 
-		ShaderPart1i(GLint location, GLint v0) : location(location), v0(v0) {}
+		ShaderPart1i(GLint location, GLint *v0) : location(location), v0(v0) {}
 
 		void upload()
 		{
-			glUniform1i(location, v0);
+			glUniform1i(location, *v0);
 		}
 	};
 
@@ -111,13 +115,14 @@ namespace nest
 
 		GLint location;
 		
-		GLint v0, v1;
+		GLint *v0, *v1;
 
-		ShaderPart2i(GLint location, GLint v0, GLint v1) : location(location), v0(v0), v1(v1) {}
+		ShaderPart2i(GLint location, GLint *v0, GLint *v1)
+		 : location(location), v0(v0), v1(v1) {}
 
 		void upload()
 		{
-			glUniform2i(location, v0, v1);
+			glUniform2i(location, *v0, *v1);
 		}
 	};
 
@@ -127,13 +132,14 @@ namespace nest
 
 		GLint location;
 		
-		GLint v0, v1, v2;
+		GLint *v0, *v1, *v2;
 
-		ShaderPart3i(GLint location, GLint v0, GLint v1, GLint v2) : location(location), v0(v0), v1(v1), v2(v2) {}
+		ShaderPart3i(GLint location, GLint *v0, GLint *v1, GLint *v2)
+		 : location(location), v0(v0), v1(v1), v2(v2) {}
 
 		void upload()
 		{
-			glUniform3i(location, v0, v1, v2);
+			glUniform3i(location, *v0, *v1, *v2);
 		}
 	};
 
@@ -143,13 +149,14 @@ namespace nest
 
 		GLint location;
 		
-		GLint v0, v1, v2, v3;
+		GLint *v0, *v1, *v2, *v3;
 
-		ShaderPart4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
+		ShaderPart4i(GLint location, GLint *v0, GLint *v1, GLint *v2, GLint *v3)
+		 : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
 
 		void upload()
 		{
-			glUniform4i(location, v0, v1, v2, v3);
+			glUniform4i(location, *v0, *v1, *v2, *v3);
 		}
 	};
 
@@ -161,13 +168,13 @@ namespace nest
 
 		GLint location;
 		
-		GLuint v0;
+		GLuint *v0;
 
-		ShaderPart1ui(GLint location, GLuint v0) : location(location), v0(v0) {}
+		ShaderPart1ui(GLint location, GLuint *v0) : location(location), v0(v0) {}
 
 		void upload()
 		{
-			glUniform1ui(location, v0);
+			glUniform1ui(location, *v0);
 		}
 	};
 
@@ -177,13 +184,14 @@ namespace nest
 
 		GLint location;
 		
-		GLuint v0, v1;
+		GLuint *v0, *v1;
 
-		ShaderPart2ui(GLint location, GLuint v0, GLuint v1) : location(location), v0(v0), v1(v1) {}
+		ShaderPart2ui(GLint location, GLuint *v0, GLuint *v1)
+		 : location(location), v0(v0), v1(v1) {}
 
 		void upload()
 		{
-			glUniform2ui(location, v0, v1);
+			glUniform2ui(location, *v0, *v1);
 		}
 	};
 
@@ -193,13 +201,14 @@ namespace nest
 
 		GLint location;
 		
-		GLuint v0, v1, v2;
+		GLuint *v0, *v1, *v2;
 
-		ShaderPart3ui(GLint location, GLuint v0, GLuint v1, GLuint v2) : location(location), v0(v0), v1(v1), v2(v2) {}
+		ShaderPart3ui(GLint location, GLuint *v0, GLuint *v1, GLuint *v2)
+		 : location(location), v0(v0), v1(v1), v2(v2) {}
 
 		void upload()
 		{
-			glUniform3ui(location, v0, v1, v2);
+			glUniform3ui(location, *v0, *v1, *v2);
 		}
 	};
 
@@ -209,21 +218,19 @@ namespace nest
 
 		GLint location;
 		
-		GLuint v0, v1, v2, v3;
+		GLuint *v0, *v1, *v2, *v3;
 
-		ShaderPart4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
+		ShaderPart4ui(GLint location, GLuint *v0, GLuint *v1, GLuint *v2, GLuint *v3)
+		 : location(location), v0(v0), v1(v1), v2(v2), v3(v3) {}
 
 		void upload()
 		{
-			glUniform4ui(location, v0, v1, v2, v3);
+			glUniform4ui(location, *v0, *v1, *v2, *v3);
 		}
 	};
 
 	// float array
 
-	/**
-	 *	You take care of the delocation of the float array pointer.
-	 */
 	class ShaderPartfv : public ShaderPart
 	{
 	public:
@@ -236,12 +243,8 @@ namespace nest
 
 		GLsizei count;
 
-		ShaderPartfv(GLint location, unsigned int per, GLsizei count, GLfloat *value) : location(location), per(per), count(count), value(value) {}
-
-		~ShaderPartfv()
-		{
-			value = NULL;
-		}
+		ShaderPartfv(GLint location, unsigned int per, GLsizei count, GLfloat *value)
+		 : location(location), per(per), count(count), value(value) {}
 
 		void upload()
 		{
@@ -265,9 +268,6 @@ namespace nest
 
 	// int array
 
-	/**
-	 *	You take care of the delocation of the int array pointer.
-	 */
 	class ShaderPartiv : public ShaderPart
 	{
 	public:
@@ -280,12 +280,8 @@ namespace nest
 
 		GLsizei count;
 
-		ShaderPartiv(GLint location, unsigned int per, GLsizei count, GLint *value) : location(location), per(per), count(count), value(value) {}
-
-		~ShaderPartiv()
-		{
-			value = NULL;
-		}
+		ShaderPartiv(GLint location, unsigned int per, GLsizei count, GLint *value)
+		 : location(location), per(per), count(count), value(value) {}
 
 		void upload()
 		{
@@ -307,11 +303,8 @@ namespace nest
 		}
 	};
 
-	// unsigned array
+	// unsigned int array
 	
-	/**
-	 *	You take care of the delocation of the uint array pointer.
-	 */
 	class ShaderPartuiv : public ShaderPart
 	{
 	public:
@@ -324,12 +317,8 @@ namespace nest
 
 		GLsizei count;
 
-		ShaderPartuiv(GLint location, unsigned int per, GLsizei count, GLuint *value) : location(location), per(per), count(count), value(value) {}
-
-		~ShaderPartuiv()
-		{
-			value = NULL;
-		}
+		ShaderPartuiv(GLint location, unsigned int per, GLsizei count, GLuint *value)
+		 : location(location), per(per), count(count), value(value) {}
 
 		void upload()
 		{
@@ -353,9 +342,6 @@ namespace nest
 
 	// matrix
 
-	/**
-	 *	You take care of the delocation of the float array pointer.
-	 */
 	class ShaderPartMatrix : public ShaderPart
 	{
 	public:
@@ -372,11 +358,6 @@ namespace nest
 
 		ShaderPartMatrix(GLint location, unsigned int w, unsigned int h, GLsizei count, GLboolean transpose, GLfloat *value)
 		 : location(location), w(w), h(h), count(count), transpose(transpose), value(value) {}
-
-		~ShaderPartMatrix()
-		{
-			value = NULL;
-		}
 
 		void upload()
 		{
@@ -428,6 +409,22 @@ namespace nest
 		}
 	};
 
+	/**
+	 *	See glBindTexture(target, texture).
+	 */
+	typedef struct
+	{
+		GLuint texture;
+		
+		GLenum target;
+
+		/**
+		 *	Delocation flag. True for auto delete.
+		 */
+		bool flag;
+
+	} TextureInfo;
+
 	class Shader
 	{
 	public:
@@ -442,17 +439,7 @@ namespace nest
 		 */
 		GLuint vao;
 
-		std::vector<GLuint> textures;
-
-		/**
-		 *	Texture's name stores here.
-		 */
-		std::vector<std::string> textureNames;
-
-		/**
-		 *	Texture's delocation flag stores here.
-		 */
-		std::vector<bool> textureParams;
+		std::map<std::string, TextureInfo> textureMap;
 
 		std::vector<ShaderPart*> parts;
 
@@ -460,14 +447,26 @@ namespace nest
 
 		~Shader();
 
-		void linkTexture(GLuint texture, std::string name, bool autoDelete);
-
 		void createVAO()
 		{
 			if(vao != 0)
 				glDeleteVertexArrays(1, &vao);
 			glGenVertexArrays(1, &vao);
 		}
+
+		/**
+		 *	Bind texture to this shader. So we can use in in glsl.
+		 *	See glBindTexture(target, texture).
+		 *	
+		 *	@flag Delocation flag. True for auto delete.
+		 *	
+		 *	@return Returns false when there's a name conflict.
+		 */
+		bool bindTexture(std::string name, GLuint texture, GLenum target, bool flag = true);
+
+		bool bindTexture(std::string name, TextureInfo tInfo);
+
+		bool unbindTexture(std::string name, TextureInfo *tInfo = NULL);
 
 		static const GLchar VERTEX_POSITION[];
 
