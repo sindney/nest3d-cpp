@@ -21,7 +21,7 @@ namespace nest
 		/**
 		 *	Calculate target vertex array's bounding-box.
 		 */
-		static void configure(AABB &bound, const float *vertexData, const int vertexDataSize);
+		static void create(AABB &bound, const float *vertexData, const int vertexDataSize);
 
 	};
 }

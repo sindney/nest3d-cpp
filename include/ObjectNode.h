@@ -1,5 +1,5 @@
-#ifndef N3D_SCENENODE_H
-#define N3D_SCENENODE_H
+#ifndef N3D_OBJECTNODE_H
+#define N3D_OBJECTNODE_H
 
 #include <string>
 

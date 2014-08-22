@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "GeomUtils.h"
+#include "MeshNode.h"
 #include "OcTree.h"
 #include "OcNode.h"
 

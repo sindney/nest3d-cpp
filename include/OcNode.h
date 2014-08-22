@@ -3,10 +3,12 @@
 
 #include <vector>
 
-#include "MeshNode.h"
+#include "AABB.h"
 
 namespace nest
 {
+	class MeshNode;
+
 	class OcNode
 	{
 	public:

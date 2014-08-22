@@ -1,13 +1,47 @@
 #ifndef N3D_OBJECTCULLING_H
 #define N3D_OBJECTCULLING_H
 
-#include "AABB.h"
+#include <vector>
+
+#include "Matrix4.h"
 
 namespace nest
 {
+	class CameraNode;
+
+	class ContainerNode;
+
+	class MeshNode;
+
+	class OcTree;
+
 	class ObjectCulling
 	{
 	public:
+
+		/**
+		 *	Test the visibility of container's meshes and store result in vector.
+		 *	
+		 *	@param result0 Stores those meshes with alphaSort off and passed specific culling function.
+		 *	@param result1 Stores those meshes with alphaSort on and passed specific culling function.
+		 *	@param result2 Stores those meshes who didn't pass the culling function.
+		 */
+		static void classify(
+			ContainerNode *root, CameraNode *camera, 
+			std::vector<MeshNode*> *result0, std::vector<MeshNode*> *result1, std::vector<MeshNode*> *result2
+		);
+
+		/**
+		 *	Test the visibility of octree's meshes and store result in vector.
+		 *	
+		 *	@param result0 Stores those meshes with alphaSort off and passed specific culling function.
+		 *	@param result1 Stores those meshes with alphaSort on and passed specific culling function.
+		 *	@param result2 Stores those meshes who didn't pass the culling function.
+		 */
+		static void classify(
+			OcTree *tree, CameraNode *camera, 
+			std::vector<MeshNode*> *result0, std::vector<MeshNode*> *result1, std::vector<MeshNode*> *result2
+		);
 
 		Vector4 planes[6];
 
@@ -42,6 +76,10 @@ namespace nest
 		 *	@param bound Axis aligned bounding box in view space.
 		 */
 		bool classifyAABB(const AABB &bound);
+
+	private:
+
+		void createPlane(Vector4 &plane, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3);
 
 	};
 }

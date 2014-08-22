@@ -1,8 +1,8 @@
 #ifndef N3D_CAMERANODE_H
 #define N3D_CAMERANODE_H
 
-#include "ObjectNode.h"
 #include "ObjectCulling.h"
+#include "ObjectNode.h"
 
 namespace nest
 {

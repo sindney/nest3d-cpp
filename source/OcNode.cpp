@@ -1,4 +1,5 @@
 #include "OcNode.h"
+#include "MeshNode.h"
 
 namespace nest
 {

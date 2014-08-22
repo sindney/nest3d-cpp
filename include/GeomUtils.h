@@ -29,8 +29,6 @@ namespace nest
 
 		static bool AABBAABB(Vector4 &max0, Vector4 &min0, Vector4 &max1, Vector4 &min1);
 
-		static void createPlane(Vector4 &p, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3);
-
 		static bool rayBS(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &center, float radius);
 
 		static bool rayAABB(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &max, Vector4 &min);

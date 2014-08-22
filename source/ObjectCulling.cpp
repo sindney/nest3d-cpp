@@ -1,10 +1,163 @@
-#include <cmath>
+#include <algorithm>
+#include <iterator>
+#include <typeinfo>
 
+#include "CameraNode.h"
+#include "ContainerNode.h"
+#include "MeshNode.h"
 #include "ObjectCulling.h"
-#include "GeomUtils.h"
+#include "OcNode.h"
+#include "OcTree.h"
 
 namespace nest
 {
+	using namespace std;
+
+	void ObjectCulling::classify(
+		ContainerNode *root, CameraNode *camera, 
+		vector<MeshNode*> *result0, vector<MeshNode*> *result1, vector<MeshNode*> *result2
+	)
+	{
+		// meshes pased culling test with alphaSort off
+		bool mark0 = result0 != NULL;
+		// meshes pased culling test with alphaSort on
+		bool mark1 = result1 != NULL;
+		// meshes didn't pased culling test
+		bool mark2 = result2 != NULL;
+
+		vector<ContainerNode*> containers;
+
+		vector<ObjectNode*>::iterator it0;
+		ContainerNode *current = root;
+
+		MeshNode *meshNode;
+		Matrix4 mat0;
+
+		while(true)
+		{
+			if(current->visible)
+			{
+				for(it0 = current->objects.begin(); it0 != current->objects.end(); ++it0)
+				{
+					if(typeid(**it0) == typeid(ContainerNode))
+					{
+						containers.push_back(static_cast<ContainerNode*>(*it0));
+					} 
+					else 
+					{
+						meshNode = static_cast<MeshNode*>(*it0);
+						if(meshNode->visible)
+						{
+							if(!meshNode->cliping || camera->culling.classifyAABB(camera->invertWorldMatrix * meshNode->bound))
+							{
+								if(!meshNode->alphaSort && mark0) result0->push_back(meshNode);
+								if(meshNode->alphaSort && mark1)
+								{
+									mat0 = camera->invertWorldMatrix * meshNode->worldMatrix;
+									meshNode->alphaKey = mat0.raw[12] * mat0.raw[12] + mat0.raw[13] * mat0.raw[13] + mat0.raw[14] * mat0.raw[14];
+									result1->push_back(meshNode);
+								}
+							}
+							else if(mark2)
+							{
+								result2->push_back(meshNode);
+							}
+						}
+					}
+				}
+			}
+			if(containers.size() != 0)
+			{
+				current = containers.back();
+				containers.pop_back();
+				continue;
+			}
+			break;
+		}
+		// sort meshes with alphaSort on
+		if(mark1) sort(result1->begin(), result1->end(), MeshNode(NULL));
+	}
+
+	void ObjectCulling::classify(
+		OcTree *tree, CameraNode *camera, 
+		vector<MeshNode*> *result0, vector<MeshNode*> *result1, vector<MeshNode*> *result2
+	)
+	{
+		// meshes pased culling test with alphaSort off
+		bool mark0 = result0 != NULL;
+		// meshes pased culling test with alphaSort on
+		bool mark1 = result1 != NULL;
+		// meshes didn't pased culling test
+		bool mark2 = result2 != NULL;
+
+		vector<MeshNode*>::iterator it0;
+		MeshNode *meshNode;
+		AABB bound;
+		Matrix4 mat0;
+
+		vector<OcNode*> nodes;
+		vector<OcNode*>::iterator it1;
+		OcNode *node0 = tree->root;
+		OcNode *node1 = NULL;
+
+		vector<bool> marks;
+		bool current;
+		bool parent = false;
+
+		while(true)
+		{
+			bound = camera->invertWorldMatrix * node0->bound;
+			if(parent || camera->culling.classifyAABB(bound))
+			{
+				current = parent ? true : camera->culling.classifyPoint(bound.min) && camera->culling.classifyPoint(bound.max);
+				if(node0->objects.size() != 0)
+				{
+					for(it0 = node0->objects.begin(); it0 != node0->objects.end(); ++it0)
+					{
+						meshNode = *it0;
+						if(meshNode->visible)
+						{
+							if(!meshNode->cliping || current || camera->culling.classifyAABB(camera->invertWorldMatrix * meshNode->bound))
+							{
+								if(!meshNode->alphaSort && mark0) result0->push_back(meshNode);
+								if(meshNode->alphaSort && mark1)
+								{
+									mat0 = camera->invertWorldMatrix * meshNode->worldMatrix;
+									meshNode->alphaKey = mat0.raw[12] * mat0.raw[12] + mat0.raw[13] * mat0.raw[13] + mat0.raw[14] * mat0.raw[14];
+									result1->push_back(meshNode);
+								}
+							}
+							else if(mark2)
+							{
+								result2->push_back(meshNode);
+							}
+						}
+					}
+				}
+				for(it1 = node0->childs.begin(); it1 != node0->childs.end(); ++it1)
+				{
+					node1 = *it1;
+					if(node1 != NULL && (current || camera->culling.classifyAABB(camera->invertWorldMatrix * node1->bound)))
+					{
+						nodes.push_back(node1);
+						marks.push_back(current);
+					}
+				}
+			}
+			if(nodes.size() != 0)
+			{
+				node0 = nodes.back();
+				nodes.pop_back();
+				parent = marks.back();
+				marks.pop_back();
+				continue;
+			}
+			break;
+		}
+		// sort meshes with alphaSort on
+		if(mark1) sort(result1->begin(), result1->end(), MeshNode(NULL));
+	}
+
 	void ObjectCulling::create(float fov, float ratio, float near, float far)
 	{
 		float r = tan(fov * 0.5);
@@ -31,17 +184,17 @@ namespace nest
 		Vector4 fBR = vf - (yv * fH) + (xv * fW);
 
 		// top
-		GeomUtils::createPlane(planes[0], fTR, nTR, nTL);
+		createPlane(planes[0], fTR, nTR, nTL);
 		// bottom
-		GeomUtils::createPlane(planes[1], nBL, nBR, fBR);
+		createPlane(planes[1], nBL, nBR, fBR);
 		// left
-		GeomUtils::createPlane(planes[2], nTL, nBL, fBL);
+		createPlane(planes[2], nTL, nBL, fBL);
 		// right
-		GeomUtils::createPlane(planes[3], fBR, nBR, nTR);
+		createPlane(planes[3], fBR, nBR, nTR);
 		// near
-		GeomUtils::createPlane(planes[4], nTL, nTR, nBR);
+		createPlane(planes[4], nTL, nTR, nBR);
 		// far
-		GeomUtils::createPlane(planes[5], fTR, fTL, fBL);
+		createPlane(planes[5], fTR, fTL, fBL);
 	}
 
 	void ObjectCulling::create(float left, float right, float bottom, float top, float near, float far)
@@ -57,17 +210,17 @@ namespace nest
 		Vector4 fBR(right, 	bottom, -far, 1);
 
 		// top
-		GeomUtils::createPlane(planes[0], fTR, nTR, nTL);
+		createPlane(planes[0], fTR, nTR, nTL);
 		// bottom
-		GeomUtils::createPlane(planes[1], nBL, nBR, fBR);
+		createPlane(planes[1], nBL, nBR, fBR);
 		// left
-		GeomUtils::createPlane(planes[2], nTL, nBL, fBL);
+		createPlane(planes[2], nTL, nBL, fBL);
 		// right
-		GeomUtils::createPlane(planes[3], fBR, nBR, nTR);
+		createPlane(planes[3], fBR, nBR, nTR);
 		// near
-		GeomUtils::createPlane(planes[4], nTL, nTR, nBR);
+		createPlane(planes[4], nTL, nTR, nBR);
 		// far
-		GeomUtils::createPlane(planes[5], fTR, fTL, fBL);
+		createPlane(planes[5], fTR, fTL, fBL);
 	}
 
 	bool ObjectCulling::classifyPoint(const Vector4 &p)
@@ -114,5 +267,12 @@ namespace nest
 		}
 
 		return true;
+	}
+
+	void ObjectCulling::createPlane(Vector4 &plane, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3)
+	{
+		plane = Vector4::crossProduct(v2 - v1, v3 - v1);
+		plane.normalize();
+		plane.w = - (plane.x * v1.x + plane.y * v1.y + plane.z * v1.z);
 	}
 }

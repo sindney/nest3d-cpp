@@ -16,13 +16,16 @@ namespace nest
 		GEOM_INDICES	= 1 << 5, 
 		GEOM_WEIGHTS	= 1 << 6
 	};
-
+	
 	class Geometry
 	{
 	public:
 
 		std::string name;
 
+		/**
+		 *	Axis aligned bounding box.
+		 */
 		AABB bound;
 
 		GLfloat *vertexData, *uvData, *normalData, *tangentData, *weightsData;

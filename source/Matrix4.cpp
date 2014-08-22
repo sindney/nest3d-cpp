@@ -176,7 +176,7 @@ namespace nest
 		GLfloat det = raw[0] * (raw[5] * raw[10] - raw[6] * raw[9])
 					+ raw[1] * (raw[6] * raw[8] - raw[4] * raw[10])
 					+ raw[2] * (raw[4] * raw[9] - raw[5] * raw[8]);
-		if(det == 0) throw std::runtime_error("Error inversing target matrix.");
+		if(det == 0) throw std::runtime_error("Matrix4::inverse()::Error inversing target matrix.");
 		
 		GLfloat det2 = 1.0f / det;
 		

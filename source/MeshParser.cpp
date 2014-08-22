@@ -157,7 +157,7 @@ namespace nest
 				mesh->geometry->indexData[i * 3 + k] = face->mIndices[k];
 		}
 
-		AABB::configure(mesh->geometry->bound, mesh->geometry->vertexData, mesh->geometry->numVts * 3);
+		AABB::create(mesh->geometry->bound, mesh->geometry->vertexData, mesh->geometry->numVts * 3);
 
 		if(aimesh->mTextureCoords != NULL)
 		{

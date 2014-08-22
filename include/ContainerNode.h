@@ -1,7 +1,6 @@
 #ifndef N3D_CONTAINERNODE_H
 #define N3D_CONTAINERNODE_H
 
-#include <string>
 #include <vector>
 
 #include "ObjectNode.h"

@@ -34,11 +34,10 @@
 #define VERSION_MINOR 6
 #define VERSION_PATCH 0
 
-#include "RenderTarget.h"
-
 #include "EventActor.h"
 
-#include "AnimationBlender.h"
+#include "RenderTarget.h"
+
 #include "AnimationPlayer.h"
 #include "AnimationUtils.h"
 
@@ -55,8 +54,5 @@
 
 #include "MeshParser.h"
 #include "MeshRender.h"
-
-#include "ContainerCulling.h"
-#include "OcTreeCulling.h"
 
 #endif

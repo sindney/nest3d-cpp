@@ -1,13 +1,13 @@
 #ifndef N3D_OCTREE_H
 #define N3D_OCTREE_H
 
-#include <vector>
-
-#include "MeshNode.h"
-
 namespace nest
 {
+	class MeshNode;
+
 	class OcNode;
+
+	class Vector4;
 
 	class OcTree
 	{

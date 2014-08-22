@@ -1,5 +1,3 @@
-#include <stdexcept>
-
 #include "GeomUtils.h"
 
 namespace nest
@@ -49,13 +47,6 @@ namespace nest
 		if(min0.z > max1.z) return false;
 		if(max0.z < min1.z) return false;
 		return true;
-	}
-
-	void GeomUtils::createPlane(Vector4 &p, const Vector4 &v1, const Vector4 &v2, const Vector4 &v3)
-	{
-		p = Vector4::crossProduct(v2 - v1, v3 - v1);
-		p.normalize();
-		p.w = - (p.x * v1.x + p.y * v1.y + p.z * v1.z);
 	}
 
 	bool GeomUtils::rayBS(Vector4 &result, Vector4 &orgion, Vector4 &delta, Vector4 &center, float radius)
@@ -208,8 +199,6 @@ namespace nest
 
 	bool GeomUtils::rayGeom(vector<RayGeomResult> *results, RayGeomResult *result, bool uv, Vector4 &orgion, Vector4 &delta, Geometry &geom)
 	{
-		if(geom.vertexData == NULL || geom.indexData == NULL) 
-			throw runtime_error("Error Ray-Geometry intersection test: Geometry's vertexData || indexData not found.");
 		Vector4 vt1;
 		if(!rayAABB(vt1, orgion, delta, geom.bound.max, geom.bound.min)) return false;
 		bool flag = result != NULL;

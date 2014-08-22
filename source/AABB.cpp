@@ -2,7 +2,7 @@
 
 namespace nest
 {
-	void AABB::configure(AABB &bound, const float *vertexData, const int vertexDataSize)
+	void AABB::create(AABB &bound, const float *vertexData, const int vertexDataSize)
 	{
 		bound.max.x = bound.min.x = vertexData[0];
 		bound.max.y = bound.min.y = vertexData[1];
