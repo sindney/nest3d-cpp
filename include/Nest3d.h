@@ -30,10 +30,6 @@
  *	http://github.com/sindney/nest3d-cpp
  */
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 6
-#define VERSION_PATCH 0
-
 #include "EventActor.h"
 
 #include "RenderTarget.h"

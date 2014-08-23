@@ -40,7 +40,7 @@ namespace nest
 	bool Shader::bindTexture(string name, GLuint texture, GLenum target, bool flag)
 	{
 		TextureInfo tInfo = {texture, target, flag};
-		bindTexture(name, tInfo);
+		return bindTexture(name, tInfo);
 	}
 
 	bool Shader::bindTexture(std::string name, TextureInfo tInfo)

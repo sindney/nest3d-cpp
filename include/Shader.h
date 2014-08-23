@@ -7,7 +7,7 @@
 
 #ifndef GLEW_INCLUDED
 #define GLEW_INCLUDED
-#include "GL/glew.h"
+#include <GL/glew.h>
 #endif
 
 namespace nest

@@ -173,31 +173,33 @@ namespace nest
 
 	Matrix4 Matrix4::inverse()
 	{
+		Matrix4 result;
+		
 		GLfloat det = raw[0] * (raw[5] * raw[10] - raw[6] * raw[9])
 					+ raw[1] * (raw[6] * raw[8] - raw[4] * raw[10])
 					+ raw[2] * (raw[4] * raw[9] - raw[5] * raw[8]);
-		if(det == 0) throw std::runtime_error("Matrix4::inverse()::Error inversing target matrix.");
-		
-		GLfloat det2 = 1.0f / det;
-		
-		Matrix4 result;
-		
-		result.raw[0] = (raw[5] * raw[10] - raw[6] * raw[9]) * det2;
-		result.raw[1] = (raw[2] * raw[9] - raw[1] * raw[10]) * det2;
-		result.raw[2] = (raw[1] * raw[6] - raw[2] * raw[5]) * det2;
-		result.raw[3] = 0.0f;
-		result.raw[4] = (raw[6] * raw[8] - raw[4] * raw[10]) * det2;
-		result.raw[5] = (raw[0] * raw[10] - raw[2] * raw[8]) * det2;
-		result.raw[6] = (raw[2] * raw[4] - raw[0] * raw[6]) * det2;
-		result.raw[7] = 0.0f;
-		result.raw[8] = (raw[4] * raw[9] - raw[5] * raw[8]) * det2;
-		result.raw[9] = (raw[1] * raw[8] - raw[0] * raw[9]) * det2;
-		result.raw[10] = (raw[0] * raw[5] - raw[1] * raw[4]) * det2;
-		result.raw[11] = 0.0f;
-		result.raw[12] = -(raw[12] * result.raw[0] + raw[13] * result.raw[4] + raw[14] * result.raw[8]);
-		result.raw[13] = -(raw[12] * result.raw[1] + raw[13] * result.raw[5] + raw[14] * result.raw[9]);
-		result.raw[14] = -(raw[12] * result.raw[2] + raw[13] * result.raw[6] + raw[14] * result.raw[10]);
-		result.raw[15] = 1.0f;
+		if(det != 0)
+		{
+			GLfloat det2 = 1.0f / det;
+			result.raw[0] = (raw[5] * raw[10] - raw[6] * raw[9]) * det2;
+			result.raw[1] = (raw[2] * raw[9] - raw[1] * raw[10]) * det2;
+			result.raw[2] = (raw[1] * raw[6] - raw[2] * raw[5]) * det2;
+			result.raw[3] = 0.0f;
+			result.raw[4] = (raw[6] * raw[8] - raw[4] * raw[10]) * det2;
+			result.raw[5] = (raw[0] * raw[10] - raw[2] * raw[8]) * det2;
+			result.raw[6] = (raw[2] * raw[4] - raw[0] * raw[6]) * det2;
+			result.raw[7] = 0.0f;
+			result.raw[8] = (raw[4] * raw[9] - raw[5] * raw[8]) * det2;
+			result.raw[9] = (raw[1] * raw[8] - raw[0] * raw[9]) * det2;
+			result.raw[10] = (raw[0] * raw[5] - raw[1] * raw[4]) * det2;
+			result.raw[11] = 0.0f;
+			result.raw[12] = -(raw[12] * result.raw[0] + raw[13] * result.raw[4] + raw[14] * result.raw[8]);
+			result.raw[13] = -(raw[12] * result.raw[1] + raw[13] * result.raw[5] + raw[14] * result.raw[9]);
+			result.raw[14] = -(raw[12] * result.raw[2] + raw[13] * result.raw[6] + raw[14] * result.raw[10]);
+			result.raw[15] = 1.0f;
+		}
+		else
+			throw std::runtime_error("Matrix4::inverse()::Error inversing target matrix.");
 		
 		return result;
 	}

@@ -213,14 +213,15 @@ namespace nest
 		Vector4 minBBR = *nodeMin;
 		bool BBBR = GeomUtils::AABBAABB(*objMax, *objMin, maxBBR, minBBR);
 
-		if(BTTL && (BTTR || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
-			BTTR && (BTTL || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR) || 
-			BTBL && (BTTL || BTTR || BTBR || BBTL || BBTR || BBBL || BBBR) || 
-			BTBR && (BTTL || BTTR || BTBL || BBTL || BBTR || BBBL || BBBR) ||
-			BBTL && (BBTR || BBBL || BBBR || BTTL || BTTR || BTBL || BTBR) || 
-			BBTR && (BBTL || BBBL || BBBR || BTTL || BTTR || BTBL || BTBR) || 
-			BBBL && (BBTL || BBTR || BBBR || BTTL || BTTR || BTBL || BTBR) || 
-			BBBR && (BBTL || BBTR || BBBL || BTTL || BTTR || BTBL || BTBR)) 
+		if(	(BTTL && (BTTR || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR)) || 
+			(BTTR && (BTTL || BTBL || BTBR || BBTL || BBTR || BBBL || BBBR)) || 
+			(BTBL && (BTTL || BTTR || BTBR || BBTL || BBTR || BBBL || BBBR)) || 
+			(BTBR && (BTTL || BTTR || BTBL || BBTL || BBTR || BBBL || BBBR)) ||
+			(BBTL && (BBTR || BBBL || BBBR || BTTL || BTTR || BTBL || BTBR)) || 
+			(BBTR && (BBTL || BBBL || BBBR || BTTL || BTTR || BTBL || BTBR)) || 
+			(BBBL && (BBTL || BBTR || BBBR || BTTL || BTTR || BTBL || BTBR)) || 
+			(BBBR && (BBTL || BBTR || BBBL || BTTL || BTTR || BTBL || BTBR))
+		)
 		{
 			return true;
 		}
