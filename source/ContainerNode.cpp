@@ -1,5 +1,4 @@
 #include <iterator>
-#include <stdexcept>
 #include <typeinfo>
 
 #include "ContainerNode.h"
@@ -58,10 +57,6 @@ namespace nest
 			}
 			break;
 		}
-
-		if(!flag) throw runtime_error(
-			"ContainerNode::removeChild()::Error removing child, can't locate child pointer in target container."
-		);
 	}
 
 	void ContainerNode::recompose(float dt)

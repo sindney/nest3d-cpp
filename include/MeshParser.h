@@ -8,17 +8,31 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "Mesh.h"
+
 namespace nest
 {
-	class AnimationClip;
+	typedef struct
+	{
+		AnimationClip *animClip;
 
-	class AnimationRig;
+		/**
+		 *	Delocation flag. True for auto delete.
+		 */
+		bool flag;
 
-	class Joint;
+	} AnimationInfo;
 
-	class Mesh;
+	typedef struct
+	{
+		Mesh *mesh;
 
-	class Matrix4;
+		/**
+		 *	Delocation flag. True for auto delete.
+		 */
+		bool flag;
+
+	} MeshInfo;
 
 	/**
 	 *	How to use AnimationClip to update Mesh's Joints' matrices: 
@@ -29,7 +43,6 @@ namespace nest
 	 *	<p>Call Joint::updateJoints(rootJoint) to update the joint tree's relation matrices.</p>
 	 *	<p>Tip: you can also blend poses together to generate the final AnimationRig.</p>
 	 *	
-	 *	@see AnimationBlender
 	 *	@see AnimationClip
 	 *	@see AnimationPlayer
 	 *	@see AnimationRig
@@ -39,9 +52,9 @@ namespace nest
 	{
 	public:
 
-		std::vector<AnimationClip*> animClips;
+		std::vector<AnimationInfo> animClips;
 
-		std::vector<Mesh*> meshes;
+		std::vector<MeshInfo> meshes;
 
 		/**
 		 *	Error detail stores here.
@@ -55,29 +68,23 @@ namespace nest
 
 		MeshParser() : jointPerVertex(4) {}
 
-		/**
-		 *	Please note that this clears meshs&animClips vector.
-		 *	<p>Make sure you'v made a copy or deleted those pointers.</p>
-		 */
 		~MeshParser()
 		{
-			animClips.clear();
-			meshes.clear();
-			error.clear();
+			delocateData();
 		}
 
 		/**
-		 *	Call this to delete data in animClips&meshes.
+		 *	Call this to delete data in animClips&meshes with flag == true.
 		 */
 		void delocateData();
 
 		/**
-		 *	I suggest the following flags for model parsing.
+		 *	Please note this first calls delocateData() to delete pointers in animClips&meshes.
+		 *	<p>And clears error string.</p>
+		 *	<p>I suggest the following flags for model parsing.</p>
 		 *	<p>aiProcess_ValidateDataStructure, aiProcess_Triangulate</p>
 		 *	<p>aiProcess_JoinIdenticalVertices, aiProcess_SortByPType</p>
 		 *	<p>See Assimp::Importer::ReadFile(pFile, pFlags).</p>
-		 *	<p>Please note that this clears meshs&animClips vector.</p>
-		 *	<p>Make sure you'v made a copy or deleted those pointers.</p>
 		 *	
 		 *	@param file model file path.
 		 *	@param flags Options to control the decoding process.

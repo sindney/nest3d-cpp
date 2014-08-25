@@ -1,4 +1,3 @@
-#include <stdexcept>
 #include <typeinfo>
 #include <vector>
 
@@ -111,11 +110,11 @@ namespace nest
 					break;
 				}
 			}
-			else
-				throw runtime_error("Error adding child: Target's transform out of range.");
+			//else
+				//throw runtime_error("Error adding child: Target's transform out of range.");
 		}
-		else 
-			throw runtime_error("Error adding child: Target has a tree pointer, remove it from that tree first.");
+		//else 
+			//throw runtime_error("Error adding child: Target has a tree pointer, remove it from that tree first.");
 	}
 
 	void OcTree::removeChild(MeshNode *object)
@@ -147,12 +146,10 @@ namespace nest
 					break;
 				}
 			}
-			if(!flag) throw runtime_error("Error removing child: Can't locate child.");
+			//if(!flag) throw runtime_error("Error removing child: Can't locate child.");
 		}
-		else 
-		{
-			throw runtime_error("Error removing child: Target has a NULL node pointer.");
-		}
+		//else 
+			//throw runtime_error("Error removing child: Target has a NULL node pointer.");
 	}
 
 	void OcTree::transformChild(MeshNode *object)
@@ -170,10 +167,8 @@ namespace nest
 				addChild(object);
 			}
 		}
-		else 
-		{
-			throw runtime_error("Error transforming child: Target has a NULL node pointer.");
-		}
+		//else 
+			//throw runtime_error("Error transforming child: Target has a NULL node pointer.");
 	}
 
 	bool OcTree::findNode(Vector4 *objMax, Vector4 *objMin, Vector4 *nodeMax, Vector4 *nodeMin, int *id, Vector4 *max, Vector4 *min)

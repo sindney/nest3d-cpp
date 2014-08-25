@@ -2,7 +2,6 @@
 #include <stack>
 
 #include "MeshParser.h"
-#include "Mesh.h"
 
 namespace nest
 {
@@ -10,30 +9,29 @@ namespace nest
 
 	void MeshParser::delocateData()
 	{
-		AnimationClip *clip = NULL;
+		AnimationInfo animInfo;
 		while(animClips.size() != 0)
 		{
-			clip = animClips.back();
+			animInfo = animClips.back();
 			animClips.pop_back();
-			delete clip;
+			if(animInfo.flag) delete animInfo.animClip;
 		}
-		Mesh *mesh = NULL;
+		MeshInfo meshInfo;
 		while(meshes.size() != 0)
 		{
-			mesh = meshes.back();
+			meshInfo = meshes.back();
 			meshes.pop_back();
-			delete mesh;
+			if(meshInfo.flag) delete meshInfo.mesh;
 		}
 	}
 
 	bool MeshParser::parse(const string &file, unsigned int flags)
 	{
-		Assimp::Importer importer;
-
-		const aiScene* scene = importer.ReadFile(file, flags);
-		animClips.clear();
-		meshes.clear();
+		delocateData();
 		error.clear();
+
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFile(file, flags);
 		
 		if(!scene)
 		{
@@ -66,7 +64,8 @@ namespace nest
 			anim->mDuration, 
 			false
 		);
-		animClips.push_back(animSet);
+		AnimationInfo animInfo = {animSet, true};
+		animClips.push_back(animInfo);
 
 		AnimationChannel *channel = NULL;
 		QuatKeyFrame quat;
@@ -126,7 +125,8 @@ namespace nest
 			aimesh->mNumBones > 0 ? new SkinInfo() : NULL
 		);
 		mesh->name = aimesh->mName.C_Str();
-		meshes.push_back(mesh);
+		MeshInfo meshInfo = {mesh, true};
+		meshes.push_back(meshInfo);
 
 		int i, j, k, l;
 

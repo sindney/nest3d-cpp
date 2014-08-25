@@ -1,5 +1,3 @@
-#include <stdexcept>
-
 #include "Matrix4.h"
 
 namespace nest
@@ -198,8 +196,6 @@ namespace nest
 			result.raw[14] = -(raw[12] * result.raw[2] + raw[13] * result.raw[6] + raw[14] * result.raw[10]);
 			result.raw[15] = 1.0f;
 		}
-		else
-			throw std::runtime_error("Matrix4::inverse()::Error inversing target matrix.");
 		
 		return result;
 	}
