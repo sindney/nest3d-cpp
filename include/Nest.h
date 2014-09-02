@@ -1,5 +1,5 @@
-#ifndef N3D_NEST3D_H
-#define N3D_NEST3D_H
+#ifndef N3D_NEST_H
+#define N3D_NEST_H
 
 /**
  *	\mainpage 
@@ -29,6 +29,10 @@
  *	
  *	http://github.com/sindney/nest3d-cpp
  */
+
+#ifndef __GLEW_H__
+#include <GL/glew.h>
+#endif
 
 #include "EventActor.h"
 

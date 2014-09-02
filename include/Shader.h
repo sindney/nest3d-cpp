@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-#ifndef GLEW_INCLUDED
-#define GLEW_INCLUDED
+#ifndef __GLEW_H__
 #include <GL/glew.h>
 #endif
 

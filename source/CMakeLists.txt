@@ -1,10 +1,10 @@
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-include_directories(${LIB_GLEW}/include)
-link_directories(${LIB_GLEW}/lib)
-
 include_directories(${LIB_ASSIMP}/include)
 link_directories(${LIB_ASSIMP}/lib)
+
+include_directories(${LIB_GLEW}/include)
+link_directories(${LIB_GLEW}/lib)
 
 if(OS_MACOSX)
 	find_package(OpenGL REQUIRED)
@@ -26,5 +26,5 @@ else()
 endif()
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include DESTINATION .)
-install(FILES ${PROJECT_BINARY_DIR}/Nest3dConfig.h DESTINATION include)
+install(FILES ${PROJECT_BINARY_DIR}/NestConfig.h DESTINATION include)
 install(TARGETS nest DESTINATION lib)

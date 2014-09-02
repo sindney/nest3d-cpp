@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(NEST3D_CPP)
+project(NEST3D)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	set(OS_WINDOWS 1)
@@ -18,8 +18,8 @@ set(NEST_VERSION_MINOR 6)
 set(NEST_VERSION_PATCH 0)
 
 configure_file (
-	${PROJECT_SOURCE_DIR}/Nest3dConfig.h.in
-	${PROJECT_BINARY_DIR}/Nest3dConfig.h
+	${PROJECT_SOURCE_DIR}/NestConfig.h.in
+	${PROJECT_BINARY_DIR}/NestConfig.h
 )
 
 add_subdirectory(source)
