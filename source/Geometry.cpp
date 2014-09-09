@@ -45,49 +45,49 @@ namespace nest
 
 	void Geometry::bindVBOtoVAO(GLuint vao, int params)
 	{
-		GLuint count = 0;
+		vboOffset = 0;
 		glBindVertexArray(vao);
 		// vertex
 		if(params & GEOM_VERTEX)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(vboOffset);
+			glVertexAttribPointer(vboOffset++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		// uv
 		if(params & GEOM_UV)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
-			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(vboOffset);
+			glVertexAttribPointer(vboOffset++, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		// normal
 		if(params & GEOM_NORMAL)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(vboOffset);
+			glVertexAttribPointer(vboOffset++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		// tangent
 		if(params & GEOM_TANGENT)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, tangentBuffer);
-			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(vboOffset);
+			glVertexAttribPointer(vboOffset++, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		// joint indices
 		if(params & GEOM_INDICES)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, indicesBuffer);
-			glEnableVertexAttribArray(count);
-			glVertexAttribIPointer(count++, jointPerVertex, GL_UNSIGNED_INT, 0, 0);
+			glEnableVertexAttribArray(vboOffset);
+			glVertexAttribIPointer(vboOffset++, jointPerVertex, GL_UNSIGNED_INT, 0, 0);
 		}
 		// joint weights
 		if(params & GEOM_WEIGHTS)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, weightsBuffer);
-			glEnableVertexAttribArray(count);
-			glVertexAttribPointer(count++, jointPerVertex - 1, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(vboOffset);
+			glVertexAttribPointer(vboOffset++, jointPerVertex - 1, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);

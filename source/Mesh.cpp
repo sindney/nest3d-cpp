@@ -36,7 +36,7 @@ namespace nest
 		it = shaderMap.find(name);
 		if(it != shaderMap.end())
 		{
-			if(sInfo) *sInfo = it->second;
+			if(sInfo != NULL) *sInfo = it->second;
 			shaderMap.erase(it);
 			return true;
 		}

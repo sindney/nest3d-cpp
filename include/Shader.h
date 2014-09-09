@@ -446,6 +446,11 @@ namespace nest
 
 		~Shader();
 
+		/**
+		 *	@param params see Geometry.bindVBOtoVAO(int params)
+		 */
+		void create(int params, const char *vertex, const char *fragment);
+
 		void createVAO()
 		{
 			if(vao != 0)
@@ -492,11 +497,6 @@ namespace nest
 		static const GLchar WORLD_MATRIX[];
 
 		static const GLchar INVERT_WORLD_MATRIX[];
-
-		/**
-		 *	@param params see Geometry.configure(int)
-		 */
-		static void configure(Shader *shader, int params, const char *vertex, const char *fragment);
 	};
 }
 

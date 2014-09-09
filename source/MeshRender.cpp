@@ -14,7 +14,7 @@ namespace nest
 		this->invertViewMatrix = invertViewMatrix;
 		this->projectionMatrix = projectionMatrix;
 		this->worldMatrix = worldMatrix;
-		if(mesh->skin)
+		if(mesh->skin != NULL)
 			draw(mesh->skin->root);
 		else
 			draw(mesh);

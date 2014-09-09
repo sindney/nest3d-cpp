@@ -37,6 +37,35 @@ namespace nest
 		}
 	}
 
+	void Shader::create(int params, const char *vertex, const char *fragment)
+	{
+		if(program != 0)
+		{
+			glDetachShader(program, vertexShader);
+			glDetachShader(program, fragmentShader);
+			glDeleteShader(vertexShader);
+			glDeleteShader(fragmentShader);
+			glDeleteProgram(program);
+		}
+		vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertexShader, 1, &vertex, NULL);
+		glCompileShader(vertexShader);
+		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragmentShader, 1, &fragment, NULL);
+		glCompileShader(fragmentShader);
+		program = glCreateProgram();
+		glAttachShader(program, vertexShader);
+		glAttachShader(program, fragmentShader);
+		int offset = 0;
+		if(params & GEOM_VERTEX) glBindAttribLocation(program, offset++, Shader::VERTEX_POSITION);
+		if(params & GEOM_UV) glBindAttribLocation(program, offset++, Shader::VERTEX_UV);
+		if(params & GEOM_NORMAL) glBindAttribLocation(program, offset++, Shader::VERTEX_NORMAL);
+		if(params & GEOM_TANGENT) glBindAttribLocation(program, offset++, Shader::VERTEX_TANGENT);
+		if(params & GEOM_INDICES) glBindAttribLocation(program, offset++, Shader::VERTEX_INDICES);
+		if(params & GEOM_WEIGHTS) glBindAttribLocation(program, offset++, Shader::VERTEX_WEIGHTS);
+		glLinkProgram(program);
+	}
+
 	bool Shader::bindTexture(string name, GLuint texture, GLenum target, bool flag)
 	{
 		TextureInfo tInfo = {texture, target, flag};
@@ -88,33 +117,4 @@ namespace nest
 	const GLchar Shader::WORLD_MATRIX[] = "world_matrix";
 
 	const GLchar Shader::INVERT_WORLD_MATRIX[] = "invert_world_matrix";
-
-	void Shader::configure(Shader *shader, int params, const char *vertex, const char *fragment)
-	{
-		if(shader->program != 0)
-		{
-			glDetachShader(shader->program, shader->vertexShader);
-			glDetachShader(shader->program, shader->fragmentShader);
-			glDeleteShader(shader->vertexShader);
-			glDeleteShader(shader->fragmentShader);
-			glDeleteProgram(shader->program);
-		}
-		shader->vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(shader->vertexShader, 1, &vertex, NULL);
-		glCompileShader(shader->vertexShader);
-		shader->fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(shader->fragmentShader, 1, &fragment, NULL);
-		glCompileShader(shader->fragmentShader);
-		shader->program = glCreateProgram();
-		glAttachShader(shader->program, shader->vertexShader);
-		glAttachShader(shader->program, shader->fragmentShader);
-		int count = 0;
-		if(params & GEOM_VERTEX) glBindAttribLocation(shader->program, count++, Shader::VERTEX_POSITION);
-		if(params & GEOM_UV) glBindAttribLocation(shader->program, count++, Shader::VERTEX_UV);
-		if(params & GEOM_NORMAL) glBindAttribLocation(shader->program, count++, Shader::VERTEX_NORMAL);
-		if(params & GEOM_TANGENT) glBindAttribLocation(shader->program, count++, Shader::VERTEX_TANGENT);
-		if(params & GEOM_INDICES) glBindAttribLocation(shader->program, count++, Shader::VERTEX_INDICES);
-		if(params & GEOM_WEIGHTS) glBindAttribLocation(shader->program, count++, Shader::VERTEX_WEIGHTS);
-		glLinkProgram(shader->program);
-	}
 }

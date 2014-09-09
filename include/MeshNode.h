@@ -10,6 +10,25 @@ namespace nest
 	class OcNode;
 
 	class OcTree;
+
+	class MeshAnimation
+	{
+	public:
+
+		Mesh *mesh;
+
+		MeshAnimation(Mesh *mesh = NULL) : mesh(mesh) {}
+
+		/**
+		 *	For skined mesh to update it's aniamtion keys.
+		 */
+		virtual void advanceTime(float dt) = 0;
+
+		/**
+		 *	For skinned mesh to transfer data from key frames to joint matrices.
+		 */
+		virtual void displayAnimation(float dt) = 0;
+	};
 	
 	class MeshNode : public ObjectNode 
 	{
@@ -44,12 +63,17 @@ namespace nest
 		Mesh *mesh;
 
 		/**
+		 *	Animation module that controls skinned mesh.
+		 */
+		MeshAnimation *animation;
+
+		/**
 		 *	MeshNode's boundingbox in worldspace.
 		 */
 		AABB bound;
 
 		MeshNode(Mesh *mesh)
-		 : mesh(mesh), alphaSort(false), alphaKey(0.0f), node(NULL), tree(NULL), cliping(true), visible(true) {}
+		 : mesh(mesh), animation(NULL), alphaSort(false), alphaKey(0.0f), node(NULL), tree(NULL), cliping(true), visible(true) {}
 
 		virtual ~MeshNode();
 		
@@ -57,16 +81,6 @@ namespace nest
 		 *	Update matrices, bound and octree info if it's attached to one.
 		 */
 		virtual void recompose(float dt = 0.0f);
-
-		/**
-		 *	For skined mesh to update it's aniamtion keys.
-		 */
-		virtual void advanceTime(float dt) {}
-
-		/**
-		 *	For skinned mesh to transfer data from key frames to joint matrices.
-		 */
-		virtual void displayAnimation(float dt);
 
 		/**
 		 *	Compare function to sort nodes for rendering alpha sort enabled object.

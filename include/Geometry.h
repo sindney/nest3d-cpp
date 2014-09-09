@@ -9,7 +9,7 @@ namespace nest
 {
 	enum GeomParams
 	{
-		GEOM_VERTEX 	= 1 << 0, 
+		GEOM_VERTEX		= 1 << 0, 
 		GEOM_UV			= 1 << 2, 
 		GEOM_NORMAL		= 1 << 3, 
 		GEOM_TANGENT	= 1 << 4, 
@@ -19,6 +19,10 @@ namespace nest
 	
 	class Geometry
 	{
+	protected:
+
+		GLuint vboOffset;
+
 	public:
 
 		std::string name;
@@ -53,7 +57,7 @@ namespace nest
 
 		/**
 		 *	Generate GeomBufferData object to store VAO for different render behaviour.
-		 *	<p>Call configure(params) first, then use this func.</p>
+		 *	<p>Call createVBOs(params) first, then use this func.</p>
 		 *	
 		 *	@param params Flags to id which of the data buffers should be attached to VAO.
 		 *	
@@ -63,11 +67,17 @@ namespace nest
 
 		/**
 		 *	Generate VBOs.
+		 * 	
 		 *	@param params Flags to id which of the data buffers should be generated.
 		 *	
 		 *	@see GeomParams
 		 */
 		void createVBOs(int params);
+
+		GLuint getVboOffset()
+		{
+			return vboOffset;
+		}
 	};
 }
 

@@ -8,18 +8,7 @@ namespace nest
 	MeshNode::~MeshNode()
 	{
 		if(node != NULL && tree != NULL) tree->removeChild(this);
-		node = NULL;
-		tree = NULL;
-		mesh = NULL;
-	}
-
-	void MeshNode::displayAnimation(float dt)
-	{
-		if(mesh && mesh->skin)
-		{
-			mesh->skin->animRig.displayAnimation(dt);
-			Joint::updateJoints(mesh->skin->root, NULL);
-		}
+		if(animation != NULL) delete animation;
 	}
 
 	void MeshNode::recompose(float dt)

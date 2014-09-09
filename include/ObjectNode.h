@@ -40,11 +40,6 @@ namespace nest
 			oldS.x = oldS.y = oldS.z = newS.x = newS.y = newS.z = 1.0f;
 		}
 
-		virtual ~ObjectNode()
-		{
-			parent = NULL;
-		}
-
 		/**
 		 *	Update ObjectNode's transform by localMatrix.
 		 *	

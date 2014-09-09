@@ -8,7 +8,6 @@ namespace nest
 
 	Joint::~Joint()
 	{
-		mesh = NULL;
 		if(sibling != NULL) delete sibling;
 		if(firstChild != NULL) delete firstChild;
 	}
