@@ -1,6 +1,7 @@
 #include <iterator>
 
 #include "EventActor.h"
+#include "EventDispatcher.h"
 
 namespace nest
 {

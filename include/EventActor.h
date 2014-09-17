@@ -1,10 +1,12 @@
 #ifndef N3D_EVENTACTOR_H
 #define N3D_EVENTACTOR_H
 
-#include "EventDispatcher.h"
-
 namespace nest
 {
+	class Event;
+	
+	class EventDispatcher;
+
 	class EventActor
 	{
 	public:

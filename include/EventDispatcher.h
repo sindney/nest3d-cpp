@@ -40,7 +40,7 @@ namespace nest
 		virtual ~EventDispatcher();
 		
 		/**
-		 *	Broadcast event, events are ided by their names.
+		 *	Broadcast event. Events are identified by their name.
 		 */
 		virtual void dispatch(const Event *event);
 

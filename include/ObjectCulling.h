@@ -56,14 +56,14 @@ namespace nest
 		void create(float left, float right, float bottom, float top, float near, float far);
 
 		/**
-		 *	Test if taget point is in frustum.
+		 *	Test point's visiblity.
 		 *	
 		 *	@param p Point in view space.
 		 */
 		bool classifyPoint(const Vector4 &p);
 
 		/**
-		 *	Test if taget bounding sphere is in frustum.
+		 *	Test bounding sphere's visiblity.
 		 *	
 		 *	@param center Bounding sphere's center in view space.
 		 *	@param radius Bounding sphere's radius in view space.
@@ -71,7 +71,7 @@ namespace nest
 		bool classifyBSphere(const Vector4 &center, float radius);
 
 		/**
-		 *	Test if taget axis aligned bounding box is in frustum.
+		 *	Test bounding box's visiblity.
 		 *	
 		 *	@param bound Axis aligned bounding box in view space.
 		 */

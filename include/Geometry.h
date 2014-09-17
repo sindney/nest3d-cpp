@@ -27,9 +27,6 @@ namespace nest
 
 		std::string name;
 
-		/**
-		 *	Axis aligned bounding box.
-		 */
 		AABB bound;
 
 		GLfloat *vertexData, *uvData, *normalData, *tangentData, *weightsData;
@@ -47,19 +44,14 @@ namespace nest
 		 */
 		GLuint jointPerVertex;
 
-		/**
-		 *	When you change the lenght of vertexData.
-		 *	<p>You should make sure that it's uv/normal/tangent/indices/weights are in the right size or just delete and NULL them.</p>
-		 */
 		Geometry();
 
 		virtual ~Geometry();
 
 		/**
-		 *	Generate GeomBufferData object to store VAO for different render behaviour.
-		 *	<p>Call createVBOs(params) first, then use this func.</p>
+		 *	Call createVBOs(params) first, then use this.
 		 *	
-		 *	@param params Flags to id which of the data buffers should be attached to VAO.
+		 *	@param params Flags to id which data buffer should be attached to VAO.
 		 *	
 		 *	@see GeomParams
 		 */
@@ -68,7 +60,7 @@ namespace nest
 		/**
 		 *	Generate VBOs.
 		 * 	
-		 *	@param params Flags to id which of the data buffers should be generated.
+		 *	@param params Flags to id which data buffer should be generated.
 		 *	
 		 *	@see GeomParams
 		 */

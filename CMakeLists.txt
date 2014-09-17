@@ -15,7 +15,7 @@ set(LIB_GLEW "" CACHE PATH "Location of library glew.")
 
 set(NEST_VERSION_MAJOR 1)
 set(NEST_VERSION_MINOR 6)
-set(NEST_VERSION_PATCH 0)
+set(NEST_VERSION_PATCH 1)
 
 configure_file (
 	${PROJECT_SOURCE_DIR}/NestConfig.h.in

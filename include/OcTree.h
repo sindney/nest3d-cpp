@@ -51,7 +51,7 @@ namespace nest
 		int depth;
 
 		/**
-		 *	Find the right location for mesh to settle in specific node.
+		 *	Find the right ocnode for mesh to settle.
 		 *	
 		 *	@param objMax Mesh's bound.max in world space.
 		 *	@param objMin Mesh's bound.min in world space.

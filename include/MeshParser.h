@@ -86,7 +86,7 @@ namespace nest
 		 *	<p>aiProcess_JoinIdenticalVertices, aiProcess_SortByPType</p>
 		 *	<p>See Assimp::Importer::ReadFile(pFile, pFlags).</p>
 		 *	
-		 *	@param file model file path.
+		 *	@param file Model file path.
 		 *	@param flags Options to control the decoding process.
 		 *	
 		 *	@return Returns false if there's something wrong here. Check MeshParser.error for details.

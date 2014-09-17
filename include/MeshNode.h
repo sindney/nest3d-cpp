@@ -35,9 +35,6 @@ namespace nest
 	public:
 
 		/**
-		 *	Set to true to sort visible meshNodes by alphaKey.
-		 *	<p>So that we can render mesh with alpha channels correctlly.</p>
-		 *	
 		 *	@see ContainerCulling
 		 *	@see OcTreeCulling
 		 */
@@ -58,7 +55,7 @@ namespace nest
 		OcTree *tree;
 
 		/**
-		 *	You take of it's delocation.
+		 *	You take care of it's delocation.
 		 */
 		Mesh *mesh;
 

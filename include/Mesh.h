@@ -75,7 +75,7 @@ namespace nest
 		virtual ~Mesh();
 
 		/**
-		 *	Bind shader to this mesh. So we can use in in glsl.
+		 *	Bind shader to this mesh. So we can use it in in glsl.
 		 *	
 		 *	@param flag Delocation flag. True for auto delete.
 		 *	

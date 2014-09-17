@@ -16,10 +16,15 @@ namespace nest
 	public:
 
 		/**
-		 *	Use this to select shader in mesh's shader map.
+		 *	Use this to identify shader in mesh's shader map.
+		 *	
+		 *	@see MeshNode
 		 */
 		std::string flag;
 
+		/**
+		 *	Number of draw calls.
+		 */
 		int numDraws, numTris, numVts;
 
 		MeshRender() : numDraws(0), numTris(0), numVts(0) {}

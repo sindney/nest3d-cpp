@@ -35,8 +35,7 @@ namespace nest
 		 : clip(clip), speed(speed), time(time) {}
 
 		/**
-		 *	Advance time to calculate new pose.
-		 *	<p>You'd setupPoseData() first, then advanceTime.</p>
+		 *	You'd setupPoseData() first, then advanceTime().
 		 *	<p>Plus, this triggers AnimationEvent.</p>
 		 */
 		void advanceTime(float dt);

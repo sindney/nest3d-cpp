@@ -90,7 +90,7 @@ namespace nest
 		void initializeIKChain();
 
 		/**
-		 *	Update the IKJoint chain's transform from index.
+		 *	Update IKJoint chain's transform from index.
 		 */
 		void updateIKChain(int index);
 

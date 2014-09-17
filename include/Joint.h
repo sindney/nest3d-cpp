@@ -21,23 +21,20 @@ namespace nest
 
 		Vector4 oldS, newS;
 
-		/**
-		 *	Local transform matrix. Store bone's transform info.
-		 */
 		Matrix4 localMatrix;
 
 		/**
-		 *	Combined transform matrix. Aka parent.combined * local.
+		 *	Parent.combined * local.
 		 */
 		Matrix4 combinedMatrix;
 
 		/**
-		 *	Offset matrix. Transform vertices into bone space.
+		 *	Transform vertices into bone space.
 		 */
 		Matrix4 offsetMatrix;
 
 		/**
-		 * Final matrix. Aka combinedMatrix * offsetMatix.
+		 * CombinedMatrix * offsetMatix.
 		 */
 		Matrix4 finalMatrix;
 
